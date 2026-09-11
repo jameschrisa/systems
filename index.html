@@ -50,6 +50,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-
 
 header{padding:52px 0 0;}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;flex-wrap:wrap;}
+.top > div:first-child{flex:0 1 auto;}
 .brandline{display:flex;align-items:center;gap:14px;}
 .brandline{align-items:flex-end;gap:18px;}
 .logobox{width:116px;height:116px;background:var(--accent);flex:none;border-radius:2px;
@@ -57,11 +58,22 @@ header{padding:52px 0 0;}
 .logobox span{display:block;color:#FFFFFF;font-size:1.2rem;font-weight:600;line-height:1.08;
   letter-spacing:-.02em;text-align:left;overflow-wrap:anywhere;hyphens:auto;}
 @media (max-width:640px){ .logobox{width:92px;height:92px;padding:10px;}
-  .logobox span{font-size:1rem;} }
+  .logobox span{font-size:1rem;}
+  .byline{white-space:normal;font-size:0.65rem;} }
 h1{margin:0;font-size:clamp(1.85rem,4vw,2.7rem);font-weight:600;letter-spacing:-0.022em;line-height:1.1;}
-.standfirst{margin:16px 0 0;max-width:64ch;color:var(--text-mid);font-size:1.0325rem;line-height:1.62;}
+.standfirst{margin:14px 0 0;max-width:64ch;color:var(--text-mid);font-size:1.0325rem;line-height:1.62;}
+.headright{display:flex;flex-direction:column;align-items:flex-end;gap:9px;}
+.byline{margin:0;text-align:right;color:var(--muted);font-size:0.6875rem;
+  letter-spacing:.015em;white-space:nowrap;}
+.iconbar{flex-wrap:wrap;justify-content:flex-end;}
+.navgroups{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.iconbar{align-items:center;}
+.navgroup{display:flex;gap:8px;align-items:center;}
+.navgroup.boxed{border:1px solid var(--line);border-radius:7px;padding:5px;}
+.icobtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--text);}
+.icobtn[aria-pressed="true"] svg{color:var(--accent);}
 
-.iconbar{display:flex;gap:8px;padding-top:4px;}
+.iconbar{display:flex;gap:8px;}
 .icobtn{width:38px;height:38px;display:grid;place-items:center;background:transparent;
   border:1px solid var(--line);border-radius:4px;color:var(--muted);
   text-decoration:none;cursor:pointer;}
@@ -69,6 +81,7 @@ a.icobtn:hover{color:var(--accent);border-color:var(--accent);}
 a.icobtn svg{width:15px;height:15px;}
 .icobtn:hover{color:var(--text);border-color:var(--muted);}
 .icobtn svg{width:17px;height:17px;display:block;}
+.icobtn .ticon{width:17px;height:17px;opacity:1;}
 
 .tabs{display:flex;margin:36px 0 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
 .tabs button{background:transparent;border:0;border-bottom:2px solid transparent;
@@ -182,6 +195,67 @@ ul.practice label.done .lbl{text-decoration:none;}
 .ask{margin:0;padding:11px 12px;border-radius:6px;background:var(--inset);
   border:1px solid var(--line);color:var(--text);font-size:0.875rem;
   line-height:1.45;font-style:italic;}
+
+/* ---- playground ---- */
+.pg{display:grid;grid-template-columns:224px 1fr;gap:18px;align-items:start;}
+.pgside{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:16px 16px 18px;}
+.pgside h4{margin:0 0 4px;font-size:0.9375rem;font-weight:550;}
+.pgside .hint{margin:0 0 13px;color:var(--muted);font-size:0.78rem;line-height:1.45;}
+.pgpal{display:flex;flex-direction:column;gap:7px;}
+.pgpal button{display:flex;align-items:center;gap:9px;text-align:left;background:var(--surface-2);
+  border:1px solid var(--line);border-left-width:3px;border-radius:4px;color:var(--text-mid);
+  font-size:0.8125rem;padding:8px 10px;cursor:grab;}
+.pgpal button:hover{color:var(--text);border-color:var(--muted);}
+.pgpal button:active{cursor:grabbing;}
+.pgtools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.pgtools button{background:transparent;border:1px solid var(--line);border-radius:4px;
+  color:var(--text-mid);font-size:0.8125rem;padding:8px 12px;}
+.pgtools button:hover{border-color:var(--accent);color:var(--text);}
+.pgtools button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--text);}
+.pgtools .sep{width:1px;background:var(--line);margin:2px 2px;}
+.pgcanvas{position:relative;height:660px;overflow:auto;border:1px solid var(--line);border-radius:6px;
+  background-color:var(--surface);
+  background-image:radial-gradient(var(--line) 1px, transparent 1px);
+  background-size:22px 22px;}
+.pgcanvas.linking{cursor:crosshair;}
+.pgwires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.pgwires path{stroke:var(--muted);stroke-width:1.6;fill:none;pointer-events:stroke;cursor:pointer;}
+.pgwires path.sel{stroke:var(--accent);stroke-width:2.4;}
+.pgwires path.hit{stroke:transparent;stroke-width:14;}
+.pgnode{position:absolute;border-radius:4px;border:1.5px solid var(--line);background:var(--surface-2);
+  display:grid;place-items:center;text-align:center;padding:8px 10px;cursor:grab;
+  font-size:0.8125rem;line-height:1.3;color:var(--text);user-select:none;}
+.pgnode:active{cursor:grabbing;}
+.pgnode .lbl{outline:none;}
+.pgnode.k-store{border-color:var(--teal);background:var(--teal-soft);}
+.pgnode.k-queue{border-color:var(--teal);background:var(--teal-soft);border-style:dashed;}
+.pgnode.k-model,.pgnode.k-agent{border-color:var(--accent);background:var(--accent-wash);}
+.pgnode.k-gate{border-color:var(--accent);background:transparent;}
+.pgnode.k-human{border-style:dashed;border-color:var(--muted);background:transparent;}
+.pgnode.k-ext{border-color:var(--accent-soft);background:transparent;}
+.pgnode.k-decision{border-color:var(--muted);background:transparent;transform:none;}
+.pgnode.sel{box-shadow:0 0 0 2px var(--accent),0 0 16px rgba(198,44,39,.3);}
+.pgnode.src{box-shadow:0 0 0 2px var(--teal);}
+.pgempty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);
+  font-size:0.9rem;pointer-events:none;text-align:center;padding:0 30px;line-height:1.6;}
+@media (max-width:860px){ .pg{grid-template-columns:1fr;} .pgcanvas{height:520px;} }
+
+/* ---- metrics ---- */
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:18px;align-items:start;}
+.metric{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;
+  padding:18px 20px 20px;box-shadow:0 1px 2px var(--shadow);}
+[data-theme="light"] .metric{box-shadow:0 1px 2px rgba(12,26,47,.05),0 5px 16px -4px rgba(12,26,47,.16);}
+.metric .cat{font-family:"IBM Plex Mono",monospace;font-size:0.6875rem;color:var(--teal);letter-spacing:.03em;}
+.metric h3{margin:7px 0 0;font-size:1.0325rem;font-weight:550;line-height:1.3;letter-spacing:-.008em;}
+.metric .def{margin:9px 0 0;color:var(--text-mid);font-size:0.9rem;line-height:1.55;}
+.mrow{margin-top:13px;padding-top:12px;border-top:1px solid var(--line-soft);}
+.mlab{display:block;font-family:"IBM Plex Mono",monospace;font-size:0.6875rem;
+  color:var(--muted);letter-spacing:.03em;margin-bottom:5px;}
+.mrow p{margin:0;color:var(--text-mid);font-size:0.86rem;line-height:1.55;}
+.mrow.good p{color:var(--text);}
+.mrow.good .mlab{color:var(--teal);}
+.eg{margin:0;color:var(--text-mid);font-size:0.85rem;line-height:1.55;
+  border-left:2px solid var(--accent);padding-left:12px;}
 
 /* ---- systems auditing ---- */
 .auditbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 18px;}
@@ -303,6 +377,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
 .empty{color:var(--muted);font-size:0.9375rem;padding:30px 0;}
 footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
   color:var(--muted);font-size:0.8125rem;max-width:70ch;}
+.credit{display:block;margin-top:22px;color:var(--text-mid);font-size:0.75rem;letter-spacing:.02em;}
 
 @media (max-width:640px){
   .wrap{padding:0 16px 60px;}
@@ -329,9 +404,10 @@ footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
 <header>
   <div class="top">
     <div>
-      <div class="brandline"><span class="logobox"><span>Systems Design</span></span><h1>Systems practice</h1></div>
-      <p class="standfirst">A working reference for designing, engineering, governing, and analyzing systems across an enterprise estate of data and applications.</p>
+      <div class="brandline"><span class="logobox"><span>Systems Design</span></span><h1>Systems Practice</h1></div>
     </div>
+    <div class="headright">
+    <p class="byline">Designed by James Christopher</p>
     <div class="iconbar">
       <button class="icobtn" id="themeBtn" type="button" title="Switch theme" aria-label="Switch colour theme">
         <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
@@ -347,8 +423,11 @@ footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
         <!-- Notion mark, simple-icons v16.30.0, CC0-1.0 -->
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z"/></svg>
       </a>
+      <span class="navgroups" id="navgroups"></span>
+    </div>
     </div>
   </div>
+  <p class="standfirst">A working reference for designing, engineering, governing, and analyzing systems across an enterprise estate of data and applications.</p>
   <nav class="tabs" id="tabs" role="tablist"></nav>
   <nav class="rail" id="rail" aria-label="Filter by area"></nav>
 </header>
@@ -358,6 +437,7 @@ footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
 
 <footer>
   Four practices, one estate. Design sets the boundary and the shape. Engineering makes the result verifiable and operable. Risk, governance, and security decide what is permitted and what happens when it fails. Analysis keeps all of it tied to how the organization actually works.
+  <span class="credit">Curated and Designed by James Christopher, 2027</span>
 </footer>
 
 </div>
@@ -374,6 +454,8 @@ const ICONS = {
   "cpu": '<path d="M12 20v2"/><path d="M12 2v2"/><path d="M17 20v2"/><path d="M17 2v2"/><path d="M2 12h2"/><path d="M2 17h2"/><path d="M2 7h2"/><path d="M20 12h2"/><path d="M20 17h2"/><path d="M20 7h2"/><path d="M7 20v2"/><path d="M7 2v2"/><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1"/>',
   "network": '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>',
   "clipboard-check": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+  "gauge": '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+  "boxes": '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>',
   "book-open": '<path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>'
 };
 
@@ -384,10 +466,20 @@ const TABS = [
   {id:"RG", label:"Risk, Governance, Security",  ic:"shield"},
   {id:"PF", label:"Process Flow",                ic:"git-merge"},
   {id:"AE", label:"AI Systems Engineering",      ic:"cpu"},
-  {id:"DX", label:"Design Patterns",             ic:"network"},
-  {id:"SA", label:"Systems Auditing",            ic:"clipboard-check"},
-  {id:"MX", label:"Mix Calculator",              ic:"sliders-horizontal"},
-  {id:"GL", label:"Glossary",                    ic:"book-open"}
+  {id:"DX", label:"Design Patterns",             ic:"network"}
+];
+
+/* tabs that live in the header icon bar rather than the strip */
+const NAVGROUPS = [
+  {label:"", items:[
+    {id:"GL", label:"Glossary",          ic:"book-open"},
+    {id:"MT", label:"Metrics",           ic:"gauge"}
+  ]},
+  {box:true, items:[
+    {id:"SA", label:"Systems Audit",     ic:"clipboard-check"},
+    {id:"MX", label:"Mix Calculator",    ic:"sliders-horizontal"},
+    {id:"PG", label:"System Playground", ic:"boxes"}
+  ]}
 ];
 
 function icon(name){
@@ -1342,6 +1434,24 @@ function areaByCode(c){ return AREAS.find(function(a){ return a.code === c; }); 
 function cardsIn(codes){ return order.filter(function(i){ return codes.indexOf(CARDS[i].a) > -1; }); }
 function currentCodes(){ return area === "ALL" ? areasFor(tab).map(function(a){ return a.code; }) : [area]; }
 
+function buildNav(){
+  const box = document.getElementById("navgroups");
+  box.innerHTML = NAVGROUPS.map(function(g){
+    return '<span class="navgroup' + (g.box ? " boxed" : "") + '">' +
+      g.items.map(function(it){
+        return '<button class="icobtn" type="button" data-tab="' + it.id + '" aria-pressed="' +
+          (it.id === tab) + '" title="' + esc(it.label) + '" aria-label="' + esc(it.label) + '">' +
+          icon(it.ic) + '</button>';
+      }).join("") + '</span>';
+  }).join("");
+  box.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click", function(){
+      tab = b.dataset.tab; area = "ALL";
+      buildTabs(); buildNav(); buildRail(); render();
+    });
+  });
+}
+
 function buildTabs(){
   tabsEl.innerHTML = TABS.map(function(t){
     return '<button type="button" role="tab" data-tab="' + t.id + '" aria-selected="' +
@@ -1349,7 +1459,7 @@ function buildTabs(){
   }).join("");
   tabsEl.querySelectorAll("button").forEach(function(b){
     b.addEventListener("click", function(){
-      tab = b.dataset.tab; area = "ALL"; buildTabs(); buildRail(); render();
+      tab = b.dataset.tab; area = "ALL"; buildTabs(); buildNav(); buildRail(); render();
     });
   });
 }
@@ -1368,6 +1478,19 @@ function buildRail(){
     });
     return;
   }
+  if (tab === "MT"){
+    railEl.style.display = "flex";
+    const list = [{c:"ALL", n:"All categories"}].concat(MCATS);
+    railEl.innerHTML = list.map(function(x){
+      const cnt = x.c === "ALL" ? METRICS.length : METRICS.filter(function(m){ return m.c === x.c; }).length;
+      return '<button type="button" data-mcat="' + x.c + '" aria-pressed="' + (x.c === mcat) +
+        '">' + x.n + '<span class="n">' + cnt + '</span></button>';
+    }).join("");
+    railEl.querySelectorAll("button").forEach(function(b){
+      b.addEventListener("click", function(){ mcat = b.dataset.mcat; buildRail(); paintMetrics(); });
+    });
+    return;
+  }
   if (tab === "GL"){
     railEl.style.display = "flex";
     railEl.innerHTML = GSOURCES.map(function(s){
@@ -1380,7 +1503,7 @@ function buildRail(){
     });
     return;
   }
-  if (tab === "MX" || tab === "DX"){ railEl.innerHTML = ""; railEl.style.display = "none"; return; }
+  if (tab === "MX" || tab === "DX" || tab === "PG"){ railEl.innerHTML = ""; railEl.style.display = "none"; return; }
   railEl.style.display = "flex";
   const list = [{code:"ALL", name:"All areas"}].concat(areasFor(tab));
   railEl.innerHTML = list.map(function(a){
@@ -1399,6 +1522,8 @@ function render(){
   if (tab === "MX"){ renderMix(); return; }
   if (tab === "DX"){ renderPatterns(); return; }
   if (tab === "SA"){ renderAudit(); return; }
+  if (tab === "MT"){ renderMetrics(); return; }
+  if (tab === "PG"){ renderPlayground(); return; }
   const idx = cardsIn(currentCodes());
 
   stage.className = "deck";
@@ -2244,6 +2369,608 @@ window.addEventListener("load", function(){
   document.querySelectorAll(".face").forEach(function(f){ if (f._sync) f._sync(); });
 });
 
+/* ================= metrics ================= */
+const MCATS = [
+  {c:"DEL", n:"Delivery and engineering"},
+  {c:"REL", n:"Reliability and service"},
+  {c:"PRC", n:"Business systems and process"},
+  {c:"OPS", n:"Enterprise operations"},
+  {c:"UXP", n:"UX and product"},
+  {c:"DAI", n:"Data and AI"}
+];
+
+const METRICS = [
+{c:"DEL",n:"Deployment frequency",
+ d:"How often change reaches production. One of the four DORA measures, and the cheapest signal of whether a delivery system is healthy.",
+ u:"Used to judge batch size and release friction. Low frequency almost always means large, risky releases rather than careful ones.",
+ r:"Read it with change failure rate beside it. Frequency rising while failure rate holds is real improvement. Frequency rising while failures rise is corner cutting.",
+ g:"Daily or better for a product team. Weekly is workable. Monthly or less indicates the release process, not the code, is the constraint.",
+ e:"A team moving from fortnightly to daily releases found defect counts unchanged per release, so total defects fell per unit of change, because each release carried less."},
+{c:"DEL",n:"Lead time for changes",
+ d:"Elapsed time from code committed to that code running in production.",
+ u:"Used to locate friction between writing and shipping: review queues, environment contention, manual approval, release windows.",
+ r:"Compare working time against waiting time. Most long lead times are queue, not effort. Look at the distribution, not the mean.",
+ g:"Under a day is strong, under a week is acceptable. Anything measured in months means the pipeline is the product bottleneck.",
+ e:"A three-week lead time decomposed to four hours of work and nineteen days waiting on a weekly change advisory board."},
+{c:"DEL",n:"Change failure rate",
+ d:"The share of deployments that cause a degradation requiring a fix, rollback or patch.",
+ u:"Used as the counterweight to speed. It is what stops deployment frequency from being gamed.",
+ r:"Rising failure rate with flat frequency means quality is eroding. Very low failure rate with very low frequency usually means batching, not excellence.",
+ g:"Under 15 percent is generally considered healthy. Zero over a long window is a sign the denominator is too small.",
+ e:"A team reporting zero failures was releasing monthly. Their incidents were logged as operational issues rather than attributed to the release that caused them."},
+{c:"DEL",n:"Mean time to restore",
+ d:"Average elapsed time from a service degradation being detected to normal service resuming.",
+ u:"Used to judge operational maturity. You control recovery far more than you control failure, which makes this more actionable than failure frequency.",
+ r:"Break it into detect, diagnose and repair. The dominant component tells you whether to invest in observability, runbooks or automation.",
+ g:"Under an hour for a customer-facing service. Under a day for internal systems. The trend matters more than the absolute.",
+ e:"An eleven-hour average decomposed to nine hours of detection lag. Alerting on the leading signal cut the total by most of that in one quarter."},
+{c:"DEL",n:"Engineering cycle time",
+ d:"Elapsed time from work starting to work being accepted, covering the whole path rather than only the coding.",
+ u:"Used for forecasting and for finding where work accumulates between states.",
+ r:"Track the 85th percentile, not the average. Commitments made on averages fail roughly half the time by construction.",
+ g:"A tight distribution matters more than a low mean. Wide spread means the process is unpredictable even when it is fast.",
+ e:"A team with a five-day mean had an 85th percentile of twenty-two days, driven entirely by items needing external dependency approval."},
+{c:"DEL",n:"Escaped defect rate",
+ d:"Defects found in production as a share of total defects found, in a given period.",
+ u:"Used to judge whether testing is catching what it should, and where in the lifecycle detection is happening.",
+ r:"Read alongside where defects originate. A high escape rate with most defects originating in requirements points at validation, not at test coverage.",
+ g:"Below 10 percent for a mature system. Direction and cause matter more than the level.",
+ e:"An escape rate of 30 percent traced almost entirely to interface assumptions between two teams, which no single team's tests could have caught."},
+
+{c:"REL",n:"Availability",
+ d:"The share of time a service is usable, usually quoted in nines. Three nines is roughly 8.8 hours of downtime a year, four nines is about 53 minutes.",
+ u:"Used to set architecture and spend. Each additional nine costs materially more and buys less.",
+ r:"Ask what counts as available and who measures it. Availability measured at the load balancer can be near perfect while users cannot complete a task.",
+ g:"Whatever the business tolerance justifies. A uniform four nines across an estate is usually both overspend and under-protection at the same time.",
+ e:"A platform reported 99.98 percent while its checkout path was failing for a subset of users. The health check tested a page that did not exercise checkout."},
+{c:"REL",n:"Error budget burn rate",
+ d:"The speed at which allowed unreliability is being consumed relative to the period. A burn rate of one exhausts the budget exactly at period end.",
+ u:"Used as a release control. Fast burn is a signal to stop shipping features and spend on stability instead.",
+ r:"Look at burn over a short and a long window together. Short-window spikes are incidents, sustained elevated burn is a design problem.",
+ g:"Sustained burn near or below one. Persistent burn far under one means the target is too loose to constrain anything.",
+ e:"A team burning 40 percent of a quarterly budget in week two paused feature work, which the objective existed to trigger and which nobody had done before."},
+{c:"REL",n:"Tail latency (p95, p99)",
+ d:"Response time at the slow end of the distribution. The p99 is the experience of the slowest one percent of requests.",
+ u:"Used to set user-facing performance targets and to size capacity. Averages hide the experience that drives abandonment.",
+ r:"A rising p99 with a flat median usually means contention, garbage collection, cold starts or a hot partition rather than general slowness.",
+ g:"Depends entirely on the interaction. Under 200ms for an interactive action, under a few seconds for a search. The ratio of p99 to p50 is often more telling than either.",
+ e:"An agentic search averaged nine seconds. Its slowest decile ran past forty with no progress shown, and that decile accounted for most abandonment."},
+{c:"REL",n:"Saturation",
+ d:"How full a constrained resource is: CPU, memory, connection pool, thread pool, queue depth, disk.",
+ u:"Used as the leading indicator. Saturation moves before latency, and latency moves before errors.",
+ r:"Queueing behaviour is non-linear. Wait time rises sharply above roughly 70 to 80 percent utilization, so a resource at 85 percent is not slightly worse than one at 70.",
+ g:"Steady state below 70 percent on any resource that queues, with headroom for the largest plausible spike.",
+ e:"A connection pool at 90 percent presented purely as intermittent slowness. No error was ever logged, because requests were waiting rather than failing."},
+{c:"REL",n:"Mean time between failures",
+ d:"Average time a service runs between distinct failures.",
+ u:"Used for capacity and redundancy planning, and in vendor and hardware comparison.",
+ r:"Less actionable than recovery time for software, because software failures are rarely independent. Useful mainly for physical components and for spotting trends.",
+ g:"Rising over time. A falling MTBF with a stable MTTR means you are getting better at hiding a worsening problem.",
+ e:"A steadily falling MTBF was masked by fast automated failover. The underlying cause was a memory leak nobody had needed to investigate."},
+{c:"REL",n:"Incident recurrence rate",
+ d:"The share of incidents that repeat a known cause within a defined window.",
+ u:"Used to judge whether post-incident actions are actually completed and effective.",
+ r:"High recurrence means remediation is being recorded rather than done. Check whether actions have owners, dates and evidence of closure.",
+ g:"Under 10 percent. Any repeated cause appearing three times is a finding about the process, not about the system.",
+ e:"The same configuration promotion failure recurred four times in a year. Each review produced an action item, and none of the four was ever closed."},
+
+{c:"PRC",n:"Straight-through processing rate",
+ d:"The share of transactions completing with no manual intervention from start to finish.",
+ u:"Used as the headline automation measure for an operational process.",
+ r:"Read it with the cost of the remainder. Automating the easy majority can leave exceptions that individually cost more than the original manual path.",
+ g:"Depends on variation. Above 80 percent for a standardized flow. In a high-variation flow, a lower rate with well-designed exception handling beats a forced higher one.",
+ e:"An initiative reached 34 percent straight-through and raised average handling time, because the remaining two thirds gained a handoff they did not have before."},
+{c:"PRC",n:"End-to-end cycle time",
+ d:"Total elapsed time from a case arriving to it being complete, including every wait.",
+ u:"Used as the customer-facing measure of a process. It is the only one that reflects what the requester experiences.",
+ r:"Always decompose into touch time and wait time. In most enterprise processes waiting dominates by an order of magnitude.",
+ g:"Improving. The absolute depends on the process, but a touch-time share below 5 percent points at the queue, not the work.",
+ e:"A nine-day approval contained four hours of work. Moving a weekly committee to twice weekly halved the duration with no system change at all."},
+{c:"PRC",n:"Exception rate",
+ d:"The share of cases that leave the standard path and require handling that the design did not anticipate.",
+ u:"Used to measure how well encoded rules still match reality. It is the honest measure of coverage.",
+ r:"A rising rate is rule decay, not a staffing problem. Categorize the exceptions; a small number of causes usually explains most of the volume.",
+ g:"Stable or falling. A rate that climbs steadily after launch means nobody owns the rule content.",
+ e:"An engine launched at 94 percent automation and drifted to 71 percent over three years, absorbed entirely by adding exception staff. No rule had been updated."},
+{c:"PRC",n:"First-pass yield",
+ d:"The share of cases completed correctly the first time, with no rework.",
+ u:"Used to find quality problems that cycle time hides, since rework often happens inside a step rather than between steps.",
+ r:"Compare across teams and shifts before concluding anything about the process. Wide variation points at training or tooling rather than design.",
+ g:"Above 95 percent for a well-specified process. Below 85 percent, rework is a material share of capacity.",
+ e:"A team at 78 percent first-pass yield was spending roughly a fifth of its capacity redoing its own work, which never appeared as a queue anywhere."},
+{c:"PRC",n:"Touch time ratio",
+ d:"Working time as a share of total elapsed time for a case.",
+ u:"Used to prove where improvement effort should go, and to counter proposals that optimize the working step.",
+ r:"A very low ratio means the constraint is waiting. Making the work faster improves nothing the requester can perceive.",
+ g:"Anything above 20 percent is unusual in an enterprise process. Below 2 percent, the process is essentially a queue with work attached.",
+ e:"Every improvement proposal targeted the form. Touch time was 1.8 percent, so the form could have been instant and the process would still have taken nine days."},
+{c:"PRC",n:"Handoff count",
+ d:"The number of times a case changes hands between teams, systems or modalities.",
+ u:"Used as a proxy for coordination cost and for the places context gets lost.",
+ r:"Each handoff adds a queue, a chance of context loss and an ownership gap. Count them before optimizing any individual step.",
+ g:"As few as the work genuinely requires. Any handoff that exists only because of an org boundary is a candidate for removal.",
+ e:"A five-agent automation pipeline was replaced with one agent and a task list. Quality rose and latency fell, because four context handoffs were removed."},
+
+{c:"OPS",n:"Cost to serve",
+ d:"Fully loaded cost of delivering one unit of output: a transaction, a case, a customer, a document.",
+ u:"Used to judge whether automation actually paid, and to find where scale improves economics and where it does not.",
+ r:"Include retries, failures, exception handling and human correction. A unit cost that only counts the happy path is not a unit cost.",
+ g:"Falling as volume grows. Flat or rising unit cost at scale means a component scales linearly with demand.",
+ e:"A document pipeline approved on build cost had a per-document inference cost above the manual process it replaced. Break-even had never been calculated."},
+{c:"OPS",n:"Run versus change ratio",
+ d:"The split of technology spend between keeping things running and building something new.",
+ u:"Used at portfolio level to expose how much capacity is consumed before any discretionary work begins.",
+ r:"A high run share is not automatically bad, but it caps how fast the organization can respond. Check what deferred maintenance is hiding inside the run figure.",
+ g:"Commonly cited around 70 run to 30 change, though the useful question is the direction of travel rather than the ratio itself.",
+ e:"A run share climbing three points a year was traced to an estate adding roughly thirty applications annually and retiring four."},
+{c:"OPS",n:"Application portfolio cost per capability",
+ d:"Total cost of ownership grouped by the business capability served rather than by system.",
+ u:"Used to find duplication. Three systems serving one capability is invisible in a system-by-system view.",
+ r:"Include integration and support effort, not only licences. Integration cost frequently exceeds licence cost in a large estate.",
+ g:"One primary system per capability, with any duplication deliberate and time-bound.",
+ e:"A consolidation ranked applications by licence spend. The most expensive was replaced while a cheap unsupported system carrying core pricing logic was untouched."},
+{c:"OPS",n:"Vendor concentration",
+ d:"The share of spend, or of critical capability, dependent on a single supplier or platform.",
+ u:"Used in resilience and commercial planning, and in regulated sectors as a supervisory expectation.",
+ r:"Measure by criticality as well as by spend. A small contract carrying an irreplaceable capability is a larger exposure than a big commodity one.",
+ g:"No single provider carrying a capability you could not recover within your stated tolerance.",
+ e:"Nineteen unrelated risk entries each mentioned the same middleware platform. Nobody had aggregated them into a single concentration finding."},
+{c:"OPS",n:"Deferred maintenance backlog",
+ d:"The accumulated volume of upgrades, patches and remediations that have been postponed, usually expressed in effort or in versions behind.",
+ u:"Used to make technical debt visible in a form finance can act on.",
+ r:"Track age as well as size. Debt that is growing and ageing compounds, because each deferral makes the eventual upgrade path longer.",
+ g:"Flat or falling, with nothing critical more than one major version behind.",
+ e:"A platform four major versions behind required an intermediate migration first, and cost several times the sum of the increments that had been skipped."},
+{c:"OPS",n:"Resource utilization",
+ d:"The share of available capacity actually deployed on chargeable or planned work.",
+ u:"Used in professional services and in shared internal teams for capacity and margin planning.",
+ r:"Very high utilization removes the slack that absorbs variability, so queues and lead times lengthen sharply. This is the same queueing effect as system saturation.",
+ g:"Typically 70 to 85 percent depending on the model. Sustained figures above 90 percent predict missed dates and attrition.",
+ e:"A team held at 95 percent utilization met its utilization target every month and missed almost every delivery date, because no slack existed to absorb variation."},
+
+{c:"UXP",n:"Task success rate",
+ d:"The share of users who complete a defined task without assistance.",
+ u:"The primary usability measure. Unlike satisfaction, it is behavioural and hard to argue with.",
+ r:"Define completion strictly before testing. Partial success and success with help are separate categories and should be reported separately.",
+ g:"Above 90 percent for a core task. Below 78 percent, something structural is wrong rather than cosmetic.",
+ e:"A scheduling module met every documented requirement and had a task success rate near zero in testing, because planners had never been in the specification room."},
+{c:"UXP",n:"Time on task",
+ d:"How long users take to complete a defined task, measured across participants.",
+ u:"Used to compare designs and to detect friction that success rate alone misses.",
+ r:"Report the distribution. A bimodal result usually means two distinct user mental models rather than one inconsistent experience.",
+ g:"Falling relative to a baseline. There is no universal target, only a comparison.",
+ e:"Two designs had identical success rates. One took twice as long, which only surfaced when time was recorded rather than just completion."},
+{c:"UXP",n:"System Usability Scale",
+ d:"A ten-item questionnaire producing a single score from 0 to 100. Long established, extensively benchmarked.",
+ u:"Used as a comparable usability measure across products and over time, where a bespoke survey would not be comparable.",
+ r:"It is not a percentage. The published average sits around 68, so a score of 70 is slightly above typical rather than a pass mark.",
+ g:"Above 68 is above average. Above 80 is considered strong. Below 50 indicates serious problems.",
+ e:"A team celebrated a score of 65 as a pass until they learned it sat below the benchmark average for the product category."},
+{c:"UXP",n:"Time to first value",
+ d:"How long from first use until a user reaches the outcome the product exists to deliver.",
+ u:"Used to judge onboarding and activation. It predicts retention better than signup volume does.",
+ r:"Define the value moment precisely and behaviourally. If it cannot be observed in data, it is not defined well enough.",
+ g:"Within the first session for consumer products. Within the first week for enterprise tools.",
+ e:"An automation platform counted activation as account creation. Redefining it as first successful workflow run revealed that most accounts never activated."},
+{c:"UXP",n:"Feature adoption depth",
+ d:"The share of active users who use a given capability, and how regularly.",
+ u:"Used to decide what to invest in, deprecate or surface differently.",
+ r:"Low adoption is ambiguous: it may be discoverability, fit or genuine irrelevance. Separate never-tried from tried-and-abandoned before concluding.",
+ g:"A small set of features with deep adoption beats broad shallow use. Anything under 5 percent after a fair discovery window is a removal candidate.",
+ e:"A feature at 3 percent adoption turned out to be used weekly by the two largest accounts, which changed the deprecation decision entirely."},
+{c:"UXP",n:"Support contact rate",
+ d:"Support contacts per active user or per transaction over a period.",
+ u:"Used as an inverse usability signal, and to size support capacity against product change.",
+ r:"Falling contact rate is only good if task success is stable. Users can stop contacting support because they have given up.",
+ g:"Falling while task success and retention hold. Contacts clustering on one workflow point straight at where to look.",
+ e:"A self-service portal cut ticket volume for a quarter before it returned, because agents measured on tickets closed had begun raising tickets on behalf of callers."},
+
+{c:"DAI",n:"Data quality by use case",
+ d:"Accuracy, completeness, validity and timeliness measured against the requirements of a specific decision.",
+ u:"Used to decide whether a dataset can support a given purpose. Quality in the abstract is not a usable concept.",
+ r:"Always state the use. The same record can be entirely adequate for a trend and dangerously wrong for an individual determination.",
+ g:"Thresholds defined per use case, with the decisions a dataset cannot support written down explicitly.",
+ e:"A segmentation dataset accurate enough for campaign sizing was reused for eligibility decisions. Its 4 percent error rate produced several hundred wrong outcomes."},
+{c:"DAI",n:"Data freshness",
+ d:"The lag between an event happening in the world and being visible in the system that reports on it.",
+ u:"Used to judge whether reporting can support the decision it feeds, and as an ingestion health check.",
+ r:"Read against the decision cadence. Hourly data is useless for a decision made every minute and wasteful for one made every quarter.",
+ g:"Freshness comfortably inside the decision interval, with alerting when it slips. Not simply as fresh as possible.",
+ e:"An ingestion job failed for five weeks with a credential error. The assistant kept answering fluently from a five-week-old corpus, including superseded pricing."},
+{c:"DAI",n:"Model accuracy by segment",
+ d:"Task-appropriate accuracy, precision or recall, broken down by the segments that make up real traffic.",
+ u:"Used for go-live decisions and ongoing monitoring. The aggregate figure is the one that hides the problem.",
+ r:"Never accept an overall number alone. Ask for the worst-performing segment and what share of volume it represents.",
+ g:"Every material segment above the threshold the use case requires, not the average above it.",
+ e:"An extraction model reported 93 percent overall. One supplier, at a fifth of volume, sat at 61 percent. The aggregate had been approved without segmentation."},
+{c:"DAI",n:"Automation rate at threshold",
+ d:"The share of cases an automated component handles without review, at a stated confidence threshold.",
+ u:"Used to size review capacity and to make the accuracy and coverage trade-off explicit rather than implicit.",
+ r:"Meaningless without the threshold and the error rate above it. Raising automation by lowering the threshold moves cost rather than removing it.",
+ g:"The highest rate that keeps post-threshold error inside tolerance. That number comes from consequence, not from model performance.",
+ e:"A classifier tuned for maximum overall accuracy routed everything. Splitting at a confidence threshold cut downstream errors while sending a fifth to review."},
+{c:"DAI",n:"Reviewer override rate",
+ d:"How often a human reviewer changes an automated output.",
+ u:"Used to test whether oversight is real, and as a training and rule-improvement signal.",
+ r:"A rate near zero means the review is nominal, not that the model is perfect. Check how long reviewers have per case and how hard overriding is.",
+ g:"Non-trivial and tracked, with overrides captured and fed back. The exact level depends on the threshold set upstream.",
+ e:"A review step recorded an override rate under 1 percent. Reviewers had twenty seconds per case and overriding required a free-text justification."},
+{c:"DAI",n:"Cost per completed task",
+ d:"Fully loaded cost of one successfully completed unit of work, including retries, failed runs and human correction.",
+ u:"Used to compare models, prompts and architectures on the basis that actually matters.",
+ r:"Token price is an input, not the unit. A cheaper model needing more turns and more correction can cost more per completed task.",
+ g:"Falling, with a known volume at which the economics stop working.",
+ e:"A switch to a cheaper model halved token cost and raised the retry rate enough that cost per completed task went up. The comparison had used price per million tokens."}
+];
+
+let mcat = "ALL", mq = "";
+
+function metricsIn(){
+  return METRICS.filter(function(m){
+    if (mcat !== "ALL" && m.c !== mcat) return false;
+    if (!mq) return true;
+    return (m.n + " " + m.d + " " + m.u + " " + m.r + " " + m.g + " " + m.e).toLowerCase().indexOf(mq) > -1;
+  });
+}
+
+function renderMetrics(){
+  stage.className = "";
+  stage.innerHTML = '<div class="auditbar"><input class="search" id="msearch" type="search" ' +
+    'placeholder="Filter metrics" aria-label="Filter metrics" value="' + esc(mq) + '"></div>' +
+    '<div class="metrics" id="mlist"></div>';
+  const inp = document.getElementById("msearch");
+  inp.addEventListener("input", function(){ mq = inp.value.toLowerCase().trim(); paintMetrics(); });
+  paintMetrics();
+}
+
+function paintMetrics(){
+  const box = document.getElementById("mlist");
+  if (!box) return;
+  const list = metricsIn();
+  box.innerHTML = list.length ? list.map(function(m){
+    const cat = MCATS.find(function(x){ return x.c === m.c; });
+    return '<article class="metric">' +
+      '<span class="cat">' + m.c + ' / ' + esc(cat.n) + '</span>' +
+      '<h3>' + esc(m.n) + '</h3>' +
+      '<p class="def">' + esc(m.d) + '</p>' +
+      '<div class="mrow"><span class="mlab">How it is used</span><p>' + esc(m.u) + '</p></div>' +
+      '<div class="mrow"><span class="mlab">How to read it</span><p>' + esc(m.r) + '</p></div>' +
+      '<div class="mrow good"><span class="mlab">What good looks like</span><p>' + esc(m.g) + '</p></div>' +
+      '<div class="mrow"><span class="mlab">Example</span><p class="eg">' + esc(m.e) + '</p></div>' +
+    '</article>';
+  }).join("") : '<p class="empty">No metrics match that filter.</p>';
+  updateMeta();
+}
+
+/* ================= system playground ================= */
+const PGKINDS = [
+  {k:"process",  n:"Process step"},
+  {k:"decision", n:"Decision"},
+  {k:"service",  n:"Service or API"},
+  {k:"rules",    n:"Rules engine"},
+  {k:"store",    n:"Data store"},
+  {k:"queue",    n:"Queue or topic"},
+  {k:"model",    n:"Model"},
+  {k:"agent",    n:"Agent"},
+  {k:"gate",     n:"Control gate"},
+  {k:"human",    n:"Human step"},
+  {k:"ext",      n:"External system"},
+  {k:"output",   n:"Output or report"}
+];
+
+const PGTEMPLATES = {
+  rag:{name:"Retrieval service", nodes:[
+    {k:"process",l:"Query",x:40,y:60},{k:"service",l:"Retriever",x:230,y:60},
+    {k:"store",l:"Index",x:230,y:190},{k:"model",l:"Model",x:420,y:60},
+    {k:"output",l:"Answer with citations",x:610,y:60}],
+    edges:[[0,1],[1,2],[1,3],[3,4]]},
+  otc:{name:"Order to cash", nodes:[
+    {k:"process",l:"Order intake",x:40,y:60},{k:"rules",l:"Validate",x:230,y:60},
+    {k:"human",l:"Credit review",x:230,y:190},{k:"service",l:"Fulfilment",x:420,y:60},
+    {k:"store",l:"Ledger",x:420,y:190},{k:"output",l:"Invoice",x:610,y:60}],
+    edges:[[0,1],[1,2],[1,3],[2,3],[3,4],[3,5]]},
+  gate:{name:"Agent with review gate", nodes:[
+    {k:"process",l:"Intake",x:40,y:120},{k:"agent",l:"Agent",x:210,y:120},
+    {k:"service",l:"Tools",x:210,y:250},{k:"gate",l:"Confidence gate",x:390,y:120},
+    {k:"human",l:"Reviewer",x:390,y:250},{k:"output",l:"Commit",x:580,y:180}],
+    edges:[[0,1],[1,2],[2,1],[1,3],[3,5],[3,4],[4,5]]}
+};
+
+let pgNodes = [], pgEdges = [], pgSeq = 1, pgDropIdx = 0;
+let pgSelNode = null, pgSelEdge = null, pgLinking = false, pgFrom = null;
+
+function pgAdd(kind, label, x, y){
+  const k = PGKINDS.find(function(z){ return z.k === kind; });
+  const n = {id:"n" + (pgSeq++), k:kind, l:label || k.n,
+             x:x, y:y, w:kind === "output" || kind === "gate" ? 148 : 132, h:54};
+  pgNodes.push(n);
+  return n;
+}
+
+function pgLoad(key){
+  const t = PGTEMPLATES[key];
+  pgNodes = []; pgEdges = []; pgSeq = 1; pgSelNode = pgSelEdge = null;
+  const made = t.nodes.map(function(z){ return pgAdd(z.k, z.l, z.x, z.y); });
+  t.edges.forEach(function(e){
+    pgEdges.push({id:"e" + (pgSeq++), from:made[e[0]].id, to:made[e[1]].id});
+  });
+  pgPaint();
+}
+
+function pgEdgePoint(n, tx, ty){
+  const cx = n.x + n.w/2, cy = n.y + n.h/2, dx = tx - cx, dy = ty - cy;
+  if (!dx && !dy) return [cx, cy];
+  const sx = dx ? (n.w/2 + 5) / Math.abs(dx) : Infinity;
+  const sy = dy ? (n.h/2 + 5) / Math.abs(dy) : Infinity;
+  const s = Math.min(sx, sy);
+  return [cx + dx*s, cy + dy*s];
+}
+
+function pgWires(){
+  const svg = document.getElementById("pgwires");
+  if (!svg) return;
+  const byId = {};
+  pgNodes.forEach(function(n){ byId[n.id] = n; });
+  svg.innerHTML =
+    '<defs><marker id="pgah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" ' +
+    'orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" stroke="none"/></marker>' +
+    '<marker id="pgahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" ' +
+    'orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--accent)" stroke="none"/></marker></defs>' +
+    pgEdges.map(function(e){
+      const a = byId[e.from], b = byId[e.to];
+      if (!a || !b) return "";
+      const p1 = pgEdgePoint(a, b.x + b.w/2, b.y + b.h/2);
+      const p2 = pgEdgePoint(b, a.x + a.w/2, a.y + a.h/2);
+      const d = "M" + p1[0].toFixed(1) + " " + p1[1].toFixed(1) + " L" + p2[0].toFixed(1) + " " + p2[1].toFixed(1);
+      const on = pgSelEdge === e.id;
+      return '<path class="hit" data-edge="' + e.id + '" d="' + d + '"/>' +
+             '<path class="' + (on ? "sel" : "") + '" data-edge="' + e.id + '" d="' + d +
+             '" marker-end="url(#' + (on ? "pgahs" : "pgah") + ')"/>';
+    }).join("");
+  svg.querySelectorAll("[data-edge]").forEach(function(p){
+    p.addEventListener("click", function(ev){
+      ev.stopPropagation();
+      pgSelEdge = p.dataset.edge; pgSelNode = null; pgPaint();
+    });
+  });
+}
+
+function pgPaint(){
+  const cv = document.getElementById("pgcanvas");
+  if (!cv) return;
+  cv.innerHTML = '<svg class="pgwires" id="pgwires"></svg>' +
+    (pgNodes.length ? "" : '<p class="pgempty">Drag a block from the left, or click one to drop it here.<br>Turn on Connect, then click two blocks to link them. Double-click a label to rename it.</p>') +
+    pgNodes.map(function(n){
+      return '<div class="pgnode k-' + n.k + (pgSelNode === n.id ? " sel" : "") +
+        (pgFrom === n.id ? " src" : "") + '" data-node="' + n.id +
+        '" style="left:' + n.x + 'px;top:' + n.y + 'px;width:' + n.w + 'px;height:' + n.h + 'px">' +
+        '<span class="lbl">' + esc(n.l) + '</span></div>';
+    }).join("");
+  pgWires();
+
+  cv.querySelectorAll(".pgnode").forEach(function(el){
+    const n = pgNodes.find(function(z){ return z.id === el.dataset.node; });
+
+    el.addEventListener("pointerdown", function(ev){
+      if (ev.target.isContentEditable) return;
+      if (pgLinking){
+        ev.preventDefault();
+        if (!pgFrom){ pgFrom = n.id; }
+        else if (pgFrom !== n.id){
+          const dup = pgEdges.some(function(e){ return e.from === pgFrom && e.to === n.id; });
+          if (!dup) pgEdges.push({id:"e" + (pgSeq++), from:pgFrom, to:n.id});
+          pgFrom = null;
+        } else { pgFrom = null; }
+        pgPaint();
+        return;
+      }
+      pgSelNode = n.id; pgSelEdge = null;
+      cv.querySelectorAll(".pgnode.sel").forEach(function(o){ o.classList.remove("sel"); });
+      el.classList.add("sel");
+      el.setPointerCapture(ev.pointerId);
+      const ox = ev.clientX - n.x, oy = ev.clientY - n.y;
+      const move = function(m){
+        n.x = Math.max(0, Math.round(m.clientX - ox));
+        n.y = Math.max(0, Math.round(m.clientY - oy));
+        el.style.left = n.x + "px"; el.style.top = n.y + "px";
+        pgWires();
+      };
+      const up = function(){
+        el.removeEventListener("pointermove", move);
+        el.removeEventListener("pointerup", up);
+      };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerup", up);
+    });
+
+    el.addEventListener("dblclick", function(){
+      const lbl = el.querySelector(".lbl");
+      lbl.contentEditable = "true"; lbl.focus();
+      document.execCommand && document.getSelection().selectAllChildren(lbl);
+      const done = function(){
+        lbl.contentEditable = "false";
+        n.l = lbl.textContent.trim() || n.l;
+        lbl.textContent = n.l;
+      };
+      lbl.addEventListener("blur", done, {once:true});
+      lbl.addEventListener("keydown", function(k){ if (k.key === "Enter"){ k.preventDefault(); lbl.blur(); } });
+    });
+  });
+
+  const del = document.getElementById("pgDel");
+  if (del) del.disabled = !(pgSelNode || pgSelEdge);
+  const meta = document.getElementById("pgmeta");
+  if (meta) meta.textContent = pgNodes.length + " blocks, " + pgEdges.length + " connections";
+}
+
+function pgDelete(){
+  if (pgSelNode){
+    pgEdges = pgEdges.filter(function(e){ return e.from !== pgSelNode && e.to !== pgSelNode; });
+    pgNodes = pgNodes.filter(function(n){ return n.id !== pgSelNode; });
+    pgSelNode = null;
+  } else if (pgSelEdge){
+    pgEdges = pgEdges.filter(function(e){ return e.id !== pgSelEdge; });
+    pgSelEdge = null;
+  }
+  pgPaint();
+}
+
+function pgExport(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = function(name, fb){ return (cs.getPropertyValue(name) || fb).trim() || fb; };
+  const pal = {
+    process:[v("--surface-2","#1A2E49"), v("--line","#243954")],
+    decision:["none", v("--muted","#9098A6")],
+    service:[v("--surface-2","#1A2E49"), v("--line","#243954")],
+    rules:[v("--surface-2","#1A2E49"), v("--line","#243954")],
+    store:["#4E9DAE28", v("--teal","#4E9DAE")],
+    queue:["#4E9DAE28", v("--teal","#4E9DAE")],
+    model:["#C62C2728", v("--accent","#C62C27")],
+    agent:["#C62C2728", v("--accent","#C62C27")],
+    gate:["none", v("--accent","#C62C27")],
+    human:["none", v("--muted","#9098A6")],
+    ext:["none", v("--accent-soft","#745863")],
+    output:[v("--surface-2","#1A2E49"), v("--line","#243954")]
+  };
+  const pad = 30;
+  const maxX = Math.max(400, ...pgNodes.map(function(n){ return n.x + n.w; })) + pad;
+  const maxY = Math.max(240, ...pgNodes.map(function(n){ return n.y + n.h; })) + pad;
+  const byId = {}; pgNodes.forEach(function(n){ byId[n.id] = n; });
+
+  let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + maxX + ' ' + maxY +
+    '" width="' + maxX + '" height="' + maxY + '">' +
+    '<rect width="100%" height="100%" fill="' + v("--bg","#0C1A2F") + '"/>' +
+    '<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" ' +
+    'orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="' + v("--muted","#9098A6") + '"/></marker></defs>';
+  pgEdges.forEach(function(e){
+    const a = byId[e.from], b = byId[e.to];
+    if (!a || !b) return;
+    const p1 = pgEdgePoint(a, b.x + b.w/2, b.y + b.h/2);
+    const p2 = pgEdgePoint(b, a.x + a.w/2, a.y + a.h/2);
+    s += '<line x1="' + p1[0].toFixed(1) + '" y1="' + p1[1].toFixed(1) + '" x2="' + p2[0].toFixed(1) +
+         '" y2="' + p2[1].toFixed(1) + '" stroke="' + v("--muted","#9098A6") +
+         '" stroke-width="1.6" marker-end="url(#a)"/>';
+  });
+  pgNodes.forEach(function(n){
+    const p = pal[n.k] || pal.process;
+    s += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="' + n.h + '" rx="4" fill="' +
+      p[0] + '" stroke="' + p[1] + '" stroke-width="1.5"' +
+      (n.k === "human" || n.k === "queue" ? ' stroke-dasharray="5 4"' : '') + '/>';
+    const words = n.l.split(" ");
+    const lines = []; let cur = "";
+    words.forEach(function(w){
+      if ((cur + " " + w).trim().length > 16){ lines.push(cur.trim()); cur = w; } else { cur += " " + w; }
+    });
+    if (cur.trim()) lines.push(cur.trim());
+    const y0 = n.y + n.h/2 - (lines.length - 1) * 6.5 + 4;
+    lines.forEach(function(ln, i){
+      s += '<text x="' + (n.x + n.w/2) + '" y="' + (y0 + i*13) + '" text-anchor="middle" ' +
+        'font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="12" fill="' +
+        v("--text","#E3E4E8") + '">' + esc(ln) + '</text>';
+    });
+  });
+  s += '</svg>';
+
+  const blob = new Blob([s], {type:"image/svg+xml"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "system-sketch.svg";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+}
+
+function renderPlayground(){
+  stage.className = "";
+  stage.innerHTML =
+    '<div class="pg">' +
+      '<aside class="pgside">' +
+        '<h4>Blocks</h4>' +
+        '<p class="hint">Drag onto the canvas, or click to drop one in.</p>' +
+        '<div class="pgpal">' + PGKINDS.map(function(k){
+          return '<button type="button" draggable="true" data-kind="' + k.k + '">' + esc(k.n) + '</button>';
+        }).join("") + '</div>' +
+        '<h4 style="margin-top:20px">Starters</h4>' +
+        '<p class="hint">Loading one replaces the canvas.</p>' +
+        '<div class="pgpal">' + Object.keys(PGTEMPLATES).map(function(k){
+          return '<button type="button" data-tpl="' + k + '" style="border-left-color:var(--accent-soft)">' +
+            esc(PGTEMPLATES[k].name) + '</button>';
+        }).join("") + '</div>' +
+      '</aside>' +
+      '<div>' +
+        '<div class="pgtools">' +
+          '<button type="button" id="pgLink" aria-pressed="false">Connect</button>' +
+          '<button type="button" id="pgDel" disabled>Delete selected</button>' +
+          '<span class="sep"></span>' +
+          '<button type="button" id="pgClear">Clear</button>' +
+          '<button type="button" id="pgSvg">Export SVG</button>' +
+          '<span style="flex:1"></span>' +
+          '<span id="pgmeta" style="align-self:center;font-family:IBM Plex Mono,monospace;font-size:0.75rem;color:var(--muted)"></span>' +
+        '</div>' +
+        '<div class="pgcanvas" id="pgcanvas"></div>' +
+      '</div>' +
+    '</div>';
+
+  const cv = document.getElementById("pgcanvas");
+
+  // attached once per render of the tab, not once per repaint
+  cv.addEventListener("click", function(ev){
+    if (ev.target === cv || ev.target.id === "pgwires"){
+      pgSelNode = null; pgSelEdge = null; pgFrom = null; pgPaint();
+    }
+  });
+
+  stage.querySelectorAll("[data-kind]").forEach(function(b){
+    b.addEventListener("click", function(){
+      const r = cv.getBoundingClientRect();
+      const col = pgDropIdx % 4, row = Math.floor(pgDropIdx / 4) % 5;
+      pgAdd(b.dataset.kind, null, 40 + col * 170, 40 + row * 90);
+      pgDropIdx++;
+      pgPaint();
+    });
+    b.addEventListener("dragstart", function(e){
+      try { e.dataTransfer.setData("text/plain", b.dataset.kind); } catch(err){}
+      e.dataTransfer.effectAllowed = "copy";
+    });
+  });
+  cv.addEventListener("dragover", function(e){ e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+  cv.addEventListener("drop", function(e){
+    e.preventDefault();
+    const kind = e.dataTransfer.getData("text/plain");
+    if (!PGKINDS.some(function(k){ return k.k === kind; })) return;
+    const r = cv.getBoundingClientRect();
+    pgAdd(kind, null, Math.max(0, Math.round(e.clientX - r.left + cv.scrollLeft - 66)),
+                      Math.max(0, Math.round(e.clientY - r.top + cv.scrollTop - 27)));
+    pgPaint();
+  });
+
+  stage.querySelectorAll("[data-tpl]").forEach(function(b){
+    b.addEventListener("click", function(){ pgLoad(b.dataset.tpl); });
+  });
+
+  document.getElementById("pgLink").addEventListener("click", function(){
+    pgLinking = !pgLinking; pgFrom = null;
+    this.setAttribute("aria-pressed", pgLinking);
+    cv.classList.toggle("linking", pgLinking);
+    pgPaint();
+  });
+  document.getElementById("pgDel").addEventListener("click", pgDelete);
+  document.getElementById("pgClear").addEventListener("click", function(){
+    pgNodes = []; pgEdges = []; pgSelNode = pgSelEdge = pgFrom = null; pgPaint();
+  });
+  document.getElementById("pgSvg").addEventListener("click", pgExport);
+
+  pgPaint();
+  updateMeta();
+}
+
+document.addEventListener("keydown", function(e){
+  if (tab !== "PG") return;
+  const t = e.target;
+  if (t && (t.isContentEditable || t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+  if (e.key === "Delete" || e.key === "Backspace"){ e.preventDefault(); pgDelete(); }
+  if (e.key === "Escape"){ pgFrom = null; pgSelNode = null; pgSelEdge = null; pgPaint(); }
+});
+
 function updateMeta(){
   if (tab === "GL"){
     const inScope = glossSrc === "ALL" ? GLOSSARY : GLOSSARY.filter(function(g){ return g.s === glossSrc; });
@@ -2258,6 +2985,18 @@ function updateMeta(){
   }
   if (tab === "DX"){
     metaEl.innerHTML = PATTERNS.length + " patterns / drag to reorder, flip for fit and limits";
+    return;
+  }
+  if (tab === "PG"){
+    metaEl.innerHTML = "drag blocks in, turn on Connect to link two, double-click a label to rename";
+    return;
+  }
+  if (tab === "MT"){
+    const list = metricsIn();
+    const scope = mcat === "ALL" ? "all categories"
+      : MCATS.find(function(x){ return x.c === mcat; }).n.toLowerCase();
+    metaEl.innerHTML = list.length + " metrics / " + scope +
+      " / definition, use, how to read it, and what good looks like";
     return;
   }
   if (tab === "SA"){
@@ -2364,7 +3103,7 @@ themeBtn.addEventListener("click", function(){
   if (tab === "MX") drawChart();
 });
 
-buildTabs(); buildRail(); render();
+buildTabs(); buildNav(); buildRail(); render();
 </script>
 </body>
 </html>
