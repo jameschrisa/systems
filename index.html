@@ -17,16 +17,27 @@
   --accent:#C62C27; --accent-soft:#745863; --focus:#9098A6;
   --accent-wash:rgba(198,44,39,.17); --check-mark:#FFFFFF;
   --teal:#4E9DAE; --teal-soft:rgba(78,157,174,.16);
+  --inset:#0C1A2F;
   --shadow:rgba(0,0,0,.34);
 }
 [data-theme="light"]{
-  --bg:#E3E4E8; --surface:#FFFFFF; --surface-2:#F4F5F8;
-  --line:#CDD1DA; --line-soft:#DFE2E8;
-  --text:#0C1A2F; --text-mid:#3D4757; --muted:#745863;
+  --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#F6F8FA;
+  --line:#D6DBE4; --line-soft:#E4E8EF;
+  --text:#0C1A2F; --text-mid:#3D4757; --muted:#6E7787;
   --accent:#C62C27; --accent-soft:#745863; --focus:#0C1A2F;
-  --accent-wash:rgba(198,44,39,.10); --check-mark:#FFFFFF;
-  --teal:#2B6E7D; --teal-soft:rgba(43,110,125,.12);
-  --shadow:rgba(12,26,47,.12);
+  --accent-wash:rgba(198,44,39,.09); --check-mark:#FFFFFF;
+  --teal:#2B6E7D; --teal-soft:rgba(43,110,125,.10);
+  --inset:#EDF1F6;
+  --shadow:rgba(12,26,47,.13);
+}
+/* on a white ground, separation comes from elevation rather than from tint */
+[data-theme="light"] .face,
+[data-theme="light"] .panel,
+[data-theme="light"] .sect{
+  box-shadow:0 1px 2px rgba(12,26,47,.05), 0 5px 16px -4px rgba(12,26,47,.16);
+}
+[data-theme="light"] .card.focused .face{
+  box-shadow:0 0 0 1px var(--accent), 0 0 0 4px rgba(198,44,39,.13), 0 6px 20px -4px rgba(12,26,47,.20);
 }
 *{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
@@ -168,7 +179,7 @@ ul.practice label.done .lbl{text-decoration:none;}
 .takeaway{margin:14px 0 0;padding:11px 12px;border-radius:6px;
   background:var(--accent-wash);border-left:3px solid var(--accent);
   color:var(--text);font-size:0.875rem;line-height:1.45;font-weight:450;}
-.ask{margin:0;padding:11px 12px;border-radius:6px;background:var(--bg);
+.ask{margin:0;padding:11px 12px;border-radius:6px;background:var(--inset);
   border:1px solid var(--line);color:var(--text);font-size:0.875rem;
   line-height:1.45;font-style:italic;}
 
@@ -201,7 +212,7 @@ ul.practice label.done .lbl{text-decoration:none;}
 .hintbtn[aria-expanded="true"]{color:var(--accent);}
 .hintbtn[aria-expanded="true"] svg{transform:rotate(180deg);}
 .hint{margin:11px 0 2px 24px;padding:12px 13px;border-radius:6px;
-  background:var(--bg);border:1px solid var(--line);}
+  background:var(--inset);border:1px solid var(--line);}
 .hint p{margin:0;font-size:0.8125rem;line-height:1.5;color:var(--text-mid);}
 .hint p + p{margin-top:9px;}
 .hlab{display:block;font-family:"IBM Plex Mono",monospace;font-size:0.65rem;
@@ -319,7 +330,7 @@ footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
   <div class="top">
     <div>
       <div class="brandline"><span class="logobox"><span>Systems Design</span></span><h1>Systems practice</h1></div>
-      <p class="standfirst">A working reference for designing, engineering, governing, and analyzing systems across an enterprise estate of data and applications. Each card holds one idea with practice steps you can tick off, and field context on the back. Drag to reorder, flip any card, filter by area.</p>
+      <p class="standfirst">A working reference for designing, engineering, governing, and analyzing systems across an enterprise estate of data and applications.</p>
     </div>
     <div class="iconbar">
       <button class="icobtn" id="themeBtn" type="button" title="Switch theme" aria-label="Switch colour theme">
