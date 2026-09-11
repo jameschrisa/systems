@@ -4,26 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0C1A2F">
-<title>Systems Design — a working reference</title>
-<meta name="description" content="A working reference for designing, engineering, governing and analysing systems across an enterprise estate of data and applications. 132 cards, 12 block-diagram patterns, a 48-question audit matrix and a 60-term glossary.">
-<meta name="author" content="James Christopher">
-<meta name="color-scheme" content="dark light">
-
-<!-- icons -->
-<link rel="icon" href="favicon.ico" sizes="32x32">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
-<link rel="manifest" href="site.webmanifest">
-
-<!-- social preview. Update BASE_URL below if the repo name differs. -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Systems Design — a working reference">
-<meta property="og:description" content="Design, engineering, governance, analysis and AI systems engineering, as cards you can work through.">
-<meta property="og:url" content="https://jameschrisa.github.io/systems-design/">
-<meta property="og:image" content="https://jameschrisa.github.io/systems-design/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
+<title>Systems Practice — Design, Engineering, Analysis, Risk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
@@ -125,10 +106,32 @@ a.icobtn svg{width:15px;height:15px;}
 .flip:hover{color:var(--accent);border-color:var(--accent-soft);}
 .flip svg{width:14px;height:14px;display:block;}
 
-.cbody{padding:15px 16px 18px;overflow-y:auto;flex:1;}
-.cbody::-webkit-scrollbar{width:9px;}
+.cbody{padding:15px 16px 30px;overflow-y:auto;flex:1;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;}
+.cbody:focus{outline:none;}
+.cbody::-webkit-scrollbar{width:10px;}
 .cbody::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px;border:3px solid var(--surface);}
+.cbody::-webkit-scrollbar-thumb:hover{background:var(--muted);}
 .back .cbody::-webkit-scrollbar-thumb{border-color:var(--surface-2);}
+
+/* focus ring: the card you clicked is the card the wheel scrolls */
+.card.focused .face{border-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent), 0 0 22px 1px rgba(198,44,39,.34);}
+[data-theme="light"] .card.focused .face{box-shadow:0 0 0 1px var(--accent), 0 0 18px 1px rgba(198,44,39,.22);}
+
+/* more-content affordance */
+.cue{position:absolute;left:1px;right:1px;bottom:1px;height:56px;pointer-events:none;
+  border-radius:0 0 5px 5px;opacity:0;transition:opacity .2s ease;
+  background:linear-gradient(to bottom, transparent, var(--surface) 74%);}
+.back .cue{background:linear-gradient(to bottom, transparent, var(--surface-2) 74%);}
+.face.more .cue{opacity:1;}
+.cuebtn{position:absolute;right:13px;bottom:11px;width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);color:var(--muted);
+  display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+.back .cuebtn{background:var(--surface-2);}
+.face.more .cuebtn{opacity:1;pointer-events:auto;}
+.cuebtn:hover{color:var(--accent);border-color:var(--accent);}
+.cuebtn svg{width:14px;height:14px;display:block;}
 
 .card h3{margin:0;font-size:1.0325rem;font-weight:550;line-height:1.33;letter-spacing:-.008em;}
 .card p{margin:10px 0 0;color:var(--text-mid);font-size:0.9rem;line-height:1.58;}
@@ -1207,70 +1210,112 @@ q:"When did we last run evals against production config?"}
 ];
 
 const GLOSSARY = [
-{t:"Balancing loop",s:"SD",d:"A feedback structure that resists change and pulls a system back toward its prior state. Often mistaken for poor adoption."},
-{t:"Blast radius",s:"SD",d:"The extent of the estate affected when one component fails or changes. A direct consequence of coupling decisions."},
-{t:"Bounded context",s:"SD",d:"A boundary within which a set of terms has one consistent meaning. Crossing it requires explicit translation."},
-{t:"Conway's law",s:"SD",d:"Systems tend to mirror the communication structure of the organizations that build them."},
-{t:"Coupling",s:"SD",d:"The degree to which two components must change, deploy, or fail together."},
-{t:"Emergence",s:"SD",d:"Behavior produced by interaction between parts that cannot be predicted from any part in isolation."},
-{t:"Idempotency",s:"SD",d:"The property that applying an operation more than once has the same effect as applying it once. What makes retry safe."},
-{t:"Reversibility",s:"SD",d:"How cheaply a decision can be undone. Distinct from how risky the decision is."},
-{t:"Stock and flow",s:"SD",d:"A model separating accumulated quantities from the rates that change them. Explains why systems respond with delay."},
-{t:"Common mode failure",s:"SE",d:"A single cause that defeats supposedly redundant paths simultaneously, usually through a shared dependency."},
-{t:"Error budget",s:"SE",d:"The permitted amount of unreliability within a target, spendable on change. Reaching zero is a signal to stop shipping."},
-{t:"FMEA",s:"SE",d:"Failure mode and effects analysis. A structured review of how a system can fail and what each failure produces."},
-{t:"Graceful degradation",s:"SE",d:"Designed reduced operation under partial failure, rather than a total stop."},
-{t:"ICD",s:"SE",d:"Interface control document. The jointly owned specification of behavior between two components or teams."},
-{t:"Margin",s:"SE",d:"Reserve held against capacity, timing, or performance limits. Consumed by small decisions and rarely reported."},
-{t:"Non-functional requirement",s:"SE",d:"A constraint on how the system performs rather than what it does. Usually the deciding architectural input."},
-{t:"Observability",s:"SE",d:"The extent to which internal state can be determined from external outputs. Broader than monitoring."},
-{t:"Traceability",s:"SE",d:"Maintained links from need to design to test, enabling impact analysis when anything changes."},
-{t:"V-model",s:"SE",d:"A lifecycle representation pairing each level of decomposition with its corresponding level of verification."},
-{t:"Validation",s:"SE",d:"Confirmation that the right system was specified. Asks whether it solves the problem."},
-{t:"Verification",s:"SE",d:"Confirmation that the system was built to specification. Asks whether it matches the document."},
-{t:"As-is / as-performed",s:"BA",d:"The process as actually carried out, including workarounds and exceptions, rather than as documented."},
-{t:"Benefits realization",s:"BA",d:"The operational change required after delivery for a business case to produce its stated value."},
-{t:"Cycle time",s:"BA",d:"Total elapsed time from start to finish of a work item, including all waiting. Usually dominated by queues."},
-{t:"Data contract",s:"BA",d:"An agreed specification of schema, meaning, cadence, and guarantees between a data producer and its consumers."},
-{t:"Data lineage",s:"BA",d:"The recorded path a data element takes from origin through transformation to use."},
-{t:"Elicitation",s:"BA",d:"Drawing out stakeholder needs. Produces symptoms; analysis is required to find structure."},
-{t:"Master data",s:"BA",d:"Core shared entities such as customer, product, or supplier, used across multiple systems."},
-{t:"Straight-through processing",s:"BA",d:"Completion of a transaction without manual intervention. Value depends on the proportion of cases that qualify."},
-{t:"System of record",s:"BA",d:"The authoritative source for a given fact. Best assigned per attribute rather than per entity."},
-{t:"TIME model",s:"BA",d:"Portfolio assessment placing each application in tolerate, invest, migrate, or eliminate based on fit and condition."},
-{t:"Volumetrics",s:"BA",d:"Transaction counts, peaks, and growth rates. Determines which solution patterns remain viable."},
-{t:"Agentic loop",s:"AE",d:"A cycle where a model chooses an action, observes the result, and chooses again. Requires externally imposed termination."},
-{t:"Chunking",s:"AE",d:"Splitting source documents into retrievable units. The boundary determines what can ever be returned together."},
-{t:"Compaction",s:"AE",d:"Summarizing conversation history to fit a context window. Whatever is not specified as durable may be discarded."},
-{t:"Context engineering",s:"AE",d:"Deciding what enters the model's context each turn, and in what order. Distinct from wording the instruction."},
-{t:"Context window",s:"AE",d:"The token budget available to a single model call. A budget to allocate, not a container to fill."},
-{t:"Eval harness",s:"AE",d:"A versioned set of cases and scoring used to measure change. For a probabilistic system it is the specification."},
-{t:"Grounding",s:"AE",d:"Tying generated claims to retrievable sources, cited precisely enough that a reader can check them."},
-{t:"LLM-as-judge",s:"AE",d:"Using a model to score outputs. A measuring instrument that needs calibration against human labels."},
-{t:"MCP",s:"AE",d:"Model Context Protocol. A standard for exposing tools and context to models, decoupling an application from any one provider."},
-{t:"Prompt injection",s:"AE",d:"Instructions embedded in fetched content that the model treats as direction. Why tool output is untrusted input."},
-{t:"RAG",s:"AE",d:"Retrieval-augmented generation. Fetching relevant material and supplying it as context. Answer quality is capped by retrieval."},
-{t:"Reranking",s:"AE",d:"A second pass that reorders a wide candidate set by relevance. Usually cheaper than adding model capacity."},
-{t:"Span",s:"AE",d:"One traced unit of work within a task, carrying its inputs, tool calls and outputs for debugging."},
-{t:"Tool scope",s:"AE",d:"What a tool is permitted to reach. The real authorization boundary for an agent, regardless of instructions."},
-{t:"Concentration risk",s:"RG",d:"Exposure arising because many unrelated activities depend on the same platform, provider, or person."},
-{t:"Decision rights",s:"RG",d:"An explicit statement of who decides what, at which threshold, and who may overrule."},
-{t:"Detective control",s:"RG",d:"A control that identifies an event after it occurs. Useful only where a corrective response is attached."},
-{t:"Inherent risk",s:"RG",d:"Exposure before any control is applied. Meaningless to report without its residual counterpart."},
-{t:"Least privilege",s:"RG",d:"Granting only the access required for a task. Decays without active recertification."},
-{t:"Near miss",s:"RG",d:"An event that almost caused harm. Carries most of the learning of an incident at none of the cost."},
-{t:"Operating effectiveness",s:"RG",d:"Evidence that a control actually functions in practice, as distinct from being well designed."},
-{t:"Residual risk",s:"RG",d:"Exposure remaining after controls operate as designed. The gap from inherent risk is the control's value."},
-{t:"RPO",s:"RG",d:"Recovery point objective. The maximum tolerable data loss, stated as a period of time."},
-{t:"RTO",s:"RG",d:"Recovery time objective. The maximum tolerable duration of an outage. A business decision, not an IT target."},
-{t:"SBOM",s:"RG",d:"Software bill of materials. An inventory of the components and dependencies contained in a piece of software."},
-{t:"Segregation of duties",s:"RG",d:"Separating who requests, approves, and executes an action. Frequently lost when steps are automated."},
-{t:"Shadow IT",s:"RG",d:"Technology procured or built outside sanctioned governance. Reliable evidence of an unmet requirement."},
-{t:"Zero trust",s:"RG",d:"An approach that treats network location as no indication of trust, authorizing on identity and context instead."}
+{t:"Balancing loop",s:"SD",alt:"negative feedback, goal seeking",d:"A feedback structure that resists change and pulls a system back toward its prior state. Often mistaken for poor adoption."},
+{t:"Blast radius",s:"SD",alt:"impact radius, fault domain",d:"The extent of the estate affected when one component fails or changes. A direct consequence of coupling decisions."},
+{t:"Bounded context",s:"SD",alt:"domain driven design, DDD",d:"A boundary within which a set of terms has one consistent meaning. Crossing it requires explicit translation."},
+{t:"Conway's law",s:"SD",alt:"Conway, org structure",d:"Systems tend to mirror the communication structure of the organizations that build them."},
+{t:"Coupling",s:"SD",alt:"coupled, decoupling, loose coupling, tight coupling",d:"The degree to which two components must change, deploy, or fail together."},
+{t:"Emergence",s:"SD",alt:"emergent, emergent behaviour",d:"Behavior produced by interaction between parts that cannot be predicted from any part in isolation."},
+{t:"Idempotency",s:"SD",alt:"idempotent, idempotence, safe retry",d:"The property that applying an operation more than once has the same effect as applying it once. What makes retry safe."},
+{t:"Reversibility",s:"SD",alt:"reversible, one-way door, two-way door",d:"How cheaply a decision can be undone. Distinct from how risky the decision is."},
+{t:"Stock and flow",s:"SD",alt:"system dynamics, accumulation",d:"A model separating accumulated quantities from the rates that change them. Explains why systems respond with delay."},
+{t:"Common mode failure",s:"SE",alt:"common cause, correlated failure",d:"A single cause that defeats supposedly redundant paths simultaneously, usually through a shared dependency."},
+{t:"Error budget",s:"SE",alt:"SLO budget, reliability budget",d:"The permitted amount of unreliability within a target, spendable on change. Reaching zero is a signal to stop shipping."},
+{t:"FMEA",s:"SE",alt:"failure mode and effects analysis",d:"Failure mode and effects analysis. A structured review of how a system can fail and what each failure produces."},
+{t:"Graceful degradation",s:"SE",alt:"degrade, fallback, fail soft",d:"Designed reduced operation under partial failure, rather than a total stop."},
+{t:"ICD",s:"SE",alt:"interface control document, interface spec",d:"Interface control document. The jointly owned specification of behavior between two components or teams."},
+{t:"Margin",s:"SE",alt:"slack, headroom, buffer",d:"Reserve held against capacity, timing, or performance limits. Consumed by small decisions and rarely reported."},
+{t:"Non-functional requirement",s:"SE",alt:"NFR, quality attribute, ilities",d:"A constraint on how the system performs rather than what it does. Usually the deciding architectural input."},
+{t:"Observability",s:"SE",alt:"monitoring, observable, telemetry",d:"The extent to which internal state can be determined from external outputs. Broader than monitoring."},
+{t:"Traceability",s:"SE",alt:"traceable, requirements trace, trace matrix",d:"Maintained links from need to design to test, enabling impact analysis when anything changes."},
+{t:"V-model",s:"SE",alt:"V model, Vee model",d:"A lifecycle representation pairing each level of decomposition with its corresponding level of verification."},
+{t:"Validation",s:"SE",alt:"V and V, fit for purpose",d:"Confirmation that the right system was specified. Asks whether it solves the problem."},
+{t:"Verification",s:"SE",alt:"V and V, built to spec",d:"Confirmation that the system was built to specification. Asks whether it matches the document."},
+{t:"As-is / as-performed",s:"BA",alt:"current state, as is, as performed",d:"The process as actually carried out, including workarounds and exceptions, rather than as documented."},
+{t:"Benefits realization",s:"BA",alt:"benefits, business case",d:"The operational change required after delivery for a business case to produce its stated value."},
+{t:"Cycle time",s:"BA",alt:"lead time, turnaround",d:"Total elapsed time from start to finish of a work item, including all waiting. Usually dominated by queues."},
+{t:"Data contract",s:"BA",alt:"schema contract, producer contract",d:"An agreed specification of schema, meaning, cadence, and guarantees between a data producer and its consumers."},
+{t:"Data lineage",s:"BA",alt:"lineage, provenance, impact analysis",d:"The recorded path a data element takes from origin through transformation to use."},
+{t:"Elicitation",s:"BA",alt:"requirements gathering, discovery",d:"Drawing out stakeholder needs. Produces symptoms; analysis is required to find structure."},
+{t:"Master data",s:"BA",alt:"MDM, master data management",d:"Core shared entities such as customer, product, or supplier, used across multiple systems."},
+{t:"Straight-through processing",s:"BA",alt:"STP, no touch",d:"Completion of a transaction without manual intervention. Value depends on the proportion of cases that qualify."},
+{t:"System of record",s:"BA",alt:"SOR, golden source, authoritative source",d:"The authoritative source for a given fact. Best assigned per attribute rather than per entity."},
+{t:"TIME model",s:"BA",alt:"tolerate invest migrate eliminate, application rationalization",d:"Portfolio assessment placing each application in tolerate, invest, migrate, or eliminate based on fit and condition."},
+{t:"Volumetrics",s:"BA",alt:"volumes, transaction volume, throughput",d:"Transaction counts, peaks, and growth rates. Determines which solution patterns remain viable."},
+{t:"Agentic loop",s:"AE",alt:"agent loop, ReAct, tool loop",d:"A cycle where a model chooses an action, observes the result, and chooses again. Requires externally imposed termination."},
+{t:"Chunking",s:"AE",alt:"chunk, splitter, segmentation",d:"Splitting source documents into retrievable units. The boundary determines what can ever be returned together."},
+{t:"Compaction",s:"AE",alt:"compact, history summarization, truncation",d:"Summarizing conversation history to fit a context window. Whatever is not specified as durable may be discarded."},
+{t:"Context engineering",s:"AE",alt:"context assembly, context management",d:"Deciding what enters the model's context each turn, and in what order. Distinct from wording the instruction."},
+{t:"Context window",s:"AE",alt:"token limit, window size",d:"The token budget available to a single model call. A budget to allocate, not a container to fill."},
+{t:"Eval harness",s:"AE",alt:"evals, evaluation set, golden set, benchmark",d:"A versioned set of cases and scoring used to measure change. For a probabilistic system it is the specification."},
+{t:"Grounding",s:"AE",alt:"grounded, source attribution",d:"Tying generated claims to retrievable sources, cited precisely enough that a reader can check them."},
+{t:"LLM-as-judge",s:"AE",alt:"model graded, autograder, AI judge",d:"Using a model to score outputs. A measuring instrument that needs calibration against human labels."},
+{t:"MCP",s:"AE",alt:"Model Context Protocol, tool protocol",d:"Model Context Protocol. A standard for exposing tools and context to models, decoupling an application from any one provider."},
+{t:"Prompt injection",s:"AE",alt:"injection, jailbreak, indirect injection",d:"Instructions embedded in fetched content that the model treats as direction. Why tool output is untrusted input."},
+{t:"RAG",s:"AE",alt:"retrieval augmented generation, retrieval, vector search",d:"Retrieval-augmented generation. Fetching relevant material and supplying it as context. Answer quality is capped by retrieval."},
+{t:"Reranking",s:"AE",alt:"rerank, reranker, cross encoder",d:"A second pass that reorders a wide candidate set by relevance. Usually cheaper than adding model capacity."},
+{t:"Span",s:"AE",alt:"trace, tracing, observability span",d:"One traced unit of work within a task, carrying its inputs, tool calls and outputs for debugging."},
+{t:"Tool scope",s:"AE",alt:"tool permissions, agent permissions",d:"What a tool is permitted to reach. The real authorization boundary for an agent, regardless of instructions."},
+{t:"ACID",s:"IF",alt:"transaction guarantees, atomicity consistency isolation durability",d:"The guarantees a traditional database transaction provides: all or nothing, valid state, isolated from concurrent work, and durable once committed."},
+{t:"API gateway",s:"IF",alt:"edge, ingress",d:"A single entry point handling routing, authentication, rate limiting and versioning for a set of services behind it."},
+{t:"Atomicity",s:"IF",alt:"all or nothing",d:"An operation either happens completely or not at all. No partially applied state is ever observable."},
+{t:"Autoscaling",s:"IF",alt:"elastic, scale automatically",d:"Adding or removing capacity in response to load. Helps only when the thing being scaled is actually the bottleneck."},
+{t:"Backpressure",s:"IF",alt:"flow control, throttle",d:"A downstream component signalling upstream to slow down. Without it, queues grow until something fails."},
+{t:"Blue-green deployment",s:"IF",alt:"blue green, red black",d:"Two identical environments with traffic switched from one to the other, which makes rollback a routing change rather than a redeploy."},
+{t:"Bulkhead",s:"IF",alt:"isolation, resource partition",d:"Isolating resources so one overloaded component cannot exhaust capacity the rest depend on."},
+{t:"CAP theorem",s:"IF",alt:"Brewer, consistency availability partition",d:"Under a network partition a distributed system must choose between consistency and availability. It says nothing about the partition-free case."},
+{t:"Cache invalidation",s:"IF",alt:"cache, TTL, staleness",d:"Deciding when cached data is no longer valid. Reliably harder than the caching itself."},
+{t:"Canary release",s:"IF",alt:"canary, progressive rollout",d:"Routing a small share of traffic to a new version and widening only if the signals hold."},
+{t:"Cardinality",s:"IF",alt:"distinct values, label explosion",d:"The number of distinct values in a field or metric label. High cardinality is what makes observability expensive."},
+{t:"CDN",s:"IF",alt:"content delivery network, edge cache",d:"Caches content close to users, cutting latency and origin load. Introduces its own invalidation problem."},
+{t:"Cold start",s:"IF",alt:"warm up, first request latency",d:"Latency incurred when a component must initialize before it can serve. Common in serverless and in model loading."},
+{t:"Connection pool",s:"IF",alt:"pooling, max connections",d:"A reusable set of open connections. Exhaustion usually presents as latency rather than as an error, which makes it hard to spot."},
+{t:"Container",s:"IF",alt:"Docker, image, OCI",d:"An application packaged with its dependencies, isolated from the host while sharing its kernel."},
+{t:"Deadlock",s:"IF",alt:"lock contention, circular wait",d:"Two or more operations each holding a resource the other needs. Neither proceeds without intervention."},
+{t:"Denormalization",s:"IF",alt:"normalization, read optimization",d:"Duplicating data deliberately to make reads cheaper, accepting the write cost and the consistency risk that follows."},
+{t:"Eventual consistency",s:"IF",alt:"BASE, converge, stale read",d:"Replicas converge given time and no new writes. Reads may return stale data until they do."},
+{t:"Failover",s:"IF",alt:"standby, switchover",d:"Switching to a standby when the primary fails. Only as reliable as the last time it was actually tested."},
+{t:"Feature flag",s:"IF",alt:"toggle, kill switch, dark launch",d:"A runtime switch separating deploying code from releasing behavior. Flags left in place become permanent branching."},
+{t:"Horizontal scaling",s:"IF",alt:"scale out, vertical scaling, scale up",d:"Adding more instances rather than a larger one. Requires statelessness or an explicit partitioning scheme."},
+{t:"Idempotency key",s:"IF",alt:"idempotent, dedupe key, request id",d:"A client-supplied identifier letting a server recognize a repeated request and not repeat its effect. What makes retry safe in practice."},
+{t:"Immutable infrastructure",s:"IF",alt:"replace not patch, golden image",d:"Servers are replaced rather than modified, so what is running always matches its definition."},
+{t:"Infrastructure as code",s:"IF",alt:"IaC, Terraform, declarative",d:"Defining infrastructure in version-controlled files so environments are reproducible, reviewable and revertible."},
+{t:"Linearizability",s:"IF",alt:"strong consistency, strict serializability",d:"The strongest consistency model: every operation appears to take effect at a single instant between its start and its return."},
+{t:"Little's law",s:"IF",alt:"queueing, WIP, arrival rate",d:"Items in a system equal arrival rate multiplied by time spent in it. The arithmetic behind every queue argument."},
+{t:"Load balancer",s:"IF",alt:"LB, round robin, health check",d:"Distributes requests across instances and removes unhealthy ones from rotation. A dependency in its own right."},
+{t:"MTTR",s:"IF",alt:"mean time to recovery, MTBF, restore time",d:"Mean time to recovery. Usually more actionable than mean time between failures, because you control it."},
+{t:"Optimistic locking",s:"IF",alt:"pessimistic locking, version check, ETag",d:"Allowing concurrent edits and detecting conflict at write time via a version check, rather than holding a lock throughout."},
+{t:"Orchestration",s:"IF",alt:"Kubernetes, k8s, scheduler",d:"Scheduling workloads across machines and continuously reconciling actual state with declared state."},
+{t:"Partitioning",s:"IF",alt:"partition key, hot partition",d:"Splitting data by a key so each part is handled independently. The key choice determines where the hot spots land."},
+{t:"Quorum",s:"IF",alt:"majority, consensus, Raft",d:"The number of replicas that must agree for an operation to count. Trades latency against consistency."},
+{t:"Race condition",s:"IF",alt:"concurrency bug, timing",d:"Behavior that depends on the relative timing of concurrent operations. Reproduces rarely and fails expensively."},
+{t:"Rate limiting",s:"IF",alt:"throttling, quota, 429",d:"Capping request volume per caller. Protects shared capacity and makes a noisy client visible instead of merely damaging."},
+{t:"Replication",s:"IF",alt:"replica, follower, read replica",d:"Maintaining copies of data across nodes or regions. Copies sharing a failure cause are not independent, whatever the count says."},
+{t:"Service mesh",s:"IF",alt:"sidecar, Envoy, mTLS",d:"A dedicated layer handling service-to-service traffic, retries, encryption and telemetry outside application code."},
+{t:"Sharding",s:"IF",alt:"shard, horizontal partition",d:"Horizontal partitioning across independent databases. Removes a scale ceiling and introduces a rebalancing problem."},
+{t:"SLI, SLO, SLA",s:"IF",alt:"service level objective, indicator, agreement",d:"What you measure, the target you hold internally, and the commitment made externally. Routinely conflated, and not the same thing."},
+{t:"Statelessness",s:"IF",alt:"stateless, sticky session",d:"Holding no per-client state between requests, so any instance can serve any request. The precondition for scaling out cleanly."},
+{t:"Tail latency",s:"IF",alt:"p99, p95, percentile, slow tail",d:"The slow end of the response distribution. Where users actually experience the system, and where averages hide the problem."},
+{t:"Two-phase commit",s:"IF",alt:"2PC, distributed transaction, coordinator",d:"A coordinated commit across systems. Provides atomicity and blocks when the coordinator fails, which is why sagas exist."},
+{t:"Write-ahead log",s:"IF",alt:"WAL, journal, redo log",d:"Recording a change durably before applying it, so state can be rebuilt after a crash."},
+{t:"Concentration risk",s:"RG",alt:"single point of failure, SPOF, key person",d:"Exposure arising because many unrelated activities depend on the same platform, provider, or person."},
+{t:"Decision rights",s:"RG",alt:"accountability, RACI, authority",d:"An explicit statement of who decides what, at which threshold, and who may overrule."},
+{t:"Detective control",s:"RG",alt:"detection, monitoring control",d:"A control that identifies an event after it occurs. Useful only where a corrective response is attached."},
+{t:"Inherent risk",s:"RG",alt:"gross risk, pre-control",d:"Exposure before any control is applied. Meaningless to report without its residual counterpart."},
+{t:"Least privilege",s:"RG",alt:"privilege, entitlements, minimum access",d:"Granting only the access required for a task. Decays without active recertification."},
+{t:"Near miss",s:"RG",alt:"close call, good catch",d:"An event that almost caused harm. Carries most of the learning of an incident at none of the cost."},
+{t:"Operating effectiveness",s:"RG",alt:"control testing, does it work",d:"Evidence that a control actually functions in practice, as distinct from being well designed."},
+{t:"Residual risk",s:"RG",alt:"net risk, post-control",d:"Exposure remaining after controls operate as designed. The gap from inherent risk is the control's value."},
+{t:"RPO",s:"RG",alt:"recovery point objective, data loss tolerance",d:"Recovery point objective. The maximum tolerable data loss, stated as a period of time."},
+{t:"RTO",s:"RG",alt:"recovery time objective, downtime tolerance",d:"Recovery time objective. The maximum tolerable duration of an outage. A business decision, not an IT target."},
+{t:"SBOM",s:"RG",alt:"software bill of materials, dependency inventory",d:"Software bill of materials. An inventory of the components and dependencies contained in a piece of software."},
+{t:"Segregation of duties",s:"RG",alt:"SoD, separation of duties, four eyes",d:"Separating who requests, approves, and executes an action. Frequently lost when steps are automated."},
+{t:"Shadow IT",s:"RG",alt:"unsanctioned, rogue tooling",d:"Technology procured or built outside sanctioned governance. Reliable evidence of an unmet requirement."},
+{t:"Zero trust",s:"RG",alt:"zero-trust, never trust always verify",d:"An approach that treats network location as no indication of trust, authorizing on identity and context instead."}
 ];
 
 /* ---------------- state ---------------- */
-let tab = "SD", area = "ALL";
+let tab = "SD", area = "ALL", glossSrc = "ALL";
 let order = CARDS.map(function(_,i){ return i; });
 const checkedSteps = new Set();
 const checkedTerms = new Set();
@@ -1312,7 +1357,19 @@ function buildRail(){
     });
     return;
   }
-  if (tab === "GL" || tab === "MX" || tab === "DX"){ railEl.innerHTML = ""; railEl.style.display = "none"; return; }
+  if (tab === "GL"){
+    railEl.style.display = "flex";
+    railEl.innerHTML = GSOURCES.map(function(s){
+      const cnt = s.c === "ALL" ? GLOSSARY.length : GLOSSARY.filter(function(g){ return g.s === s.c; }).length;
+      return '<button type="button" data-gsrc="' + s.c + '" aria-pressed="' + (s.c === glossSrc) +
+        '">' + s.n + '<span class="n">' + cnt + '</span></button>';
+    }).join("");
+    railEl.querySelectorAll("button").forEach(function(b){
+      b.addEventListener("click", function(){ glossSrc = b.dataset.gsrc; buildRail(); renderGlossary(); });
+    });
+    return;
+  }
+  if (tab === "MX" || tab === "DX"){ railEl.innerHTML = ""; railEl.style.display = "none"; return; }
   railEl.style.display = "flex";
   const list = [{code:"ALL", name:"All areas"}].concat(areasFor(tab));
   railEl.innerHTML = list.map(function(a){
@@ -1373,6 +1430,7 @@ function render(){
   }).join("");
 
   wireCards();
+  enhanceCards();
   updateMeta();
 }
 
@@ -1383,7 +1441,10 @@ function renderGlossary(){
   function paint(){
     const q = (input.value || "").toLowerCase().trim();
     const hits = GLOSSARY.filter(function(g){
-      return !q || g.t.toLowerCase().indexOf(q) > -1 || g.d.toLowerCase().indexOf(q) > -1;
+      if (glossSrc !== "ALL" && g.s !== glossSrc) return false;
+      if (!q) return true;
+      const hay = (g.t + " " + (g.alt || "") + " " + g.d).toLowerCase();
+      return hay.indexOf(q) > -1;
     });
     const box = document.getElementById("glist");
     box.innerHTML = hits.length ? hits.map(function(g){
@@ -1834,6 +1895,7 @@ function renderPatterns(){
       dragI = null; renderPatterns();
     });
   });
+  enhanceCards();
   updateMeta();
 }
 
@@ -2003,6 +2065,16 @@ const AUDIT = [
  no:"Only technical risks named. The usual causes are ownership, adoption and benefit."}
 ];
 
+const GSOURCES = [
+  {c:"ALL", n:"All sources"},
+  {c:"SD",  n:"Systems design"},
+  {c:"SE",  n:"Systems engineering"},
+  {c:"BA",  n:"Business analysis"},
+  {c:"RG",  n:"Risk and governance"},
+  {c:"AE",  n:"AI systems"},
+  {c:"IF",  n:"Infrastructure"}
+];
+
 const checkedAudit = new Set();
 let auditFilter = "ALL", auditQuery = "", hintsOpen = new Set(), allHints = false;
 
@@ -2089,9 +2161,84 @@ function renderAudit(){
   paintAudit();
 }
 
+/* ---------- card focus and scroll affordance ---------- */
+const CUE = '<div class="cue"></div>' +
+  '<button class="cuebtn" type="button" tabindex="-1" aria-label="Scroll this card down" ' +
+  'title="Scroll down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" ' +
+  'stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>';
+
+function faceOf(card){
+  return card.querySelector(card.classList.contains("flipped") ? ".back" : ".front");
+}
+
+function focusCard(card){
+  stage.querySelectorAll(".card.focused").forEach(function(c){
+    if (c !== card) c.classList.remove("focused");
+  });
+  card.classList.add("focused");
+  card.querySelectorAll(".cbody").forEach(function(b){ b.tabIndex = -1; });
+  const f = faceOf(card), b = f && f.querySelector(".cbody");
+  if (b){ b.tabIndex = 0; b.focus({preventScroll:true}); }
+}
+
+function enhanceCards(){
+  stage.querySelectorAll(".card").forEach(function(card){
+    card.querySelectorAll(".face").forEach(function(face){
+      const body = face.querySelector(".cbody");
+      if (!body || face.querySelector(".cue")) return;
+      body.setAttribute("role", "region");
+      body.tabIndex = face.classList.contains("front") ? 0 : -1;
+      face.insertAdjacentHTML("beforeend", CUE);
+
+      const sync = function(){
+        const more = body.scrollHeight - body.clientHeight > 4;
+        const atEnd = body.scrollTop + body.clientHeight >= body.scrollHeight - 6;
+        face.classList.toggle("more", more && !atEnd);
+      };
+      body.addEventListener("scroll", sync, {passive:true});
+      face._sync = sync;
+      sync();
+      requestAnimationFrame(sync);
+
+      face.querySelector(".cuebtn").addEventListener("click", function(e){
+        e.stopPropagation();
+        focusCard(card);
+        body.scrollBy({top: Math.round(body.clientHeight * 0.75), behavior:"smooth"});
+      });
+    });
+
+    card.addEventListener("mousedown", function(){ focusCard(card); });
+    card.querySelectorAll(".flip").forEach(function(b){
+      b.addEventListener("click", function(){
+        focusCard(card);
+        const f = faceOf(card);
+        if (f && f._sync) requestAnimationFrame(f._sync);
+      });
+    });
+  });
+}
+
+document.addEventListener("mousedown", function(e){
+  if (!e.target.closest(".card")) {
+    document.querySelectorAll(".card.focused").forEach(function(c){ c.classList.remove("focused"); });
+  }
+});
+document.addEventListener("keydown", function(e){
+  if (e.key === "Escape") document.querySelectorAll(".card.focused").forEach(function(c){ c.classList.remove("focused"); });
+});
+window.addEventListener("resize", function(){
+  document.querySelectorAll(".face").forEach(function(f){ if (f._sync) f._sync(); });
+});
+window.addEventListener("load", function(){
+  document.querySelectorAll(".face").forEach(function(f){ if (f._sync) f._sync(); });
+});
+
 function updateMeta(){
   if (tab === "GL"){
-    metaEl.innerHTML = GLOSSARY.length + " terms / <b>" + checkedTerms.size + "</b> reviewed / filter by typing";
+    const inScope = glossSrc === "ALL" ? GLOSSARY : GLOSSARY.filter(function(g){ return g.s === glossSrc; });
+    const rev = inScope.filter(function(g){ return checkedTerms.has(g.t); }).length;
+    metaEl.innerHTML = inScope.length + " terms / <b>" + rev +
+      "</b> reviewed / search matches terms, aliases and definitions";
     return;
   }
   if (tab === "MX"){
