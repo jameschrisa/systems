@@ -1,0 +1,16 @@
+{
+  "name": "Systems Design — a working reference",
+  "short_name": "Systems Design",
+  "description": "Design, engineering, governance, analysis and AI systems engineering, as cards you can work through.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0C1A2F",
+  "theme_color": "#0C1A2F",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

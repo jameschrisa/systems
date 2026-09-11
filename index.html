@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0C1A2F">
+<title>Systems Design — a working reference</title>
+<meta name="description" content="A working reference for designing, engineering, governing and analysing systems across an enterprise estate of data and applications. 132 cards, 12 block-diagram patterns, a 48-question audit matrix and a 60-term glossary.">
+<meta name="author" content="James Christopher">
+<meta name="color-scheme" content="dark light">
+
+<!-- icons -->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- social preview. Update BASE_URL below if the repo name differs. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Systems Design — a working reference">
+<meta property="og:description" content="Design, engineering, governance, analysis and AI systems engineering, as cards you can work through.">
+<meta property="og:url" content="https://jameschrisa.github.io/systems-design/">
+<meta property="og:image" content="https://jameschrisa.github.io/systems-design/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C1A2F; --surface:#13253D; --surface-2:#1A2E49;
+  --line:#243954; --line-soft:#1C2F4A;
+  --text:#E3E4E8; --text-mid:#B6BDC9; --muted:#9098A6;
+  --accent:#C62C27; --accent-soft:#745863; --focus:#9098A6;
+  --accent-wash:rgba(198,44,39,.17); --check-mark:#FFFFFF;
+  --teal:#4E9DAE; --teal-soft:rgba(78,157,174,.16);
+  --shadow:rgba(0,0,0,.34);
+}
+[data-theme="light"]{
+  --bg:#E3E4E8; --surface:#FFFFFF; --surface-2:#F4F5F8;
+  --line:#CDD1DA; --line-soft:#DFE2E8;
+  --text:#0C1A2F; --text-mid:#3D4757; --muted:#745863;
+  --accent:#C62C27; --accent-soft:#745863; --focus:#0C1A2F;
+  --accent-wash:rgba(198,44,39,.10); --check-mark:#FFFFFF;
+  --teal:#2B6E7D; --teal-soft:rgba(43,110,125,.12);
+  --shadow:rgba(12,26,47,.12);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px 90px;}
+button{font-family:inherit;cursor:pointer;}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+
+header{padding:52px 0 0;}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;flex-wrap:wrap;}
+.brandline{display:flex;align-items:center;gap:14px;}
+.brandline{align-items:flex-end;gap:18px;}
+.logobox{width:116px;height:116px;background:var(--accent);flex:none;border-radius:2px;
+  display:flex;align-items:flex-end;padding:12px;overflow:hidden;}
+.logobox span{display:block;color:#FFFFFF;font-size:1.2rem;font-weight:600;line-height:1.08;
+  letter-spacing:-.02em;text-align:left;overflow-wrap:anywhere;hyphens:auto;}
+@media (max-width:640px){ .logobox{width:92px;height:92px;padding:10px;}
+  .logobox span{font-size:1rem;} }
+h1{margin:0;font-size:clamp(1.85rem,4vw,2.7rem);font-weight:600;letter-spacing:-0.022em;line-height:1.1;}
+.standfirst{margin:16px 0 0;max-width:64ch;color:var(--text-mid);font-size:1.0325rem;line-height:1.62;}
+
+.iconbar{display:flex;gap:8px;padding-top:4px;}
+.icobtn{width:38px;height:38px;display:grid;place-items:center;background:transparent;
+  border:1px solid var(--line);border-radius:4px;color:var(--muted);
+  text-decoration:none;cursor:pointer;}
+a.icobtn:hover{color:var(--accent);border-color:var(--accent);}
+a.icobtn svg{width:15px;height:15px;}
+.icobtn:hover{color:var(--text);border-color:var(--muted);}
+.icobtn svg{width:17px;height:17px;display:block;}
+
+.tabs{display:flex;margin:36px 0 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+.tabs button{background:transparent;border:0;border-bottom:2px solid transparent;
+  color:var(--muted);font-size:0.9375rem;font-weight:450;padding:12px 18px 11px;margin-bottom:-1px;
+  display:flex;align-items:center;gap:8px;}
+.ticon{width:15px;height:15px;flex:none;opacity:.7;}
+.tabs button:hover .ticon{opacity:1;}
+.tabs button[aria-selected="true"] .ticon{opacity:1;color:var(--accent);}
+.tabs button:hover{color:var(--text);}
+.tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent);font-weight:500;}
+
+.rail{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0;}
+.rail button{background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  color:var(--muted);font-size:0.8125rem;padding:8px 14px;display:flex;align-items:baseline;gap:8px;}
+.rail button:hover{color:var(--text);}
+.rail button[aria-pressed="true"]{border-color:var(--accent);color:var(--text);}
+.rail .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.75rem;color:var(--accent-soft);}
+.rail button[aria-pressed="true"] .n{color:var(--accent);}
+
+.meta{margin:22px 0 16px;color:var(--muted);font-size:0.8125rem;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;}
+.meta b{color:var(--accent);font-weight:500;}
+
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(336px,1fr));gap:18px;}
+.card{height:452px;perspective:1400px;}
+.card.dragging{opacity:.35;}
+.card.over .inner{outline:2px dashed var(--accent-soft);outline-offset:3px;}
+.inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.2,.7,.3,1);}
+.card.flipped .inner{transform:rotateY(180deg);}
+.face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;
+  background:var(--surface);border:1px solid var(--line-soft);border-radius:5px;
+  box-shadow:0 1px 2px var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
+.back{transform:rotateY(180deg);background:var(--surface-2);}
+
+.chead{display:flex;align-items:center;gap:10px;padding:12px 14px 10px;
+  border-bottom:1px solid var(--line-soft);flex:none;}
+.grip{color:var(--muted);cursor:grab;display:grid;place-items:center;flex:none;
+  background:transparent;border:0;padding:2px;}
+.grip:active{cursor:grabbing;}
+.grip svg{width:14px;height:14px;display:block;}
+.ctag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.6875rem;color:var(--muted);
+  letter-spacing:.03em;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.flip{background:transparent;border:1px solid var(--line);border-radius:3px;color:var(--muted);
+  padding:4px 5px;display:grid;place-items:center;flex:none;}
+.flip:hover{color:var(--accent);border-color:var(--accent-soft);}
+.flip svg{width:14px;height:14px;display:block;}
+
+.cbody{padding:15px 16px 18px;overflow-y:auto;flex:1;}
+.cbody::-webkit-scrollbar{width:9px;}
+.cbody::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px;border:3px solid var(--surface);}
+.back .cbody::-webkit-scrollbar-thumb{border-color:var(--surface-2);}
+
+.card h3{margin:0;font-size:1.0325rem;font-weight:550;line-height:1.33;letter-spacing:-.008em;}
+.card p{margin:10px 0 0;color:var(--text-mid);font-size:0.9rem;line-height:1.58;}
+
+.plabel{margin:14px 0 9px;padding-top:12px;border-top:1px solid var(--line-soft);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.6875rem;
+  color:var(--muted);letter-spacing:.03em;}
+ul.practice{list-style:none;margin:0 -8px;padding:0;}
+ul.practice li{margin:0 0 4px;}
+ul.practice label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;
+  color:var(--text-mid);font-size:0.85rem;line-height:1.5;
+  padding:6px 8px;border-radius:6px;
+  transition:background .15s ease,color .15s ease;}
+ul.practice label:hover{color:var(--text);}
+
+input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;margin:1px 0 0;
+  width:17px;height:17px;flex:none;cursor:pointer;
+  border:1.5px solid var(--muted);border-radius:50%;
+  background:transparent;display:grid;place-items:center;
+  transition:background .15s ease,border-color .15s ease;
+}
+input[type="checkbox"]:hover{border-color:var(--accent-soft);}
+input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent);}
+input[type="checkbox"]:checked::after{
+  content:"";width:8px;height:4.5px;
+  border-left:2px solid var(--check-mark);border-bottom:2px solid var(--check-mark);
+  transform:rotate(-45deg) translate(1px,-1.5px);
+}
+
+ul.practice label.done{background:var(--accent-wash);color:var(--text);font-weight:450;}
+ul.practice label.done .lbl{text-decoration:none;}
+
+.takeaway{margin:14px 0 0;padding:11px 12px;border-radius:6px;
+  background:var(--accent-wash);border-left:3px solid var(--accent);
+  color:var(--text);font-size:0.875rem;line-height:1.45;font-weight:450;}
+.ask{margin:0;padding:11px 12px;border-radius:6px;background:var(--bg);
+  border:1px solid var(--line);color:var(--text);font-size:0.875rem;
+  line-height:1.45;font-style:italic;}
+
+/* ---- systems auditing ---- */
+.auditbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 18px;}
+.auditbar .search{max-width:340px;margin:0;}
+.auditbar button{background:transparent;border:1px solid var(--line);border-radius:4px;
+  color:var(--text-mid);font-size:0.8125rem;padding:9px 13px;}
+.auditbar button:hover{border-color:var(--accent);color:var(--text);}
+.auditbar button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--text);}
+.audit{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:18px;align-items:start;}
+.sect{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;overflow:hidden;}
+.sect > header{display:flex;align-items:center;gap:12px;padding:14px 18px;
+  border-bottom:1px solid var(--line);background:var(--surface-2);}
+.sect h3{margin:0;font-size:0.9375rem;font-weight:550;flex:1;}
+.sect .scode{font-family:"IBM Plex Mono",monospace;font-size:0.6875rem;color:var(--teal);letter-spacing:.03em;}
+.sect .prog{font-family:"IBM Plex Mono",monospace;font-size:0.75rem;color:var(--muted);}
+.sect .prog b{color:var(--accent);font-weight:500;}
+.qrow{padding:13px 18px;border-bottom:1px solid var(--line-soft);transition:background .15s ease;}
+.qrow:last-child{border-bottom:0;}
+.qrow.done{background:var(--accent-wash);}
+.qtop{display:flex;gap:10px;align-items:flex-start;}
+.qtop label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;flex:1;
+  color:var(--text-mid);font-size:0.875rem;line-height:1.5;}
+.qrow.done .qtop label{color:var(--text);}
+.hintbtn{background:transparent;border:0;padding:2px 0 0;color:var(--muted);flex:none;
+  display:grid;place-items:center;}
+.hintbtn:hover{color:var(--accent);}
+.hintbtn svg{width:15px;height:15px;display:block;transition:transform .18s ease;}
+.hintbtn[aria-expanded="true"]{color:var(--accent);}
+.hintbtn[aria-expanded="true"] svg{transform:rotate(180deg);}
+.hint{margin:11px 0 2px 24px;padding:12px 13px;border-radius:6px;
+  background:var(--bg);border:1px solid var(--line);}
+.hint p{margin:0;font-size:0.8125rem;line-height:1.5;color:var(--text-mid);}
+.hint p + p{margin-top:9px;}
+.hlab{display:block;font-family:"IBM Plex Mono",monospace;font-size:0.65rem;
+  letter-spacing:.03em;margin-bottom:3px;}
+.hlab.ok{color:var(--teal);}
+.hlab.no{color:var(--accent);}
+@media (max-width:640px){ .audit{grid-template-columns:1fr;} }
+
+/* ---- pattern diagrams ---- */
+.card.pat{height:492px;}
+.dgm{width:100%;height:auto;display:block;margin:2px 0 14px;}
+.dgm .nlab{font-family:"IBM Plex Sans",sans-serif;font-size:9.5px;font-weight:500;fill:var(--text);}
+.dgm .elab{font-family:"IBM Plex Mono",monospace;font-size:7.5px;fill:var(--muted);}
+.caption{margin:0;color:var(--text-mid);font-size:0.875rem;line-height:1.55;}
+.pblock{margin-top:14px;}
+.pblock h5{margin:0 0 8px;font-family:"IBM Plex Mono",monospace;font-size:0.6875rem;
+  color:var(--muted);letter-spacing:.03em;font-weight:400;}
+.pblock ul{margin:0;padding:0;list-style:none;}
+.pblock li{margin:0 0 7px;padding-left:14px;position:relative;color:var(--text-mid);
+  font-size:0.85rem;line-height:1.5;}
+.pblock li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;}
+.pblock.use li::before{background:var(--teal);}
+.pblock.avoid li::before{background:var(--accent);}
+
+/* ---- mix calculator ---- */
+.mix{display:grid;grid-template-columns:minmax(300px,1fr) minmax(320px,1.15fr);gap:26px;align-items:start;}
+.panel{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:20px 22px;}
+.panel h3{margin:0 0 4px;font-size:1rem;font-weight:550;}
+.panel .hint{margin:0 0 16px;color:var(--muted);font-size:0.8125rem;line-height:1.5;}
+.chartwrap{position:relative;height:210px;margin:4px 0 18px;display:grid;place-items:center;}
+.fallbar{display:flex;width:100%;height:34px;border-radius:4px;overflow:hidden;border:1px solid var(--line);}
+.fallbar span{display:block;height:100%;}
+.slider{margin:0 0 15px;}
+.slider .srow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.slider .sname{font-size:0.875rem;color:var(--text);}
+.slider .sval{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.8125rem;color:var(--accent);}
+input[type="range"]{appearance:none;-webkit-appearance:none;width:100%;height:4px;border-radius:4px;
+  background:var(--line);outline:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:18px;height:18px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--surface);cursor:grab;}
+input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);
+  border:2px solid var(--surface);cursor:grab;}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.presets button{background:transparent;border:1px solid var(--line);border-radius:4px;
+  color:var(--text-mid);font-size:0.8125rem;padding:7px 11px;}
+.presets button:hover{border-color:var(--accent);color:var(--text);}
+.presets button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--text);}
+.profile{font-size:1.125rem;font-weight:600;margin:0 0 4px;letter-spacing:-.01em;}
+.profile span{color:var(--accent);}
+.why{margin:0 0 18px;color:var(--text-mid);font-size:0.875rem;line-height:1.55;}
+.block{margin-top:16px;}
+.block h4{margin:0 0 9px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.6875rem;
+  color:var(--muted);letter-spacing:.03em;font-weight:400;}
+.block ul{margin:0;padding:0;list-style:none;}
+.block li{margin:0 0 8px;padding-left:15px;position:relative;color:var(--text-mid);
+  font-size:0.875rem;line-height:1.52;}
+.block li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;}
+.block.risk li::before{background:var(--accent);}
+.block.opp li::before{background:var(--teal);}
+.block.ctrl li::before{background:var(--muted);}
+.mixnote{margin-top:22px;color:var(--muted);font-size:0.78rem;line-height:1.5;}
+@media (max-width:860px){ .mix{grid-template-columns:1fr;} }
+
+.klabel{font-size:0.75rem;color:var(--muted);font-family:"IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.03em;margin:0 0 9px;}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;}
+.tag{font-size:0.75rem;color:var(--text-mid);background:var(--surface);
+  border:1px solid var(--line);border-radius:3px;padding:3px 8px;}
+.field{margin:0;color:var(--text-mid);font-size:0.875rem;line-height:1.6;
+  border-left:2px solid var(--accent);padding-left:12px;}
+
+.search{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);
+  border-radius:4px;color:var(--text);font-family:inherit;font-size:0.9375rem;padding:10px 13px;}
+.search::placeholder{color:var(--muted);}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:0 30px;margin-top:8px;}
+.gterm{border-bottom:1px solid var(--line-soft);padding:15px 0;display:flex;gap:11px;align-items:flex-start;}
+.gterm input[type="checkbox"]{margin-top:3px;}
+.gterm h4{margin:0;font-size:0.9375rem;font-weight:550;}
+.gterm .src{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.6875rem;
+  color:var(--accent-soft);margin-left:8px;font-weight:400;}
+.gterm p{margin:6px 0 0;color:var(--text-mid);font-size:0.875rem;line-height:1.55;}
+.gterm.done{background:var(--accent-wash);border-radius:6px;
+  padding-left:10px;padding-right:10px;margin:0 -10px;}
+.gterm.done h4{color:var(--text);}
+.gterm.done .tname{text-decoration:none;}
+.gterm.done p{color:var(--text-mid);}
+
+.empty{color:var(--muted);font-size:0.9375rem;padding:30px 0;}
+footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:0.8125rem;max-width:70ch;}
+
+@media (max-width:640px){
+  .wrap{padding:0 16px 60px;}
+  header{padding-top:34px;}
+  .tabs button{padding:11px 12px;font-size:0.8125rem;}
+  .card{height:502px;}
+}
+@media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
+@media print{
+  body{background:#fff;color:#000;}
+  .iconbar,.tabs,.rail,.chead,.search{display:none;}
+  .deck,.gloss{display:block;}
+  .card{height:auto;perspective:none;}
+  .inner{transform:none !important;}
+  .face{position:static;border:0;border-bottom:1px solid #bbb;border-radius:0;box-shadow:none;}
+  .back{transform:none;}
+  .cbody{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="top">
+    <div>
+      <div class="brandline"><span class="logobox"><span>Systems Design</span></span><h1>Systems practice</h1></div>
+      <p class="standfirst">A working reference for designing, engineering, governing, and analyzing systems across an enterprise estate of data and applications. Each card holds one idea with practice steps you can tick off, and field context on the back. Drag to reorder, flip any card, filter by area.</p>
+    </div>
+    <div class="iconbar">
+      <button class="icobtn" id="themeBtn" type="button" title="Switch theme" aria-label="Switch colour theme">
+        <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+        <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.5 1.5M17.6 17.6l1.5 1.5M19.1 4.9l-1.5 1.5M6.4 17.6l-1.5 1.5"/></svg>
+      </button>
+      <button class="icobtn" id="resetBtn" type="button" title="Clear ticks in this view" aria-label="Clear all ticks in this view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg>
+      </button>
+      <a class="icobtn" id="notesBtn"
+         href="https://app.notion.com/p/signetsci/SYSTEMS-f90e4bbf048a4c71a463d5b1dd90cf24?source=copy_link"
+         target="_blank" rel="noopener noreferrer"
+         title="Open my SYSTEMS notes in Notion" aria-label="Open my SYSTEMS notes in Notion">
+        <!-- Notion mark, simple-icons v16.30.0, CC0-1.0 -->
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z"/></svg>
+      </a>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <nav class="rail" id="rail" aria-label="Filter by area"></nav>
+</header>
+
+<p class="meta" id="meta"></p>
+<main id="stage"></main>
+
+<footer>
+  Four practices, one estate. Design sets the boundary and the shape. Engineering makes the result verifiable and operable. Risk, governance, and security decide what is permitted and what happens when it fails. Analysis keeps all of it tied to how the organization actually works.
+</footer>
+
+</div>
+
+<script>
+/* Lucide v1.45.0 icon paths, ISC licensed */
+const ICONS = {
+  "shapes": '<path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/>',
+  "settings-2": '<path d="M14 17H5"/><path d="M19 7h-9"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
+  "workflow": '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>',
+  "shield": '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  "git-merge": '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/>',
+  "sliders-horizontal": '<path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/>',
+  "cpu": '<path d="M12 20v2"/><path d="M12 2v2"/><path d="M17 20v2"/><path d="M17 2v2"/><path d="M2 12h2"/><path d="M2 17h2"/><path d="M2 7h2"/><path d="M20 12h2"/><path d="M20 17h2"/><path d="M20 7h2"/><path d="M7 20v2"/><path d="M7 2v2"/><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1"/>',
+  "network": '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>',
+  "clipboard-check": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+  "book-open": '<path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>'
+};
+
+const TABS = [
+  {id:"SD", label:"Systems Design",              ic:"shapes"},
+  {id:"SE", label:"Systems Engineering",         ic:"settings-2"},
+  {id:"BA", label:"Business Systems Analysis",   ic:"workflow"},
+  {id:"RG", label:"Risk, Governance, Security",  ic:"shield"},
+  {id:"PF", label:"Process Flow",                ic:"git-merge"},
+  {id:"AE", label:"AI Systems Engineering",      ic:"cpu"},
+  {id:"DX", label:"Design Patterns",             ic:"network"},
+  {id:"SA", label:"Systems Auditing",            ic:"clipboard-check"},
+  {id:"MX", label:"Mix Calculator",              ic:"sliders-horizontal"},
+  {id:"GL", label:"Glossary",                    ic:"book-open"}
+];
+
+function icon(name){
+  return '<svg class="ticon" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    (ICONS[name] || "") + '</svg>';
+}
+
+const AREAS = [
+  {tab:"SD", code:"FR", name:"Framing and boundaries"},
+  {tab:"SD", code:"AR", name:"Architecture and integration"},
+  {tab:"SE", code:"RV", name:"Requirements and verification"},
+  {tab:"SE", code:"RO", name:"Reliability and operations"},
+  {tab:"BA", code:"PS", name:"Process and stakeholders"},
+  {tab:"BA", code:"DP", name:"Data and application portfolio"},
+  {tab:"RG", code:"RK", name:"Risk management"},
+  {tab:"RG", code:"GV", name:"Governance and control"},
+  {tab:"RG", code:"SC", name:"Security and resilience"},
+  {tab:"PF", code:"PL", name:"People-based"},
+  {tab:"PF", code:"SY", name:"Deterministic systems"},
+  {tab:"PF", code:"AG", name:"AI and agentic"},
+  {tab:"PF", code:"HY", name:"Hybrid seams"},
+  {tab:"AE", code:"CX", name:"Context and retrieval"},
+  {tab:"AE", code:"TL", name:"Tools and protocols"},
+  {tab:"AE", code:"LP", name:"Loop and control"},
+  {tab:"AE", code:"EV", name:"Evaluation and runtime"}
+];
+
+const CARDS = [
+/* ===== SD / FR ===== */
+{a:"FR",t:"The system is larger than the software",
+b:"The boundary includes the people who use it, the decisions it feeds, the vendors it depends on, and the data arriving from outside. Draw that boundary explicitly at the start, because every later scope dispute is an undeclared disagreement about where it sits.",
+p:["Write down what is deliberately outside scope, not only what is in.","Name the upstream systems you do not control but will be blamed for.","Check whether a human step is load-bearing before treating it as overhead."],
+k:["boundary","socio-technical","scope"],
+f:"A claims platform replacement was scoped as a software migration. The boundary excluded the adjusters' manual triage spreadsheet, which turned out to be carrying the routing logic. It surfaced three weeks before cutover as a defect rather than a requirement.",
+tk:"Scope the decisions, not just the software.",q:"What sits outside our boundary but still reacts to us?"},
+{a:"FR",t:"Feedback loops explain behavior better than org charts",
+b:"Reinforcing loops compound whatever you build, defects included. Balancing loops quietly cancel your change and make it look like weak adoption. Structure produces the outcome regardless of who is accountable on paper.",
+p:["Trace where an output becomes an input somewhere else.","When adoption stalls with no complaints filed, look for a balancing loop.","Ask what gets easier and what gets harder once the change lands."],
+k:["feedback","reinforcing loop","balancing loop"],
+f:"A self-service portal cut ticket volume for a quarter, then volume returned. Agents, measured on tickets closed, had begun opening tickets on behalf of callers to protect their numbers. The metric created a balancing loop against the deflection it was meant to prove.",
+tk:"Structure beats accountability. Find the loop.",q:"Where does this output become someone else's input?"},
+{a:"FR",t:"Delay is the variable nobody budgets for",
+b:"The gap between an action and its visible consequence determines how people judge the work. Long delays mean stakeholders form a verdict before the signal arrives, then over-correct when it finally does.",
+p:["State how long until the first real signal, and say it early.","Put an interim measure in place for anything lagging beyond a quarter.","Treat mid-flight reversals as a symptom of unmanaged delay."],
+k:["delay","lag","stock and flow"],
+f:"A data quality remediation showed no movement in downstream reporting for five months because corrections only propagated on the annual master refresh. Funding was cut in month four, one cycle before the evidence would have arrived.",
+tk:"Judgement arrives before the evidence does.",q:"How long until we see the first real signal?"},
+{a:"FR",t:"Local optimization degrades the whole",
+b:"A team improving its own metric can make the end-to-end system worse. This is the most common form of emergent failure in a large portfolio, and it is invisible from inside any single team.",
+p:["Measure the path a request takes across teams, not each team's throughput.","Look for queues that formed because someone upstream got faster.","Ask what behavior a metric produces when someone optimizes for it."],
+k:["emergence","sub-optimization","flow"],
+f:"An onboarding team automated identity verification and halved its own cycle time. Downstream credit review, still manual and staffed to the old arrival rate, went from a two-day queue to eleven. Total time to onboard got worse.",
+tk:"A faster team can slow the whole.",q:"Whose queue grows when we get faster?"},
+{a:"FR",t:"Constraints outlive requirements",
+b:"Requirements change with every stakeholder conversation. Constraints, meaning regulatory obligation, data residency, existing contracts, physical latency, do not. Design against the constraints first and let requirements arrange themselves inside them.",
+p:["Separate the list into things that can change and things that cannot.","Validate each claimed constraint; some are conventions wearing a uniform.","Revisit the constraint list annually rather than per project."],
+k:["constraints","invariants","regulatory"],
+f:"A data platform design spent two months on warehouse topology before anyone confirmed that a residency clause in the largest customer contract prohibited the intended region. The constraint had been documented in legal, never in architecture.",
+tk:"Design to what cannot move.",q:"Is this constraint real, or just convention?"},
+{a:"FR",t:"Mental models are part of the architecture",
+b:"How people believe the system works determines how they use it, what they trust, and when they intervene. A correct system paired with an incorrect mental model produces the same outcomes as a broken one.",
+p:["Ask users to describe what they think happens after they click.","Watch where the interface implies something the system does not do.","Update training when the model changes, not only when the screen does."],
+k:["mental model","trust","human factors"],
+f:"Operators kept re-running a nightly reconciliation because the status screen showed the last run time rather than the last successful run. Their model, reasonably, was that a stale timestamp meant failure. The duplicate runs caused the corruption they were trying to prevent.",
+tk:"Belief about the system is part of the system.",q:"What do users think happens after they click?"},
+{a:"FR",t:"Reversibility is a design property",
+b:"Decisions differ less in how risky they are than in how expensive they are to undo. Make reversible decisions early and fast, and hold irreversible ones until the evidence arrives, even when the calendar argues otherwise.",
+p:["Label each major decision reversible or not before committing.","Push irreversible choices, data formats and vendor lock, as late as viable.","Record what it would cost to unwind, not just what it costs to do."],
+k:["reversibility","option value","decision cost"],
+f:"A team chose a managed streaming service quickly because the integration sat behind a broker interface, making a later switch cheap. They spent the saved deliberation on the event schema instead, which every consumer would depend on and nobody could change quietly.",
+tk:"Cheap to undo, decide now. Expensive, wait.",q:"What would it cost us to unwind this?"},
+{a:"FR",t:"The workaround is the real process",
+b:"Wherever people have built a spreadsheet, a shared mailbox, or a side channel, the sanctioned process has failed in a specific way. The workaround describes that failure more accurately than any process document.",
+p:["Collect workarounds before mapping the intended process.","Ask how long the gap existed before someone routed around it.","Absorb the requirement first, then close the exposure."],
+k:["workaround","shadow process","as-performed"],
+f:"A procurement process documented as four approval steps was running as six, with two informal pre-checks in a shared inbox. The pre-checks existed because the formal system rejected submissions without explaining why. Automating the documented four would have removed the only useful feedback.",
+tk:"The spreadsheet is the requirement.",q:"What do you do when the system says no?"},
+
+/* ===== SD / AR ===== */
+{a:"AR",t:"Coupling is the thing you are actually designing",
+b:"Integration decisions are coupling decisions. Every connection determines what must change together, what can fail independently, and how much of the estate gets pulled into any future migration.",
+p:["Ask what else must be redeployed when this system changes.","Prefer the loosest coupling that still meets the consistency requirement.","Treat shared databases between applications as the tightest coupling there is."],
+k:["coupling","cohesion","blast radius"],
+f:"Two applications sharing a customer table could not be upgraded independently for six years. Each release required a joint change window, so both teams planned to the slower one. The coupling had been an expedient choice in a single sprint a decade earlier.",
+tk:"Every connection decides what changes together.",q:"What else must redeploy when this changes?"},
+{a:"AR",t:"Events describe what happened, requests demand what should happen",
+b:"An event states that something occurred and lets consumers decide what it means. A request instructs a specific system to act now. Mixing the two produces workflows that are neither traceable nor independently recoverable.",
+p:["Use events where consumers vary or will multiply over time.","Use requests where you need an immediate answer and a clear failure.","Do not embed business decisions inside an event's routing rules."],
+k:["event-driven","request-response","choreography"],
+f:"An order-placed event carried routing logic deciding which fulfilment centre would receive it. When the centres changed, the schema changed, and every unrelated consumer redeployed. The decision belonged in a consumer, not in the message.",
+tk:"State facts, do not issue orders.",q:"Is this a notification or an instruction?"},
+{a:"AR",t:"Point-to-point growth is quadratic",
+b:"Each new system connected directly to every other adds connections faster than it adds capability. The estate stays workable long past the point where it stops being changeable.",
+p:["Count existing interfaces before approving another direct connection.","Introduce a broker when interface count starts outpacing system count.","Watch for the same data moved by three different mechanisms."],
+k:["topology","interface sprawl","broker"],
+f:"A 40-application estate carried over 300 interfaces, a third of them moving the same product master. Nobody had approved that; each had been the cheapest local answer at the time. The rationalization took longer than the original builds combined.",
+tk:"Connections outgrow capability.",q:"How many interfaces do we already carry?"},
+{a:"AR",t:"The integration layer inherits every upstream fault",
+b:"Middleware is where failures surface, which makes it where failures get attributed. Without upstream observability, the integration team spends its time proving problems are not theirs.",
+p:["Instrument at the boundary of each source, not only at the hub.","Carry a correlation identifier across every hop.","Define who owns the incident when the fault is upstream of the broker."],
+k:["observability","correlation id","fault attribution"],
+f:"An integration team held the top incident count in the organization for two years. A correlation identifier added across hops reattributed roughly 70 percent of those incidents to three source systems. The team's headcount case had been argued on the wrong number.",
+tk:"Middleware gets blamed for upstream faults.",q:"Can we trace one request end to end?"},
+{a:"AR",t:"Conway's law is a scheduling constraint",
+b:"Systems reproduce the communication structure of the organization that builds them. A design cutting across team boundaries will either be redrawn to match them or cost continuous coordination to hold in place.",
+p:["Check whether the intended module boundaries match team boundaries.","If they do not, either move the boundary or fund the coordination.","Expect a reorganization to show up in the architecture within two releases."],
+k:["Conway's law","team topology","boundaries"],
+f:"A shared services layer was designed to sit across four product teams. With no owning team, it accumulated four dialects of the same function. The eventual fix was organizational, not technical.",
+tk:"Architecture follows the org chart.",q:"Does a single team own this boundary?"},
+{a:"AR",t:"Idempotency is what makes retries safe",
+b:"Distributed systems retry. Networks time out after the work completed, messages arrive twice, operators re-run jobs. Unless the same operation applied twice produces the same result, every retry mechanism is a corruption mechanism.",
+p:["Give each operation a client-supplied key and deduplicate on it.","Test the double-delivery case explicitly; it will happen in production.","Check that manual re-runs use the same path as automated retries."],
+k:["idempotency","at-least-once","deduplication"],
+f:"A payment file re-sent after a gateway timeout produced duplicate disbursements. The gateway had processed the original successfully but the acknowledgement was lost. Retry was already built, idempotency was not.",
+tk:"If retry is not safe, it is corruption.",q:"What happens if this runs twice?"},
+{a:"AR",t:"Define the seam before you define the service",
+b:"Service decomposition arguments are usually arguments about where the seam sits. Find the place where the data and the decision genuinely separate, then name the service. Naming first produces boundaries that cut through a transaction.",
+p:["Look for where consistency is genuinely not required across the line.","If two services must always deploy together, the seam is in the wrong place.","Prefer seams that follow ownership, not that follow the noun."],
+k:["decomposition","bounded context","seams"],
+f:"A split into customer and account services put a single balance-adjustment transaction across both. Every change needed a distributed transaction and both teams. The domain seam was between servicing and origination, not between the two nouns.",
+tk:"Find the split, then name the service.",q:"Must these two always deploy together?"},
+{a:"AR",t:"Shared databases are the tightest coupling there is",
+b:"When two applications read and write the same tables, they share not only data but schema, release cadence, locking behavior, and failure modes. The integration is invisible in every architecture diagram and binding in every change.",
+p:["Inventory which tables are written by more than one application.","Give each table a single writing application and expose the rest as an interface.","Treat direct database reads by another team as an undocumented contract."],
+k:["shared database","anti-pattern","schema coupling"],
+f:"A reporting tool reading production tables directly blocked a schema change for eighteen months. Nobody in the application team knew the dependency existed until their migration script broke a dashboard the board reviewed weekly.",
+tk:"A shared table is an undocumented contract.",q:"Who else writes to this table?"},
+
+/* ===== SE / RV ===== */
+{a:"RV",t:"A requirement you cannot verify is a preference",
+b:"If there is no test, measurement, inspection, or demonstration that settles whether a requirement is met, it will be argued about at acceptance instead. Write the verification method at the same time as the requirement.",
+p:["State the method beside each requirement: test, analysis, inspection, demonstration.","Replace adjectives with thresholds and conditions.","If nobody can propose a method, the requirement is not yet understood."],
+k:["verifiability","acceptance criteria","V and V"],
+f:"A requirement for the system to be highly available survived three reviews. At acceptance it meant 99.9 percent to the vendor and zero unplanned outages during month-end to the business. Both readings were defensible and the contract settled neither.",
+tk:"No test, no requirement.",q:"How would we prove this was met?"},
+{a:"RV",t:"Separate the need from the solution",
+b:"Requirements arrive pre-loaded with a design. Someone asks for a dashboard when the need is a weekly decision about stock. Accepting the solution as the requirement forecloses the cheaper answer before anyone has seen it.",
+p:["Ask what decision or outcome the request supports.","Restate each requirement without naming a mechanism.","Keep the original wording; do not lose the stakeholder's framing."],
+k:["needs analysis","solution bias","problem statement"],
+f:"A request for a real-time inventory dashboard served one daily replenishment decision made at 6am. A scheduled report answered it at a fraction of the cost, and the real-time work was redirected to the exception alerting that actually needed it.",
+tk:"They asked for a mechanism, not an outcome.",q:"What decision does this actually support?"},
+{a:"RV",t:"Interfaces fail more often than components",
+b:"Components are built and tested by people who understand them. Interfaces sit between two teams, each assuming the other handles the edge case. Most integration defects are assumption mismatches, not code defects.",
+p:["Specify the interface as a jointly owned artifact with one named owner.","Define behavior for null, late, duplicate, and out-of-order cases.","Test the interface against a stub before either side is complete."],
+k:["interface control","ICD","integration defects"],
+f:"Two teams agreed a date field without agreeing a timezone. Each assumed the other's convention, both tested successfully in isolation, and reconciliation failed on the first day the clocks diverged. The defect was in neither component.",
+tk:"The defect lives between the components.",q:"Who owns this interface specification?"},
+{a:"RV",t:"Verification and validation answer different questions",
+b:"Verification asks whether the system was built to the specification. Validation asks whether the specification was the right one. A system can pass every verification test and still fail to solve the problem.",
+p:["Run validation with actual users against real work, not against the spec.","Schedule a validation checkpoint before the specification freezes.","Treat a passing system that nobody uses as a validation failure."],
+k:["verification","validation","fitness for purpose"],
+f:"A scheduling module met every documented requirement and went unused for a year. The specification had been written from the supervisor's description of the work; the planners who would use it had never been in the room.",
+tk:"Built right is not the same as right.",q:"Have real users done real work on it?"},
+{a:"RV",t:"Traceability is what makes change affordable",
+b:"When a requirement changes, the question is what else moves. Without a trace from need to design to test, that question takes a week of archaeology and the answer is a guess. Traceability is not documentation overhead; it is change capability.",
+p:["Link each requirement to its design element and its test.","Check coverage in both directions: orphan tests and untested requirements.","Maintain the trace during change, not as a pre-audit exercise."],
+k:["traceability","impact analysis","change control"],
+f:"A regulatory change to retention rules touched eleven systems. The two with maintained traceability scoped their work in a day. The rest spent six weeks establishing what the rule currently affected before they could estimate anything.",
+tk:"Traceability is how you afford change.",q:"If this changes, what else moves?"},
+{a:"RV",t:"Non-functional requirements decide the architecture",
+b:"Functional requirements determine what the system does and can usually be satisfied many ways. Throughput, latency, availability, retention, and security determine which of those ways remain viable. They are architectural inputs, not a later checklist.",
+p:["Establish volume, peak, and growth numbers before choosing a pattern.","Ask what happens at ten times current volume, then at a tenth.","Get retention and residency requirements before selecting storage."],
+k:["non-functional","quality attributes","scalability"],
+f:"A case management build was designed around expected average load. Peak fell on the first three days of each month at roughly eight times average. The architecture was sound for the number it was given and wrong for the workload.",
+tk:"The numbers decide the architecture.",q:"What is peak load, and when does it fall?"},
+{a:"RV",t:"Model at the cheapest fidelity that answers the question",
+b:"A model exists to retire a specific uncertainty. A whiteboard sketch, a spreadsheet, a queueing calculation, and a load test each answer different questions at wildly different cost. Choose by the question, not by available tooling.",
+p:["State the question the model must settle before building it.","Stop when the uncertainty is retired, not when the model is elegant.","Record the assumptions; they age faster than the result."],
+k:["modelling","fidelity","uncertainty"],
+f:"A queueing calculation on a single sheet showed a proposed approval workflow would form a permanent backlog at known arrival rates. The finding arrived in an afternoon and changed the design before any code existed.",
+tk:"Model to retire doubt, then stop.",q:"What question must this model settle?"},
+{a:"RV",t:"The V is a dependency graph, not a schedule",
+b:"The V-model is routinely read as sequential phases. Its actual content is that each level of decomposition has a matching level of test, and that the test is defined when the specification is written, not afterward.",
+p:["Write the acceptance test with the requirement it verifies.","Allow levels to proceed concurrently where dependencies permit.","Treat a test defined after the build as a description, not a verification."],
+k:["V-model","lifecycle","test design"],
+f:"A programme ran the V as strict phases and reached integration testing eleven months in, where a foundational interface assumption failed. Defining the integration tests alongside the interface specification would have surfaced it in month two.",
+tk:"Write the test with the specification.",q:"Does this requirement already have its test?"},
+
+/* ===== SE / RO ===== */
+{a:"RO",t:"Define observability before deployment",
+b:"What you will watch is a design decision, not a post-incident addition. For anything probabilistic, uptime and accuracy are insufficient. Output variability, drift, and tool failures are the signals that move first.",
+p:["Decide the failing condition and its threshold before go-live.","Log inputs and decisions, not only outcomes.","Alert on the leading signal, not the downstream consequence."],
+k:["observability","telemetry","leading indicators"],
+f:"A document classification service was monitored on uptime and throughput only. Accuracy fell after an upstream format change and nobody noticed for seven weeks, because the service stayed fast and available while being wrong.",
+tk:"Decide what you watch before you ship.",q:"What signal moves first when this degrades?"},
+{a:"RO",t:"Failure modes are designed, not discovered",
+b:"Every system fails. The choice is whether it fails in a way you selected and prepared for or in whatever way the first unhandled condition produces. Decide in advance what degraded operation looks like.",
+p:["List the top failure modes and the intended behavior for each.","Define what happens when a dependency is slow, not only when it is down.","Make the degraded state visible to operators rather than silent."],
+k:["FMEA","graceful degradation","failure modes"],
+f:"A pricing service treated a slow dependency as available and queued requests until memory exhausted, taking the whole node down. Returning a cached price after 200 milliseconds was a one-line policy nobody had been asked to choose.",
+tk:"Choose the failure, or it chooses you.",q:"What happens when this dependency goes slow?"},
+{a:"RO",t:"Redundancy without independence is decoration",
+b:"Two instances sharing a power feed, a network path, a configuration source, or a release pipeline fail together. Redundancy only buys availability to the extent the copies can fail independently.",
+p:["Trace what the redundant paths have in common, all the way down.","Include configuration and deployment in the common-mode analysis.","Test failover by removing the shared dependency, not the instance."],
+k:["redundancy","common mode failure","independence"],
+f:"A dual-region deployment failed in both regions simultaneously when a bad configuration was promoted to each by the same pipeline. The compute was independent; the change path was not.",
+tk:"Copies sharing a cause fail together.",q:"What do both paths still have in common?"},
+{a:"RO",t:"Run cost is the decision, build cost is the invoice",
+b:"Build cost is visible, bounded, and negotiated once. Run cost recurs, grows with use, and lands in a different budget than the one that approved the project.",
+p:["Model marginal cost per transaction, not total annual spend.","Identify the volume at which the economics stop working.","Put run cost in front of the sponsor before the build is approved."],
+k:["TCO","unit economics","run cost"],
+f:"A document processing pipeline was approved on build cost. At production volume its per-document inference cost exceeded the manual process it replaced. The break-even had never been calculated because nobody owned the question.",
+tk:"Approved on build, paid on run.",q:"What does this cost per transaction?"},
+{a:"RO",t:"Drift is an operating state, not a defect",
+b:"Data distributions shift, upstream schemas change, and model behavior moves with them. Treating each occurrence as a one-off bug means rediscovering the same class of problem indefinitely.",
+p:["Baseline the inputs, not only the outputs.","Schedule revalidation rather than waiting for a complaint.","Record what changed upstream when performance moves."],
+k:["drift","model decay","revalidation"],
+f:"A demand forecast degraded steadily for two quarters after a product hierarchy was reorganized upstream. Each month's variance was explained locally as a market effect. Nobody was comparing input distributions to the training baseline.",
+tk:"Expect decay, schedule the check.",q:"What changed upstream since the baseline?"},
+{a:"RO",t:"Margin gets consumed silently",
+b:"Capacity, latency budget, error budget, and timing margin are all spent by small decisions that individually look free. Nobody reports consuming margin, so the first visible signal is usually the failure it was holding back.",
+p:["Publish the current margin, not just the current performance.","Require margin consumption to be stated in change requests.","Recheck margin after every integration, not annually."],
+k:["margin","error budget","capacity"],
+f:"A batch window with four hours of slack lost it across two years of unrelated additions, each adding minutes. The first overrun happened on a month-end and was treated as an anomaly rather than the arrival of a long-predicted condition.",
+tk:"Slack vanishes without anyone reporting it.",q:"How much margin is left right now?"},
+{a:"RO",t:"Handoff is a design artifact",
+b:"The system will outlive the project team. If nobody can name who operates it, what they watch, and what they are permitted to change, the design is incomplete regardless of how well it works today.",
+p:["Name the operating owner before the final build phase, not after.","Document the three most likely failures and their recovery steps.","Confirm the receiving team has capacity, not just the assignment."],
+k:["handover","operability","ownership"],
+f:"An analytics platform was handed to a team of two who had not been consulted and had no runbook. Within a year the only person who understood the orchestration had left, and the platform was frozen rather than maintained.",
+tk:"Design who runs it, not just what runs.",q:"Who operates this, and do they know yet?"},
+{a:"RO",t:"Every alert is a claim about a human response",
+b:"An alert asserts that a person should do something now. If there is no action, or the action is always the same, or nobody is awake, it is not an alert. Volume erodes response faster than any single bad alert.",
+p:["Require a named action for every alert before it is enabled.","Review alert-to-action ratio quarterly and delete the rest.","Track acknowledged-without-action as a failure signal."],
+k:["alerting","alert fatigue","runbook"],
+f:"An on-call rotation received roughly 200 alerts a week, of which four required action. Engineers had built filters to cope, and the filters caught a genuine outage alert for six hours.",
+tk:"No action, no alert.",q:"What is the named action for this alert?"},
+
+/* ===== BA / PS ===== */
+{a:"PS",t:"Map the process as performed, not as published",
+b:"The documented process describes intent. The performed process includes the pre-checks, the side conversations, the rework loops, and the exceptions that make it function. Designing against the documented version automates a process that does not exist.",
+p:["Observe the work; do not rely on the process owner's description.","Map exceptions as first-class paths, not as footnotes.","Ask what happens when the normal route does not work."],
+k:["as-is","process mapping","observation"],
+f:"A published three-step onboarding contained an undocumented manual credit override used in nearly a fifth of cases. It was the single largest source of cycle time and did not appear in any requirement until someone sat with the team for a day.",
+tk:"Document intent, observe reality.",q:"What happens when the normal route fails?"},
+{a:"PS",t:"Find the queue before you find the bottleneck",
+b:"Work waiting is easier to see than work constrained, and it points at the constraint reliably. Time in queue, not time in process, is where most end-to-end duration lives in an enterprise workflow.",
+p:["Measure waiting time separately from working time at each step.","Improve the step the queue is waiting on, not the busiest step.","Expect a new queue to form downstream after any improvement."],
+k:["queueing","cycle time","constraint"],
+f:"An approval process averaging nine days contained about four hours of actual work. Every improvement proposal targeted the forms. The constraint was a weekly committee, and moving it to twice weekly halved the duration with no system change.",
+tk:"Duration lives in the waiting.",q:"Where is work sitting, and on whom?"},
+{a:"PS",t:"Shadow IT is a requirements document",
+b:"When a team buys its own tool, it has stated precisely what the sanctioned stack failed to deliver and how urgently. Treating it purely as a compliance violation destroys the only honest signal available.",
+p:["Ask what the tool does that the approved one does not.","Check how long the gap existed before someone routed around it.","Absorb the requirement first, then resolve the exposure."],
+k:["shadow IT","unmet need","adoption"],
+f:"A marketing team's unapproved analytics subscription was discovered during a security review. The capability had been requested through the formal channel twice and declined on cost, at roughly a tenth of what the shadow tools cost across the organization.",
+tk:"Unapproved tools state the unmet need.",q:"What does that tool do that ours does not?"},
+{a:"PS",t:"Separate the decision from the approval",
+b:"Approval steps frequently contain no decision. If an approver has never rejected anything and possesses no information the submitter lacks, the step is a delay wearing the costume of a control.",
+p:["Ask each approver what they check and when they last said no.","Identify what information makes the decision real; supply it or remove the step.","Replace uninformed approvals with post-hoc sampling."],
+k:["controls","decision rights","approval"],
+f:"A four-stage sign-off had a rejection rate under one percent at two stages. Those approvers were confirming completeness a validation rule could enforce. Removing them cut three days and lost no control.",
+tk:"Approval without a decision is delay.",q:"When did you last reject something here?"},
+{a:"PS",t:"Elicitation surfaces symptoms, analysis finds structure",
+b:"Stakeholders reliably report what they experience: the slow screen, the missing field, the report that arrives too late. The structural cause usually sits two steps upstream in a different team. Taking the symptom list as the requirement set treats the pain where it is felt.",
+p:["Group reported problems and look for a shared upstream cause.","Trace each complaint to the step that produced the condition.","Validate the structural finding back with the people who reported it."],
+k:["elicitation","root cause","analysis"],
+f:"Six teams independently requested better reporting. All six were reconciling against a master that refreshed weekly while their operational data moved hourly. The requirement was a refresh cadence, not six reports.",
+tk:"Symptoms cluster; causes sit upstream.",q:"Do these complaints share one upstream cause?"},
+{a:"PS",t:"Volume, variation, and exception drive the design",
+b:"How many, how different, and how often it goes wrong determine the appropriate solution more than any functional description. High volume with low variation suits automation; low volume with high variation usually does not.",
+p:["Get the transaction counts before designing the workflow.","Measure what proportion follows the happy path today.","Design the exception route deliberately; it carries most of the cost."],
+k:["volumetrics","variation","exception handling"],
+f:"A straight-through processing initiative targeted a workflow where only a third of cases followed the standard path. The automation handled the third and the remaining two thirds gained a handoff step, lengthening average cycle time.",
+tk:"Counts decide the design.",q:"What share of cases follows the happy path?"},
+{a:"PS",t:"The current-state map has a shelf life",
+b:"A process map is a photograph. Reorganizations, system changes, and staff turnover invalidate it quietly. A map more than a few months old is a hypothesis about the present, not a description of it.",
+p:["Date every map and name who confirmed it.","Re-confirm before using a map to justify a design decision.","Capture what would make the map wrong, not only what is true."],
+k:["as-is","currency","validation"],
+f:"A design was built on a process map produced eight months earlier. Two of the mapped handoffs had been eliminated in a restructure. The design reintroduced them as requirements and had to be reworked after user testing.",
+tk:"A map is a photograph, not a fact.",q:"Who last confirmed this map, and when?"},
+{a:"PS",t:"Benefits need an owner outside the project",
+b:"A project can deliver its scope in full and produce no benefit, because the benefit requires an operational change the project has no authority to make. Name the person accountable for the outcome, not just for the delivery.",
+p:["Identify what must change in operations for the benefit to materialize.","Get the benefit owner to agree the measure before the build starts.","Schedule a benefit review after the project team disbands."],
+k:["benefits realization","accountability","outcome"],
+f:"An automation projected to save twelve roles delivered on time. No department had committed to releasing headcount, so the saving showed as capacity rather than cost. The business case had been approved on a number nobody owned.",
+tk:"Delivery is not benefit.",q:"Who is accountable after the team disbands?"},
+
+/* ===== BA / DP ===== */
+{a:"DP",t:"Data contracts are the real interface",
+b:"The schema, its meaning, its refresh cadence, and its guarantees are what downstream systems actually consume. Without an agreed contract, every producer change becomes a silent consumer outage.",
+p:["Version the contract, not only the pipeline.","Define what a breaking change is before you need to argue about one.","Give each contract an owner reachable during an incident."],
+k:["data contract","schema","producer-consumer"],
+f:"A source system widened a status field from three values to seven as a routine enhancement. Four downstream consumers had hard-coded the original three. All four failed silently, defaulting unknown values to the most common case.",
+tk:"The contract, not the pipeline, is the interface.",q:"What counts as a breaking change here?"},
+{a:"DP",t:"One system of record per fact",
+b:"The question is not which system is authoritative overall, but which is authoritative for each attribute. Customer address and customer credit limit can legitimately master in different places.",
+p:["Master at the attribute level, not the entity level.","Document where each attribute originates and who may write to it.","Reconciliation between two masters signals a decision that was skipped."],
+k:["MDM","system of record","attribute mastering"],
+f:"Three systems each considered themselves authoritative for customer address. The nightly sync ran in an order nobody had designed, so the last writer won and the winner varied with job timing. Correspondence went to whichever address happened to survive.",
+tk:"Authoritative per attribute, not per system.",q:"Who is allowed to write this field?"},
+{a:"DP",t:"Lineage is an operating requirement",
+b:"Lineage is usually justified as a compliance artifact, built once, then left to rot. Its real value appears the morning a number is wrong and someone must determine how far the error spread.",
+p:["Ask how long it takes to answer where a given figure came from.","Capture lineage from the pipeline itself, not from documentation.","Treat an unanswerable lineage question as an incident finding."],
+k:["lineage","impact analysis","data governance"],
+f:"A misstated figure in a board pack took nine days to trace to its source. The same error had been feeding two regulatory submissions, which nobody could confirm until the trace was complete.",
+tk:"Lineage matters the morning a number is wrong.",q:"Where did this figure come from?"},
+{a:"DP",t:"Quality is a property of use, not of storage",
+b:"Data is not good or bad in the abstract; it is fit or unfit for a specific decision. The same record can be adequate for a trend and dangerously wrong for an individual determination.",
+p:["Define quality thresholds per use case, not per table.","State the decisions a dataset is not adequate to support.","Re-check fitness when a dataset is reused for a new purpose."],
+k:["data quality","fitness for purpose","reuse"],
+f:"A customer segmentation dataset, accurate enough for campaign sizing, was reused for individual eligibility decisions. Its 4 percent error rate was immaterial at aggregate and produced several hundred wrong individual outcomes.",
+tk:"Fit for this decision, not good in general.",q:"What decisions is this data not adequate for?"},
+{a:"DP",t:"Rationalize on capability, not license cost",
+b:"Cost is the easiest number to obtain and the least useful to decide on. Assess each application on business fit and technical condition together, then choose to tolerate, invest, migrate, or eliminate.",
+p:["Score fit and condition separately before combining them.","High fit with poor condition is an investment case, not a removal case.","Low fit with good condition is where sunk-cost arguments do most damage."],
+k:["APM","TIME model","rationalization"],
+f:"A consolidation programme ranked applications by annual licence spend. The most expensive was retired and replaced, while a cheap, unsupported system carrying a core pricing calculation stayed untouched for another four years.",
+tk:"Fit and condition, not spend.",q:"Is this a removal case or an investment case?"},
+{a:"DP",t:"Every application is a standing liability",
+b:"Acquisition is a one-time decision. Patching, integration, access review, vendor management, and eventual migration are permanent. The portfolio grows because adding is a project and removing is nobody's job.",
+p:["Give every application a named owner for retirement, not just uptime.","Require a decommission plan as a condition of approving a new system.","Track applications added versus retired as a single ratio."],
+k:["portfolio","technical debt","decommissioning"],
+f:"An estate added roughly 30 applications a year and retired four. Nobody had opposed a single addition, and no funding line existed for removal. The integration cost of the estate eventually exceeded its licence cost.",
+tk:"Adding is a project, removing is nobody's job.",q:"Who owns retiring this application?"},
+{a:"DP",t:"Separate the budget owner from the lifecycle owner",
+b:"The person funding a system is frequently not the person responsible for its condition over time. Where those roles collapse into one, upgrades lose to new features every cycle.",
+p:["Name both roles explicitly for each material application.","Give the lifecycle owner standing to escalate deferred maintenance.","Review deferrals annually, not at renewal when leverage is gone."],
+k:["ownership","lifecycle","maintenance"],
+f:"A platform ran four major versions behind because each year's budget holder preferred visible features. The eventual upgrade required an intermediate migration and cost several times the deferred increments.",
+tk:"Funding and condition need separate owners.",q:"Who escalates deferred maintenance here?"},
+{a:"DP",t:"Master data conflicts are governance conflicts",
+b:"When two departments disagree about what counts as an active customer, no technical solution resolves it. The disagreement is about definitions serving different legitimate purposes, and it must be settled by people with authority to choose.",
+p:["Write the competing definitions down side by side.","Escalate to whoever owns both purposes, not to the data team.","Where both must survive, name them separately and stop merging them."],
+k:["master data","definitions","stewardship"],
+f:"Finance and sales reported different customer counts for three years. Finance counted billing relationships and sales counted buying entities. Both were correct, and the monthly reconciliation meeting persisted until someone finally named them as two distinct measures.",
+tk:"No technical fix for a definitional dispute.",q:"Whose definition are we using, and why?"},
+
+/* ===== RG / RK ===== */
+{a:"RK",t:"A risk is a statement about a decision",
+b:"Risks written as topics, meaning cyber risk or vendor risk, cannot be acted on. A usable risk names a condition, its cause, and the consequence, so that someone can decide whether to accept it or spend money against it.",
+p:["Write each risk as cause, event, consequence rather than as a subject heading.","State the decision the risk is meant to inform.","Remove any entry that would not change an action if it doubled."],
+k:["risk statement","register","causality"],
+f:"A register of 240 entries included legacy technology risk with no cause or consequence attached. It had been carried forward for six years and reviewed quarterly by people who could not have acted on it if they wanted to.",
+tk:"Cause, event, consequence. Otherwise it is a topic.",q:"What decision is this risk meant to inform?"},
+{a:"RK",t:"Likelihood times impact hides the tail",
+b:"Multiplying a probability band by an impact band produces a single number that ranks a frequent nuisance alongside a rare catastrophe. The two demand completely different responses, and the score obscures which one you are holding.",
+p:["Separate high-frequency low-impact from low-frequency high-impact explicitly.","For tail risks, assess survivability rather than expected value.","Ask what the worst plausible case costs, not the average case."],
+k:["risk scoring","tail risk","heat map"],
+f:"A heat map placed a recurring reconciliation break and a total data centre loss in the same amber band. Mitigation budget was allocated evenly. Only one of the two was capable of ending the business.",
+tk:"One score hides two different problems.",q:"Is this frequent and small, or rare and fatal?"},
+{a:"RK",t:"Inherent and residual risk is the only useful pair",
+b:"Inherent risk is exposure before controls. Residual is what remains after they work as designed. Reporting only one of them makes it impossible to see whether the controls are doing anything or whether the exposure was always small.",
+p:["Record both figures and the control that explains the gap.","Where the gap is large, verify the control actually operates.","Where the gap is near zero, ask whether the control is needed at all."],
+k:["inherent risk","residual risk","control effectiveness"],
+f:"A control framework reported residual risk only. When inherent figures were reconstructed, a third of controls were reducing exposure that had never been material, while two of the largest exposures had no control mapped at all.",
+tk:"Show both, or the control proves nothing.",q:"What exposure does this control actually remove?"},
+{a:"RK",t:"A risk without an owner is an observation",
+b:"Ownership means someone has both the accountability and the budget authority to act. Assigning a risk to a committee, a function, or a role nobody occupies converts it into documentation of awareness.",
+p:["Name an individual, not a team or a forum.","Confirm the owner controls the resources needed to respond.","Escalate any risk whose owner cannot act at their level."],
+k:["ownership","accountability","escalation"],
+f:"A concentration risk on a single integration platform was assigned to the architecture forum. No forum has a budget. It remained open for four years and was eventually closed as accepted, without anyone ever deciding to accept it.",
+tk:"Owner means budget, not awareness.",q:"Can this owner actually fund a response?"},
+{a:"RK",t:"Concentration is the risk the register misses",
+b:"Individual risks are assessed individually. Concentration appears only when you look across them: one cloud region, one identity provider, one integration platform, one person who understands the batch schedule.",
+p:["Look for the dependency that appears in many unrelated risk entries.","Include key-person concentration alongside technical concentration.","Assess what fails together, not what fails independently."],
+k:["concentration","single point of failure","key person"],
+f:"Nineteen separate risk entries each mentioned the same middleware platform in passing. Nobody had aggregated them. The platform's unsupported version was the common factor in most of the estate's material exposure.",
+tk:"Read across the register, not down it.",q:"What dependency appears in many entries?"},
+{a:"RK",t:"Third-party risk is your risk with someone else's controls",
+b:"Outsourcing an activity does not outsource the consequence. Regulatory obligation, customer impact, and reputational exposure stay where they were. What changes is that you now assess controls through evidence rather than observation.",
+p:["Establish what evidence you receive and how often, before signing.","Map which of your obligations depend on their performance.","Plan the exit at the point of entry, including data return."],
+k:["third party","vendor risk","exit planning"],
+f:"An outsourced payment reconciliation failed during a provider migration. The contract had service credits but no exit assistance clause, so recovering the process took five months during which the obligation remained entirely with the client.",
+tk:"The consequence never gets outsourced.",q:"What evidence do we receive, and how often?"},
+{a:"RK",t:"Accepted risk needs an expiry date",
+b:"Acceptance is a decision made under specific conditions: current volume, current threat, current architecture. Those conditions change and the acceptance does not, so an old acceptance is a decision nobody currently supports.",
+p:["Record what conditions the acceptance depends on.","Set a review date rather than an indefinite acceptance.","Re-present for decision rather than auto-renewing."],
+k:["risk acceptance","expiry","review"],
+f:"An accepted risk on unencrypted internal traffic was signed off when the network was entirely on-premises. Three years and one cloud migration later, the acceptance was still on file and still being cited.",
+tk:"Conditions change; the acceptance does not.",q:"Would we still accept this today?"},
+{a:"RK",t:"Near misses are free data",
+b:"An event that almost caused harm carries nearly the same information as one that did, at none of the cost. Organizations that only investigate actual losses are paying full price for every lesson.",
+p:["Define and capture near misses explicitly, not only incidents.","Investigate the ones that were stopped by luck rather than by control.","Report near-miss volume as a health signal, not as a failure count."],
+k:["near miss","leading indicator","learning"],
+f:"A deployment that would have exposed a customer database was caught by an engineer who happened to read the diff. No incident was raised because nothing occurred. The same class of change succeeded four months later.",
+tk:"Same lesson, none of the loss.",q:"What nearly went wrong and got caught?"},
+
+/* ===== RG / GV ===== */
+{a:"GV",t:"Decision rights come before standards",
+b:"A standard nobody has authority to enforce is a preference. Establish who decides what, at which threshold, and who may overrule, before writing the technical policy itself.",
+p:["Define the threshold at which a choice becomes an architecture decision.","Name the single role that resolves a deadlock.","Record the decision and its reasoning, not only the outcome."],
+k:["decision rights","authority","decision record"],
+f:"A technology standards document ran to 90 pages with no statement of who approved exceptions. Teams interpreted it independently, and three incompatible interpretations of the same integration rule were in production simultaneously.",
+tk:"Authority first, policy second.",q:"Who decides, and who can overrule them?"},
+{a:"GV",t:"A standard without an exception path becomes shadow IT",
+b:"Legitimate cases will not fit. If there is no visible way to get an exception, teams will take one silently and you lose both the standard and the visibility.",
+p:["Publish the exception route alongside the standard.","Time-bound every exception and record what would end it.","Treat a high exception rate as feedback on the standard, not on the teams."],
+k:["exceptions","standards","variance"],
+f:"A prohibition on unapproved data stores had no exception process. Two years later an inventory found eleven unapproved stores, every one of which had a defensible reason and none of which anyone had been able to declare.",
+tk:"No visible exception means a silent one.",q:"How does a legitimate exception get approved?"},
+{a:"GV",t:"Architecture review is a queue, so manage it as one",
+b:"Review capacity is finite and demand is not. When the queue lengthens, teams stop submitting rather than wait, and governance quietly stops seeing the work it exists to see.",
+p:["Measure time in queue, not number of reviews completed.","Set a value threshold below which no review is required at all.","Watch for work being split to stay under the threshold."],
+k:["review board","queue","throughput"],
+f:"An architecture board with a three-week queue saw submissions fall by half in a year. The board read it as improved standards compliance. Teams had learned to scope changes just under the trigger threshold.",
+tk:"Long queues make governance blind.",q:"How long is the wait, and who stopped submitting?"},
+{a:"GV",t:"Federate the decision, centralize the constraint",
+b:"Central teams cannot hold enough context to decide well for every domain, and fully devolved teams produce an unmanageable estate. Hold a small set of constraints centrally and let local teams decide freely inside them.",
+p:["Keep the central constraint list short enough to be memorized.","Constrain interfaces and data contracts rather than internal choices.","Revisit any constraint that is routinely exempted."],
+k:["federation","subsidiarity","guardrails"],
+f:"A central team maintaining a 40-item approved technology list spent most of its capacity processing additions. Reducing it to four interface and data constraints cut the queue to nothing and improved consistency where it mattered.",
+tk:"Few constraints centrally, freedom inside them.",q:"Is this a constraint or a preference?"},
+{a:"GV",t:"Preventive, detective, corrective: choose deliberately",
+b:"Preventive controls stop the event and cost friction. Detective controls find it after the fact and cost time. Corrective controls limit the damage. Most control failures come from applying the wrong type rather than from a weak control.",
+p:["Match control type to how reversible the event is.","Use detection where prevention would block legitimate work.","Ensure every detective control has a corrective response attached."],
+k:["control types","preventive","detective"],
+f:"A firm applied preventive blocks to every data export, and staff routed around them via screenshots and personal email. Detective controls with follow-up would have preserved the visibility the blocks destroyed.",
+tk:"Wrong control type, not weak control.",q:"Is prevention here worth the friction?"},
+{a:"GV",t:"A control nobody tests is an assumption",
+b:"Controls degrade silently. Access reviews stop being run, alerting rules are disabled during an incident and never restored, a validation is bypassed for a migration. Design says the control exists; only testing says it operates.",
+p:["Test operation, not design, on a defined cycle.","Sample actual transactions rather than reviewing documentation.","Record when a control was last proven to work, not last reviewed."],
+k:["control testing","operating effectiveness","assurance"],
+f:"A quarterly access recertification was recorded as complete for two years. Investigation found the reviewer had been approving the full list without opening it, because the tool offered an approve-all action.",
+tk:"Designed is not operating.",q:"When was this control last proven to work?"},
+{a:"GV",t:"Segregation of duties survives automation only by design",
+b:"Separating who requests, who approves, and who executes is straightforward with people. When steps are automated, the service account frequently ends up holding all three, and the segregation exists only in the process diagram.",
+p:["Check what the automation's identity is permitted to do end to end.","Keep approval outside the system performing the action.","Review service account entitlements with the same rigour as human ones."],
+k:["segregation of duties","service accounts","entitlements"],
+f:"An automated payment run used a single service account to create, approve, and release batches. The human process it replaced had required three people. Nothing in the change request had identified the control as affected.",
+tk:"Automation collapses three roles into one account.",q:"What can this service account do end to end?"},
+{a:"GV",t:"Policy that cannot be evidenced cannot be audited",
+b:"If compliance depends on someone attesting that they followed a rule, the evidence is the attestation, not the behavior. Write policy so that conformance produces an artifact as a side effect of the work.",
+p:["Ask what artifact proves conformance before publishing the policy.","Prefer rules enforced in the pipeline over rules stated in a document.","Retire policies whose only evidence is a signature."],
+k:["evidence","auditability","policy as code"],
+f:"A change management policy required peer review. The evidence was a checkbox on the change record. When sampled, roughly a quarter of the checked reviews had no corresponding comment, approval, or record of any second person.",
+tk:"No artifact, no audit.",q:"What proves someone actually did this?"},
+
+/* ===== RG / SC ===== */
+{a:"SC",t:"Identity is the perimeter",
+b:"With applications distributed across cloud, on-premises, and third parties, network location no longer indicates trust. What a credential is permitted to do, and how confidently it is bound to a real actor, is the control that remains.",
+p:["Enforce strong authentication for administrative and service access alike.","Base authorization on identity and context, not on network origin.","Inventory non-human identities; they usually outnumber people."],
+k:["zero trust","identity","authorization"],
+f:"An internal service trusted any request originating inside the corporate network. A compromised contractor laptop on VPN inherited that trust. The service had no authentication because, when built, the network had been the boundary.",
+tk:"Location is not trust.",q:"Would this be safe from outside the network?"},
+{a:"SC",t:"Least privilege decays without recertification",
+b:"Access accumulates. People move roles, projects end, temporary elevation becomes permanent. Without a recurring review that actually removes entitlements, every long-tenured account trends toward administrator.",
+p:["Review entitlements on role change, not only on a calendar.","Expire temporary elevation automatically rather than by request.","Measure removal volume; a review that removes nothing is not working."],
+k:["least privilege","recertification","access creep"],
+f:"An analyst who had moved through four departments in six years retained active entitlements in all four. None of the annual reviews had removed anything, because each reviewer saw only their own department's grants.",
+tk:"Access accumulates unless something removes it.",q:"What did the last review actually remove?"},
+{a:"SC",t:"Data classification drives every other control",
+b:"Encryption, retention, residency, access, and monitoring requirements all follow from what the data is. Without classification, controls get applied uniformly, which means either over-protecting everything or under-protecting the material.",
+p:["Classify at the dataset level and inherit to derived products.","Reclassify when data is aggregated; combinations can raise sensitivity.","Tie each control requirement to a classification, not to a system."],
+k:["classification","retention","residency"],
+f:"A derived analytics table combined two separately non-sensitive datasets into one that permitted individual identification. It inherited the lower classification of its sources and was accessible to a broad reporting group.",
+tk:"Classification decides every other control.",q:"Did combining these datasets raise sensitivity?"},
+{a:"SC",t:"Logging is a security control only if someone reads it",
+b:"Log collection is often treated as the control. Collection without detection produces a forensic record of a breach you did not notice, which is useful after the fact and prevents nothing.",
+p:["Define the detections the logs exist to support before choosing what to collect.","Verify retention covers your realistic detection lag, not a policy number.","Test detection with a controlled exercise, not with a coverage report."],
+k:["logging","detection","SIEM"],
+f:"An intrusion was identified by an external notification eleven weeks after the initial access. Every relevant event had been logged and retained. No rule existed that would have matched the activity.",
+tk:"Collection is not detection.",q:"What rule would have caught this?"},
+{a:"SC",t:"Recovery time is a business decision, not an IT target",
+b:"How long the organization can operate without a system, and how much data it can afford to lose, are questions about business tolerance. IT can state what is achievable at what cost, but it cannot decide what is acceptable.",
+p:["Get the business to state tolerance before proposing an architecture.","Present the cost of each recovery tier and let the owner choose.","Re-test the assumption after any material change in volume or dependency."],
+k:["RTO","RPO","business continuity"],
+f:"A continuity plan specified a four-hour recovery objective set by IT years earlier. When tested, the business found that two hours of loss during settlement was unacceptable while a full day elsewhere was fine. The uniform target had been both too expensive and insufficient.",
+tk:"The business owns the tolerance.",q:"How long can we operate without this?"},
+{a:"SC",t:"Backups are unproven until restored",
+b:"A completed backup job confirms that data was written. It says nothing about whether the data is complete, readable, uncorrupted, or restorable within the time you need. Only a restore test establishes that.",
+p:["Restore on a schedule, to a clean environment, against a clock.","Test restoring a subset as well as the whole; partial recovery is the common case.","Verify backups are isolated from the credentials that could encrypt production."],
+k:["backup","restore testing","immutability"],
+f:"Nightly backups had completed successfully for eighteen months. The first restore attempt, during an actual incident, failed because the database version had been upgraded and no one had tested against the new format.",
+tk:"A backup job is not a restore.",q:"When did we last restore, against a clock?"},
+{a:"SC",t:"The supply chain is part of the attack surface",
+b:"Dependencies, build tools, container images, and vendor integrations execute with your privileges. Code you did not write and did not review forms most of what runs in production.",
+p:["Maintain an inventory of dependencies and their provenance.","Pin versions and review what a dependency update actually changes.","Apply the same access standards to vendor integrations as to internal ones."],
+k:["supply chain","SBOM","dependencies"],
+f:"A build pipeline pulled an unpinned utility package on every run. A compromised release of that package ran with pipeline credentials for two days before the maintainers published an advisory.",
+tk:"You run code you never reviewed.",q:"What does this dependency execute with?"},
+{a:"SC",t:"Secrets sprawl faster than systems",
+b:"API keys, connection strings, certificates, and tokens multiply with every integration and end up in configuration files, repositories, pipeline variables, and support tickets. Rotation is only possible if you know where they all are.",
+p:["Centralize secret storage and reference rather than copy.","Scan repositories and pipeline logs, including history.","Rotate on a schedule to prove rotation actually works."],
+k:["secrets management","rotation","credentials"],
+f:"A database credential appeared in seven places across three repositories and a wiki page. Rotating it during an incident broke two services nobody had connected to that credential, extending the outage by several hours.",
+tk:"Rotation needs an inventory.",q:"Where else does this credential exist?"},
+/* ===== PF / PL — People-based ===== */
+{a:"PL",t:"People are the right answer for judgment under ambiguity",
+b:"Human execution earns its cost where inputs are unstructured, precedent is thin, and someone must be answerable for the call. Choosing people for stable, high-volume, well-specified work is how a process becomes expensive and inconsistent at the same time.",
+p:["Reserve human steps for genuine judgment, not for data entry.","Check whether the ambiguity is real or just an unwritten rule.","Count how often the human step changes the outcome."],
+k:["fit","judgment","lifecycle: selection"],
+f:"A specialist team reviewed every submission. Sampling showed they changed the outcome in 6 percent of cases, all sharing three identifiable traits. Those traits became a routing rule and the team reviewed only what needed them.",
+tk:"Use people where accountability and ambiguity meet.",
+q:"How often does this human step change the outcome?"},
+{a:"PL",t:"A policy is a specification with no compiler",
+b:"Nothing rejects a policy that contradicts itself, omits a case, or cannot be followed. It ships unvalidated and the defects surface as inconsistent behavior across teams months later.",
+p:["Walk real cases through the policy before publishing it.","Define the default for any situation the policy does not name.","Have someone who will follow it try to break it first."],
+k:["policy design","ambiguity","lifecycle: design"],
+f:"An expenses policy set two thresholds that overlapped between 500 and 750. Four offices resolved the overlap differently for two years, and each believed it was compliant.",
+tk:"Nothing rejects a broken policy. Test it yourself.",
+q:"What does someone do in the case this does not name?"},
+{a:"PL",t:"Training is the deployment mechanism",
+b:"For a people-based solution, the rollout is the training and the reference material. Publishing the procedure and announcing it is the equivalent of writing code and never running the installer.",
+p:["Plan competence, not communication, as the release activity.","Give people the reference where the work happens, not in a portal.","Confirm a sample can perform it before declaring rollout complete."],
+k:["rollout","competence","lifecycle: deployment"],
+f:"A revised handling procedure was announced by email and posted to the intranet. Six weeks later, a spot check found most of the team still following the previous version, which was pinned above their desks.",
+tk:"Announcing a procedure is not deploying it.",
+q:"Can a sample of the team actually perform this now?"},
+{a:"PL",t:"Verify procedures by watching, not by attesting",
+b:"Asking people whether they follow a procedure measures their understanding of what they should do. Observation and sampled output measure what they did. The two diverge quietly and in one direction.",
+p:["Sample actual work products rather than collecting confirmations.","Observe the step in context, including when it is busy.","Treat a divergence as a design signal before a compliance one."],
+k:["assurance","observation","lifecycle: verification"],
+f:"A compliance attestation returned full conformance. Observation found a documented step being skipped on the busiest day of the week because performing it made the queue unmanageable.",
+tk:"Ask what they did, not what they know.",
+q:"When did we last watch this being done under load?"},
+{a:"PL",t:"Procedural drift is the human form of decay",
+b:"Procedures erode through reasonable local adaptations, staff turnover, and undocumented improvements. Each change is individually sensible and the cumulative result is a process nobody has described in years.",
+p:["Re-baseline the performed process on a set cycle.","Capture adaptations as candidate improvements, not violations.","Date the procedure and record who last confirmed it."],
+k:["drift","turnover","lifecycle: operation"],
+f:"Three shifts on the same line had each adapted a checklist differently over four years. All three produced acceptable output, and none matched the document used to train new joiners.",
+tk:"Adaptations are improvements you have not captured.",
+q:"How does today's practice differ from the written version?"},
+{a:"PL",t:"Retiring a procedure means removing the habit",
+b:"Switching off a system stops the behavior. Withdrawing a procedure does not, because the behavior lives in people who learned it. Old steps persist alongside new ones and the cost is paid twice.",
+p:["Name explicitly what stops, not only what starts.","Remove the artifacts that prompt the old behavior.","Check for the old step surviving in a parallel record."],
+k:["decommissioning","habit","lifecycle: retirement"],
+f:"A duplicate log was retained by an operations team for two years after the system replacing it went live. Nobody had told them to stop, and the reconciliation it fed had itself been retired.",
+tk:"Name what stops, not only what starts.",
+q:"What old step is still running alongside the new one?"},
+
+/* ===== PF / SY — Deterministic systems ===== */
+{a:"SY",t:"Choose determinism where the rule is stable and the stakes are high",
+b:"Deterministic logic gives you the same answer every time, an auditable path, and a predictable cost. That is the correct trade wherever the rule is genuinely settled and wrong answers are expensive to reverse.",
+p:["Confirm the rule is stable before encoding it, not merely current.","Prefer determinism wherever the decision must be explained.","Estimate how often the rule will need changing."],
+k:["fit","auditability","lifecycle: selection"],
+f:"A tax withholding calculation was moved to a rules engine rather than a model because every output had to be reproducible and defensible years later, regardless of how well a model performed on average.",
+tk:"Determinism buys reproducibility and explanation.",
+q:"Is this rule settled, or still being argued about?"},
+{a:"SY",t:"Rules encode a moment and age from the day they ship",
+b:"A rules engine captures policy as it stood when someone wrote it. Policy moves; the encoded version does not. Without a maintenance path, the system slowly becomes an authoritative record of a former policy.",
+p:["Name who owns rule content, separately from who owns the engine.","Version rules so you can answer what applied on a given date.","Schedule review with the policy cycle, not the release cycle."],
+k:["rule maintenance","policy drift","lifecycle: design"],
+f:"An eligibility engine still applied a threshold removed from policy eighteen months earlier. The business team assumed IT tracked policy changes; IT assumed the business would raise them.",
+tk:"Encoded policy does not follow the policy.",
+q:"Who owns the rule content, separate from the engine?"},
+{a:"SY",t:"Configuration is code with none of the discipline",
+b:"Business rules moved into configuration to avoid deployments escape review, testing, version control, and rollback. The change is just as capable of breaking production and travels a far weaker path to get there.",
+p:["Put configuration changes through review and version control.","Test configuration in a non-production environment first.","Keep a rollback path for configuration, not only for builds."],
+k:["configuration","change control","lifecycle: deployment"],
+f:"A threshold edited directly in production configuration rejected a full day of valid transactions. There was no record of the previous value and no test environment carrying the same configuration.",
+tk:"If it can break production, it needs the same path.",
+q:"Can we roll this configuration change back?"},
+{a:"SY",t:"Deterministic systems can be verified exhaustively at the boundary",
+b:"The advantage of deterministic logic is that the input space can be enumerated and the decision boundary tested directly. Testing only representative happy-path cases discards the main benefit of choosing it.",
+p:["Test at the boundaries and one step either side of each.","Enumerate the combinations, then decide which to cover.","Keep the rule test suite as the rule specification."],
+k:["boundary testing","coverage","lifecycle: verification"],
+f:"A pricing rule was tested with typical values and passed. The boundary case at exactly the threshold fell through every branch and returned zero, which went unnoticed until a customer reported it.",
+tk:"Enumerate the boundaries. That is why you chose rules.",
+q:"Have we tested exactly at the threshold, and either side?"},
+{a:"SY",t:"The exception queue measures the rules engine",
+b:"Whatever the engine cannot decide lands with a person. That queue is the honest measure of coverage, and it grows quietly as reality diverges from the encoded rules.",
+p:["Track exception rate as a primary operating metric.","Categorize exceptions; a few causes usually dominate.","Treat a rising rate as rule decay, not as staffing demand."],
+k:["exception rate","coverage","lifecycle: operation"],
+f:"An engine reported a 94 percent automation rate at launch. Three years later it was 71 percent, absorbed entirely by adding staff to the exception team. No rule had been updated in that period.",
+tk:"The exception queue tells you what the rules missed.",
+q:"What is the exception rate now versus at launch?"},
+{a:"SY",t:"Rules accumulate because nobody deletes them",
+b:"Adding a rule resolves a case today. Removing one requires proving nothing depends on it. The asymmetry means rule sets only grow, and interactions between old rules eventually exceed anyone's ability to reason about them.",
+p:["Log rule hit rates; rules that never fire are candidates.","Require a removal or supersession statement with each addition.","Review interaction effects, not only individual rules."],
+k:["rule sprawl","supersession","lifecycle: change"],
+f:"A rule set of over 900 entries included several that had not fired in four years and two pairs that contradicted each other. Resolution depended on evaluation order nobody had deliberately chosen.",
+tk:"Additions are cheap, removals are never anyone's job.",
+q:"Which rules have not fired in the last year?"},
+
+/* ===== PF / AG — AI and agentic ===== */
+{a:"AG",t:"Choose probabilistic where variation defeats rules and errors are recoverable",
+b:"Models earn their place on unstructured or highly varied input where writing rules is impractical. They are a poor fit where every output must be reproducible, explainable years later, or correct on the first attempt.",
+p:["Ask whether a wrong output can be caught and corrected downstream.","Check the input really is too varied for rules, not just unmapped.","Match the modality to reversibility, not to available budget."],
+k:["fit","variance","lifecycle: selection"],
+f:"Inbound correspondence classification moved to a model because the formats numbered in the hundreds and misrouting cost a day of delay. The adjacent payment authorization stayed deterministic, because a wrong answer moved money.",
+tk:"Probabilistic suits variety with recoverable errors.",
+q:"If this output is wrong, what catches it?"},
+{a:"AG",t:"Design the confidence threshold before the prompt",
+b:"The consequential decision is not what the model outputs, but what confidence level permits it to act unreviewed. That threshold sets your automation rate, your review load, and your error exposure at once.",
+p:["Set the threshold from the cost of a wrong answer, not from accuracy.","Decide what happens below the threshold before launch.","Revisit the threshold when volume or consequence changes."],
+k:["confidence","thresholds","lifecycle: design"],
+f:"A classifier was tuned for maximum overall accuracy and routed everything it produced. Splitting outputs at a confidence threshold cut downstream errors substantially while sending only a fifth to human review.",
+tk:"The threshold, not the model, sets your exposure.",
+q:"What confidence lets this act without review?"},
+{a:"AG",t:"Evaluation sets are the specification",
+b:"There is no source code stating what a model should do. The evaluation set is the only artifact expressing intended behavior precisely, which makes building it a specification activity rather than a testing chore.",
+p:["Build the evaluation set before selecting or tuning anything.","Include the hard, rare, and adversarial cases deliberately.","Version it; changing the set changes the requirement."],
+k:["evaluation","golden set","lifecycle: design"],
+f:"Two teams disagreed for weeks about whether a summarization output was acceptable. Neither had an evaluation set. Writing forty labelled examples settled the disagreement in an afternoon and became the acceptance criteria.",
+tk:"No eval set means no agreed requirement.",
+q:"What examples define acceptable behavior here?"},
+{a:"AG",t:"Verify on distribution, not on examples",
+b:"A model that handles the cases you tried says little about the cases you will see. Verification has to address the shape of real traffic, including the rare inputs that arrive in volume once the system is live.",
+p:["Test against sampled production traffic, not curated examples.","Measure performance per segment; averages conceal failures.","Establish the input baseline you will later compare against."],
+k:["distribution","segments","lifecycle: verification"],
+f:"An extraction model reported 93 percent accuracy overall. Broken down by document source, one supplier accounting for a fifth of volume sat at 61 percent. The aggregate had been approved without segmentation.",
+tk:"Averages conceal the segment that fails.",
+q:"How does this perform on our worst segment?"},
+{a:"AG",t:"An agent's tools are its permissions",
+b:"Whatever an agent can call, it can do, in any sequence, including sequences nobody anticipated. Tool scope is the actual authorization boundary regardless of what the prompt instructs.",
+p:["Scope each tool to one action with the narrowest sufficient access.","Assume instructions can be overridden; rely on the tool boundary.","Log every tool call with its arguments and its result."],
+k:["agent scope","least privilege","lifecycle: deployment"],
+f:"An agent given broad database access for a reporting task was instructed to read only. A malformed request produced a write. The instruction had been the only control; the credential permitted both.",
+tk:"The tool boundary is the real control, not the prompt.",
+q:"What is the worst sequence these tools permit?"},
+{a:"AG",t:"Rollback means keeping the previous version runnable",
+b:"Model behavior changes with a new version, a provider update, or a prompt edit. Unless the prior configuration can be restored and compared, a regression becomes an investigation rather than a reversal.",
+p:["Pin versions and keep the previous configuration deployable.","Run the evaluation set against any change before promoting it.","Record prompt, model, and parameters together as one unit."],
+k:["versioning","regression","lifecycle: change"],
+f:"Output quality dropped after a provider updated the underlying model. Nothing on the team's side had changed and no pinned version existed, so diagnosis took nine days and the previous behavior was never recovered.",
+tk:"Prompt, model, and parameters are one versioned unit.",
+q:"Can we restore last week's behavior exactly?"},
+
+/* ===== PF / HY — Hybrid seams ===== */
+{a:"HY",t:"Hybrid failure happens at the seams, not in the parts",
+b:"Each modality is usually tested by the people who built it. The handoffs between them belong to nobody, and that is where context is lost, responsibility blurs, and cases fall out of the process entirely.",
+p:["Name an owner for each handoff, not only for each component.","Trace one case end to end across all modalities.","Test what happens when a handoff is refused or times out."],
+k:["seams","handoff","lifecycle: design"],
+f:"A model routed low-confidence cases to a rules engine, which routed unmatched cases to a team, which returned them to the model queue. A small number of cases circulated for weeks without anyone owning the loop.",
+tk:"Handoffs belong to nobody unless you assign them.",
+q:"Who owns the handoff between these two steps?"},
+{a:"HY",t:"Route by confidence and consequence together",
+b:"Confidence alone is the wrong router. A confident answer on a decision that cannot be reversed still warrants review, and an uncertain answer on a trivial case does not. Both axes belong in the routing rule.",
+p:["Define consequence bands alongside confidence thresholds.","Send high-consequence cases to review regardless of confidence.","Let low-consequence uncertainty proceed rather than queue."],
+k:["routing","consequence","lifecycle: design"],
+f:"A triage design routed purely on model confidence. Small refunds were reviewed because the model was unsure; large account closures proceeded automatically because it was certain. The bands were added after an escalation.",
+tk:"High consequence earns review even at high confidence.",
+q:"Does routing here account for consequence, or only confidence?"},
+{a:"HY",t:"Escalation must carry context or the work restarts",
+b:"When a case moves from an automated step to a person, everything the automation established should travel with it. Handing over a bare case forces the reviewer to redo work that was already done and usually done well.",
+p:["Pass the inputs, the output, the confidence, and the reason for escalation.","Show what was already checked so it is not repeated.","Capture the reviewer's decision back into the same record."],
+k:["escalation","context transfer","lifecycle: operation"],
+f:"Escalated cases arrived with a case number only. Reviewers re-read source documents the extraction step had already parsed correctly, which made human review four times slower than the work actually required.",
+tk:"Hand over the reasoning, not just the case.",
+q:"What does the reviewer have to redo on arrival?"},
+{a:"HY",t:"The human in the loop must be able to disagree",
+b:"Oversight is real only where overriding is practical, recorded, and free of penalty. Where the override path is slow or the reviewer is measured on throughput, review degrades into confirmation and the control is gone.",
+p:["Make overriding at least as easy as accepting.","Measure override rate; a rate near zero means review is nominal.","Feed overrides back as training or rule evidence."],
+k:["oversight","override","automation bias"],
+f:"A review step recorded an override rate under 1 percent. Reviewers had 20 seconds per case and overriding required a free-text justification. The control existed in the design and not in the operation.",
+tk:"An override rate near zero means review is nominal.",
+q:"How easy is it here to disagree with the machine?"},
+{a:"HY",t:"Measure the whole path, not each modality",
+b:"Every component can meet its target while the end-to-end result gets worse. Automating one stage frequently relocates cost into review, exception handling, or rework rather than removing it.",
+p:["Measure end-to-end time and cost per completed case.","Include review and rework in the automated path's cost.","Compare against the original process, not against the component target."],
+k:["end-to-end","measurement","lifecycle: operation"],
+f:"An intake step reached 80 percent automation and was reported as a success. Total handling time per case had increased, because the automated path produced exceptions that took longer to resolve than the original manual route.",
+tk:"Component targets can all pass while the path degrades.",
+q:"What is end-to-end cost per completed case now?"},
+{a:"HY",t:"The modality mix is revisited, not set",
+b:"The right balance shifts as volume grows, models improve, rules stabilize, and staff turn over. A mix chosen at design time and never revisited will be wrong within a couple of years in a predictable direction.",
+p:["Review the split on a cycle, with the exception rate as evidence.","Move work between modalities deliberately rather than by drift.","Record why the current mix was chosen so it can be re-argued."],
+k:["rebalancing","portfolio","lifecycle: change"],
+f:"A process designed as 70 percent manual was still staffed that way three years later, although the rules engine now handled most of what the team reviewed. The staffing model had never been revisited after go-live.",
+tk:"Today's right mix is next year's wrong one.",
+q:"When did we last rebalance this, and on what evidence?"}
+,
+/* ===== AE / CX — Context and retrieval ===== */
+{a:"CX",t:"Retrieval quality caps everything downstream",
+b:"No prompt recovers from the right passage never being fetched. In a retrieval-augmented system the ceiling on answer quality is set by whether the relevant material reached the context at all, which makes retrieval the first thing to measure and the last thing teams look at.",
+p:["Measure recall at k separately from answer quality.","Inspect the retrieved passages on failures before touching the prompt.","Keep a labelled set of query and expected-source pairs."],
+k:["RAG","recall","grounding"],
+f:"A support assistant was blamed for hallucinating policy details. Logging the retrieved chunks showed the correct policy document was outside the top ten results for most failing queries. The model had been answering from nothing.",
+tk:"If it was never retrieved, no prompt saves you.",
+q:"On this failure, was the right passage even fetched?"},
+{a:"CX",t:"Chunking is a design decision, not a default",
+b:"Splitting documents at a fixed token count severs tables, separates a heading from its content, and strips the context that made a passage meaningful. The chunk boundary determines what can ever be retrieved as a unit.",
+p:["Chunk on document structure where the structure is reliable.","Carry parent headings and source into each chunk as metadata.","Read a random sample of chunks before indexing everything."],
+k:["chunking","preprocessing","metadata"],
+f:"A policy corpus chunked at 500 tokens split a rate table across three chunks. Any retrieval returned a fragment of columns without the header row, and the model produced confident, wrongly-labelled numbers.",
+tk:"The chunk boundary decides what can be retrieved.",
+q:"Have we actually read a sample of our chunks?"},
+{a:"CX",t:"The context window is a budget, not a container",
+b:"Filling the window because it is available degrades attention on what matters, raises cost on every call, and slows response. What you leave out is as much a design decision as what you include.",
+p:["Decide what each section of context is for before adding it.","Put the decisive material where the model attends most reliably.","Measure whether adding context actually improved the output."],
+k:["context budget","attention","token cost"],
+f:"An agent was given the full conversation history, twelve retrieved documents and a long system prompt. Trimming retrieval to three reranked passages improved accuracy and cut cost per call by roughly two thirds.",
+tk:"More context is not better context.",
+q:"What is each part of this context actually doing?"},
+{a:"CX",t:"Grounding means citations someone can check",
+b:"An answer that references a source the user can open is verifiable. An answer that merely sounds sourced is not. Citation is the mechanism that lets a probabilistic component be used for consequential work.",
+p:["Return the source identifier and location with every claim.","Make the citation resolve to the passage, not to the document.","Treat an uncited claim as an output the system should suppress."],
+k:["citation","verifiability","provenance"],
+f:"A research assistant cited document titles only. Spot checks found a fifth of citations pointed at documents that did not contain the claim. Resolving citations to passage level made the errors visible to users immediately.",
+tk:"Cite to the passage, or it is not grounded.",
+q:"Can a user open the exact passage behind this claim?"},
+{a:"CX",t:"Stale indexes fail silently",
+b:"A vector index does not report that it is out of date. It returns confident neighbours from whatever it last ingested, so the system keeps answering fluently from superseded material long after the source changed.",
+p:["Track index freshness as an operational metric with an alert.","Reconcile document counts between source and index on a cycle.","Include a last-updated timestamp in retrieved metadata."],
+k:["index freshness","ingestion","silent failure"],
+f:"An ingestion job had been failing for five weeks with a credential error that only wrote to a log nobody watched. The assistant continued answering from a five-week-old corpus, including a pricing change that had already shipped.",
+tk:"A stale index answers just as confidently.",
+q:"When did this index last successfully ingest?"},
+{a:"CX",t:"Reranking is cheaper than a bigger model",
+b:"Vector similarity retrieves what is semantically near, which is not the same as what answers the question. A reranking pass over a wider candidate set usually buys more accuracy per unit of cost than upgrading the generation model.",
+p:["Retrieve wide, rerank, then pass only the top few forward.","Test hybrid keyword and vector retrieval before adding model capacity.","Compare the cost of reranking against the cost of a larger model."],
+k:["reranking","hybrid search","precision"],
+f:"A team planned to move to a larger model to fix retrieval-related errors. Adding a reranker over the top fifty candidates closed most of the gap at a fraction of the per-query cost, and the larger model was never needed.",
+tk:"Fix retrieval before you buy model capacity.",
+q:"Have we tried reranking before upgrading the model?"},
+
+/* ===== AE / TL — Tools and protocols ===== */
+{a:"TL",t:"MCP standardizes the connection, not the judgment",
+b:"A protocol for exposing tools and context removes integration work and vendor coupling. It does not decide which tools an agent should have, what they are permitted to touch, or whether the model uses them sensibly. Those remain design decisions.",
+p:["Use the protocol to decouple from providers, not to skip scoping.","Review what each server exposes before connecting it.","Keep authorization outside the protocol layer."],
+k:["MCP","protocol","decoupling"],
+f:"A team connected four servers because integration had become trivial, then found the model selecting a write-capable tool for a read-only task. The protocol had removed the friction that previously forced a scoping conversation.",
+tk:"Easy connection is not the same as safe connection.",
+q:"What does this server actually expose, tool by tool?"},
+{a:"TL",t:"A tool description is a prompt",
+b:"The model chooses tools from their names, descriptions and parameter schemas. Vague or overlapping descriptions produce wrong tool selection, and no amount of system-prompt instruction reliably compensates for two tools that sound the same.",
+p:["Write descriptions stating when to use and when not to use.","Remove overlap between tools rather than explaining the difference.","Test selection accuracy separately from execution."],
+k:["tool description","selection","schema"],
+f:"Two tools named search_records and find_entries were selected almost interchangeably. Renaming them by the question each answers, and stating explicitly which to prefer, brought selection accuracy above 95 percent without any prompt change.",
+tk:"Ambiguous tool names produce ambiguous tool choices.",
+q:"Could two of these tools be confused for each other?"},
+{a:"TL",t:"One tool, one responsibility",
+b:"A broad tool taking a mode parameter is several tools hiding from review. Narrow, single-purpose tools are easier for the model to select correctly, easier to permission, and easier to test deterministically.",
+p:["Split any tool whose behavior branches on a mode argument.","Scope credentials per tool, not per integration.","Write a unit test per tool with fixed inputs and outputs."],
+k:["tool design","least privilege","testability"],
+f:"A single manage_record tool accepted create, update and delete modes behind one credential. Narrowing it to three tools let the delete capability be withheld entirely from the agent that only needed to read and update.",
+tk:"A mode parameter is several tools avoiding review.",
+q:"Does this tool branch on a mode argument?"},
+{a:"TL",t:"Tool errors must be legible to the model",
+b:"An error returned as a stack trace or an opaque code gives the model nothing to act on, so it retries identically or invents a path forward. Error messages are part of the interface and should state what failed and what to try instead.",
+p:["Return errors as plain statements of cause and remedy.","Distinguish retryable from terminal failures explicitly.","Cap retries in the harness rather than trusting the model to stop."],
+k:["error handling","retries","affordance"],
+f:"A tool returned HTTP 429 as a bare status code. The agent retried immediately in a tight loop until the harness limit stopped it. Returning rate limited, retry after 30 seconds changed the behavior on the first attempt.",
+tk:"Write errors for the model, not for the log.",
+q:"Would this error tell the model what to do next?"},
+{a:"TL",t:"Server scope is a blast radius",
+b:"Connecting a server grants its whole surface for the session. Whatever any tool on it can reach is reachable, in combinations nobody enumerated, regardless of what the task required.",
+p:["Connect the narrowest server that covers the task.","Enumerate the worst sequence the combined tools permit.","Separate read-only and write-capable servers where you can."],
+k:["scope","blast radius","authorization"],
+f:"A reporting agent was given a server exposing both query and administrative tools because they shipped together. Nothing in the task needed the administrative surface, and nothing in the configuration prevented reaching it.",
+tk:"You grant the server, not the tool you wanted.",
+q:"What is the worst sequence these connected tools allow?"},
+{a:"TL",t:"Treat tool output as untrusted input",
+b:"Content returned from a web page, a document, or a third-party system can contain text addressed to the model. If tool results are concatenated into context without separation, retrieved content can issue instructions.",
+p:["Delimit tool results clearly as data rather than instruction.","Require confirmation before acting on instructions found in content.","Log what the model acted on when the source was external."],
+k:["prompt injection","trust boundary","provenance"],
+f:"A summarization agent processed a document containing an instruction to email its contents to an external address. The agent had send capability, and nothing in the pipeline distinguished document text from operator instruction.",
+tk:"Fetched content is data, never instruction.",
+q:"Could this fetched content be addressing the model?"},
+
+/* ===== AE / LP — Loop and control ===== */
+{a:"LP",t:"Every loop needs a termination condition",
+b:"An agent that decides its own next step will, given an unreachable goal, keep deciding. Step limits, wall-clock limits and cost ceilings belong in the harness, because a model asked to stop when it is done is not a control.",
+p:["Set maximum steps, elapsed time and spend per task.","Define what the agent returns when it exhausts a limit.","Alert on tasks that routinely reach the ceiling."],
+k:["termination","step limit","runaway"],
+f:"An agent asked to reconcile two systems that genuinely disagreed looped between fetching both sides for over 400 steps. No step ceiling existed. The cost was noticed on the monthly invoice rather than by an alert.",
+tk:"The harness stops the loop, not the instruction.",
+q:"What are the step, time and spend ceilings here?"},
+{a:"LP",t:"Context engineering beats prompt engineering",
+b:"Once a system has tools, retrieval and history, the leverage moves from wording the instruction to deciding what the model sees on each turn: which results, how much history, in what order, with what compacted away.",
+p:["Treat each turn's context as an assembled artifact with a budget.","Order material so decisive content is not buried mid-window.","Change one element of the assembly at a time when debugging."],
+k:["context engineering","assembly","turn budget"],
+f:"Weeks of prompt rewriting produced marginal gains. Restructuring what entered the context each turn, dropping stale tool output and keeping a running task summary, produced a larger improvement in two days.",
+tk:"Decide what the model sees, not just what you say.",
+q:"What exactly is in the context on this turn?"},
+{a:"LP",t:"State belongs outside the conversation",
+b:"Holding task state in the message history means it degrades as history is truncated, cannot be inspected, and cannot be resumed after a failure. Durable state in an external store can be read, corrected and restarted.",
+p:["Persist task state in a store the harness owns.","Make state inspectable by a human during a run.","Resume from stored state rather than replaying the transcript."],
+k:["state","durability","resumability"],
+f:"A long-running migration agent lost its progress list when history was compacted and restarted work it had already completed, producing duplicate records. The progress list had only ever existed in the transcript.",
+tk:"History is not a database.",
+q:"Where does this task's state live if the run dies?"},
+{a:"LP",t:"Decompose before you delegate",
+b:"Handing an agent a large, vaguely bounded objective produces plausible-looking wandering. Breaking work into steps with checkable outputs turns one unverifiable result into a sequence you can inspect and resume.",
+p:["Define the checkable output of each step before running it.","Prefer several verified steps to one long autonomous run.","Fail the step, not the whole task, when a check does not pass."],
+k:["decomposition","checkpoints","verifiability"],
+f:"An agent given migrate the reporting layer produced forty minutes of activity and an unverifiable claim of success. The same work split into eight steps with an assertion after each surfaced two genuine failures immediately.",
+tk:"Checkable steps beat one long autonomous run.",
+q:"How would we verify this step succeeded?"},
+{a:"LP",t:"Multi-agent is a coordination cost you must justify",
+b:"Separate agents add context transfer, handoff loss, and failure modes at the seams, exactly as hybrid human and machine processes do. The structure earns its keep where subtasks genuinely need different tools, permissions or context, and not otherwise.",
+p:["Justify each additional agent by the tools or permissions it needs.","Define what each handoff carries and who owns it.","Compare against a single agent with better decomposition first."],
+k:["multi-agent","orchestration","handoff"],
+f:"A five-agent pipeline was replaced by one agent with a clear task list and the same tools. Output quality rose and latency fell, because four context handoffs and their losses had been removed.",
+tk:"Another agent is another seam.",
+q:"What does this agent need that the last one cannot have?"},
+{a:"LP",t:"Compaction loses what you did not choose to keep",
+b:"When history is summarized to fit the window, something is discarded. If nothing specifies what must survive, the summarizer decides, and the detail that mattered is frequently the specific one it compressed away.",
+p:["Name explicitly what must persist across compaction.","Keep decisions and constraints verbatim, summarize narration.","Test behavior across a compaction boundary, not only before it."],
+k:["compaction","summarization","memory"],
+f:"An agent was told early in a session never to modify a particular table. After compaction that constraint had been summarized into general caution about data changes, and the table was modified two hundred turns later.",
+tk:"Say what must survive compaction, or lose it.",
+q:"Which constraints must survive the next compaction?"},
+
+/* ===== AE / EV — Evaluation and runtime ===== */
+{a:"EV",t:"Ship the eval harness before the feature",
+b:"Without a way to measure, every change is judged by whether the last few outputs looked acceptable. The harness is what converts opinion into evidence, and building it after launch means every earlier decision was uncontrolled.",
+p:["Write the evaluation set before selecting a model or prompt.","Run it on every change, including prompt edits.","Version the set; changing it changes the requirement."],
+k:["evals","harness","regression"],
+f:"A team iterated on prompts for six weeks by reading samples. When an evaluation set was finally built, two changes believed to be improvements measured worse than the version from week one.",
+tk:"No harness means every judgement is anecdote.",
+q:"How would we know if this change made it worse?"},
+{a:"EV",t:"LLM-as-judge needs its own validation",
+b:"Using a model to score outputs is efficient and inherits the failure modes of the thing it is scoring. Position bias, verbosity preference and self-preference are well documented. The judge is a measuring instrument and requires calibration against human labels.",
+p:["Calibrate the judge against a human-labelled sample first.","Randomize order and identity to counter position and self bias.","Re-validate the judge when you change its model."],
+k:["LLM-as-judge","calibration","bias"],
+f:"An automated judge consistently preferred longer answers. Once calibrated against human labels, the scoring rubric was rewritten to penalize unsupported length, and the ranking of two candidate prompts reversed.",
+tk:"Calibrate the judge before trusting its scores.",
+q:"Has this judge been checked against human labels?"},
+{a:"EV",t:"Trace the whole span, not the final answer",
+b:"A wrong answer has a location: retrieval, tool selection, tool execution, or generation. Without a trace carrying inputs, retrieved context, tool calls and outputs for each step, debugging becomes re-running prompts and guessing.",
+p:["Capture retrieved context and every tool call with arguments.","Carry one identifier across the whole task span.","Sample and read successful traces, not only failures."],
+k:["tracing","spans","observability"],
+f:"A defect blamed on the model for three weeks turned out to be a tool returning an empty result set without an error. Nothing in the logs recorded tool responses, so the failure was invisible upstream of the answer.",
+tk:"Wrong answers have a location. Trace to it.",
+q:"Can we see every tool call behind this answer?"},
+{a:"EV",t:"Latency is a product decision",
+b:"A multi-step agent is slower than a single call by design, and users abandon tasks on wall-clock time rather than on step count. How long a task may take belongs in the requirement, alongside how good the answer must be.",
+p:["Set a latency target with the accuracy target, not after it.","Stream or show progress for anything over a few seconds.","Measure the slowest decile, not the average."],
+k:["latency","p90","user experience"],
+f:"An agentic search averaged nine seconds, which testing accepted. The slowest tenth of queries exceeded forty seconds with no visible progress, and that decile accounted for most of the abandonment.",
+tk:"Users abandon on the slow tail, not the average.",
+q:"What does the slowest tenth of requests look like?"},
+{a:"EV",t:"Cost per task, not per token",
+b:"Token pricing is an input, not the unit that matters. A cheaper model that needs more turns, more retries and more human correction can cost more per completed task than an expensive one that succeeds first time.",
+p:["Measure fully loaded cost per successfully completed task.","Include retries, failed runs and human correction in the number.","Re-test the comparison when volume or prompt length changes."],
+k:["unit economics","cost per task","TCO"],
+f:"A switch to a cheaper model cut token cost by half and raised the retry rate enough that cost per completed task rose. The comparison had been run on price per million tokens alone.",
+tk:"Compare completed tasks, not token prices.",
+q:"What does one completed task actually cost us?"},
+{a:"EV",t:"Regression is the default state",
+b:"Provider updates, prompt edits, retrieval changes and corpus growth all move behavior, and none of them announce themselves. A system without continuous evaluation is not stable; it is unmeasured.",
+p:["Run the evaluation set on a schedule, not only on release.","Pin model versions and treat provider updates as changes.","Keep the previous configuration deployable for comparison."],
+k:["regression","drift","version pinning"],
+f:"Quality complaints arrived three weeks after a provider updated the default model. Nothing on the team's side had changed, no version was pinned, and there was no scheduled evaluation that would have caught the shift.",
+tk:"Nothing changed on our side is not reassurance.",
+q:"When did we last run evals against production config?"}
+
+];
+
+const GLOSSARY = [
+{t:"Balancing loop",s:"SD",d:"A feedback structure that resists change and pulls a system back toward its prior state. Often mistaken for poor adoption."},
+{t:"Blast radius",s:"SD",d:"The extent of the estate affected when one component fails or changes. A direct consequence of coupling decisions."},
+{t:"Bounded context",s:"SD",d:"A boundary within which a set of terms has one consistent meaning. Crossing it requires explicit translation."},
+{t:"Conway's law",s:"SD",d:"Systems tend to mirror the communication structure of the organizations that build them."},
+{t:"Coupling",s:"SD",d:"The degree to which two components must change, deploy, or fail together."},
+{t:"Emergence",s:"SD",d:"Behavior produced by interaction between parts that cannot be predicted from any part in isolation."},
+{t:"Idempotency",s:"SD",d:"The property that applying an operation more than once has the same effect as applying it once. What makes retry safe."},
+{t:"Reversibility",s:"SD",d:"How cheaply a decision can be undone. Distinct from how risky the decision is."},
+{t:"Stock and flow",s:"SD",d:"A model separating accumulated quantities from the rates that change them. Explains why systems respond with delay."},
+{t:"Common mode failure",s:"SE",d:"A single cause that defeats supposedly redundant paths simultaneously, usually through a shared dependency."},
+{t:"Error budget",s:"SE",d:"The permitted amount of unreliability within a target, spendable on change. Reaching zero is a signal to stop shipping."},
+{t:"FMEA",s:"SE",d:"Failure mode and effects analysis. A structured review of how a system can fail and what each failure produces."},
+{t:"Graceful degradation",s:"SE",d:"Designed reduced operation under partial failure, rather than a total stop."},
+{t:"ICD",s:"SE",d:"Interface control document. The jointly owned specification of behavior between two components or teams."},
+{t:"Margin",s:"SE",d:"Reserve held against capacity, timing, or performance limits. Consumed by small decisions and rarely reported."},
+{t:"Non-functional requirement",s:"SE",d:"A constraint on how the system performs rather than what it does. Usually the deciding architectural input."},
+{t:"Observability",s:"SE",d:"The extent to which internal state can be determined from external outputs. Broader than monitoring."},
+{t:"Traceability",s:"SE",d:"Maintained links from need to design to test, enabling impact analysis when anything changes."},
+{t:"V-model",s:"SE",d:"A lifecycle representation pairing each level of decomposition with its corresponding level of verification."},
+{t:"Validation",s:"SE",d:"Confirmation that the right system was specified. Asks whether it solves the problem."},
+{t:"Verification",s:"SE",d:"Confirmation that the system was built to specification. Asks whether it matches the document."},
+{t:"As-is / as-performed",s:"BA",d:"The process as actually carried out, including workarounds and exceptions, rather than as documented."},
+{t:"Benefits realization",s:"BA",d:"The operational change required after delivery for a business case to produce its stated value."},
+{t:"Cycle time",s:"BA",d:"Total elapsed time from start to finish of a work item, including all waiting. Usually dominated by queues."},
+{t:"Data contract",s:"BA",d:"An agreed specification of schema, meaning, cadence, and guarantees between a data producer and its consumers."},
+{t:"Data lineage",s:"BA",d:"The recorded path a data element takes from origin through transformation to use."},
+{t:"Elicitation",s:"BA",d:"Drawing out stakeholder needs. Produces symptoms; analysis is required to find structure."},
+{t:"Master data",s:"BA",d:"Core shared entities such as customer, product, or supplier, used across multiple systems."},
+{t:"Straight-through processing",s:"BA",d:"Completion of a transaction without manual intervention. Value depends on the proportion of cases that qualify."},
+{t:"System of record",s:"BA",d:"The authoritative source for a given fact. Best assigned per attribute rather than per entity."},
+{t:"TIME model",s:"BA",d:"Portfolio assessment placing each application in tolerate, invest, migrate, or eliminate based on fit and condition."},
+{t:"Volumetrics",s:"BA",d:"Transaction counts, peaks, and growth rates. Determines which solution patterns remain viable."},
+{t:"Agentic loop",s:"AE",d:"A cycle where a model chooses an action, observes the result, and chooses again. Requires externally imposed termination."},
+{t:"Chunking",s:"AE",d:"Splitting source documents into retrievable units. The boundary determines what can ever be returned together."},
+{t:"Compaction",s:"AE",d:"Summarizing conversation history to fit a context window. Whatever is not specified as durable may be discarded."},
+{t:"Context engineering",s:"AE",d:"Deciding what enters the model's context each turn, and in what order. Distinct from wording the instruction."},
+{t:"Context window",s:"AE",d:"The token budget available to a single model call. A budget to allocate, not a container to fill."},
+{t:"Eval harness",s:"AE",d:"A versioned set of cases and scoring used to measure change. For a probabilistic system it is the specification."},
+{t:"Grounding",s:"AE",d:"Tying generated claims to retrievable sources, cited precisely enough that a reader can check them."},
+{t:"LLM-as-judge",s:"AE",d:"Using a model to score outputs. A measuring instrument that needs calibration against human labels."},
+{t:"MCP",s:"AE",d:"Model Context Protocol. A standard for exposing tools and context to models, decoupling an application from any one provider."},
+{t:"Prompt injection",s:"AE",d:"Instructions embedded in fetched content that the model treats as direction. Why tool output is untrusted input."},
+{t:"RAG",s:"AE",d:"Retrieval-augmented generation. Fetching relevant material and supplying it as context. Answer quality is capped by retrieval."},
+{t:"Reranking",s:"AE",d:"A second pass that reorders a wide candidate set by relevance. Usually cheaper than adding model capacity."},
+{t:"Span",s:"AE",d:"One traced unit of work within a task, carrying its inputs, tool calls and outputs for debugging."},
+{t:"Tool scope",s:"AE",d:"What a tool is permitted to reach. The real authorization boundary for an agent, regardless of instructions."},
+{t:"Concentration risk",s:"RG",d:"Exposure arising because many unrelated activities depend on the same platform, provider, or person."},
+{t:"Decision rights",s:"RG",d:"An explicit statement of who decides what, at which threshold, and who may overrule."},
+{t:"Detective control",s:"RG",d:"A control that identifies an event after it occurs. Useful only where a corrective response is attached."},
+{t:"Inherent risk",s:"RG",d:"Exposure before any control is applied. Meaningless to report without its residual counterpart."},
+{t:"Least privilege",s:"RG",d:"Granting only the access required for a task. Decays without active recertification."},
+{t:"Near miss",s:"RG",d:"An event that almost caused harm. Carries most of the learning of an incident at none of the cost."},
+{t:"Operating effectiveness",s:"RG",d:"Evidence that a control actually functions in practice, as distinct from being well designed."},
+{t:"Residual risk",s:"RG",d:"Exposure remaining after controls operate as designed. The gap from inherent risk is the control's value."},
+{t:"RPO",s:"RG",d:"Recovery point objective. The maximum tolerable data loss, stated as a period of time."},
+{t:"RTO",s:"RG",d:"Recovery time objective. The maximum tolerable duration of an outage. A business decision, not an IT target."},
+{t:"SBOM",s:"RG",d:"Software bill of materials. An inventory of the components and dependencies contained in a piece of software."},
+{t:"Segregation of duties",s:"RG",d:"Separating who requests, approves, and executes an action. Frequently lost when steps are automated."},
+{t:"Shadow IT",s:"RG",d:"Technology procured or built outside sanctioned governance. Reliable evidence of an unmet requirement."},
+{t:"Zero trust",s:"RG",d:"An approach that treats network location as no indication of trust, authorizing on identity and context instead."}
+];
+
+/* ---------------- state ---------------- */
+let tab = "SD", area = "ALL";
+let order = CARDS.map(function(_,i){ return i; });
+const checkedSteps = new Set();
+const checkedTerms = new Set();
+
+const tabsEl = document.getElementById("tabs");
+const railEl = document.getElementById("rail");
+const metaEl = document.getElementById("meta");
+const stage  = document.getElementById("stage");
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function areasFor(t){ return AREAS.filter(function(a){ return a.tab === t; }); }
+function areaByCode(c){ return AREAS.find(function(a){ return a.code === c; }); }
+function cardsIn(codes){ return order.filter(function(i){ return codes.indexOf(CARDS[i].a) > -1; }); }
+function currentCodes(){ return area === "ALL" ? areasFor(tab).map(function(a){ return a.code; }) : [area]; }
+
+function buildTabs(){
+  tabsEl.innerHTML = TABS.map(function(t){
+    return '<button type="button" role="tab" data-tab="' + t.id + '" aria-selected="' +
+      (t.id === tab) + '">' + icon(t.ic) + '<span>' + t.label + '</span></button>';
+  }).join("");
+  tabsEl.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click", function(){
+      tab = b.dataset.tab; area = "ALL"; buildTabs(); buildRail(); render();
+    });
+  });
+}
+
+function buildRail(){
+  if (tab === "SA"){
+    railEl.style.display = "flex";
+    const list = [{c:"ALL", n:"All sections"}].concat(ASECTIONS);
+    railEl.innerHTML = list.map(function(s){
+      const cnt = s.c === "ALL" ? AUDIT.length : AUDIT.filter(function(x){ return x.s === s.c; }).length;
+      return '<button type="button" data-asec="' + s.c + '" aria-pressed="' + (s.c === auditFilter) +
+        '">' + s.n + '<span class="n">' + cnt + '</span></button>';
+    }).join("");
+    railEl.querySelectorAll("button").forEach(function(b){
+      b.addEventListener("click", function(){ auditFilter = b.dataset.asec; buildRail(); paintAudit(); });
+    });
+    return;
+  }
+  if (tab === "GL" || tab === "MX" || tab === "DX"){ railEl.innerHTML = ""; railEl.style.display = "none"; return; }
+  railEl.style.display = "flex";
+  const list = [{code:"ALL", name:"All areas"}].concat(areasFor(tab));
+  railEl.innerHTML = list.map(function(a){
+    const codes = a.code === "ALL" ? areasFor(tab).map(function(x){ return x.code; }) : [a.code];
+    return '<button type="button" data-area="' + a.code + '" aria-pressed="' + (a.code === area) +
+      '">' + a.name + '<span class="n">' + cardsIn(codes).length + '</span></button>';
+  }).join("");
+  railEl.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click", function(){ area = b.dataset.area; buildRail(); render(); });
+  });
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  if (tab === "GL"){ renderGlossary(); return; }
+  if (tab === "MX"){ renderMix(); return; }
+  if (tab === "DX"){ renderPatterns(); return; }
+  if (tab === "SA"){ renderAudit(); return; }
+  const idx = cardsIn(currentCodes());
+
+  stage.className = "deck";
+  stage.innerHTML = idx.map(function(i){
+    const c = CARDS[i], a = areaByCode(c.a);
+    const steps = c.p.map(function(x, j){
+      const key = i + ":" + j, on = checkedSteps.has(key);
+      return '<li><label class="' + (on ? "done" : "") + '"><input type="checkbox" data-step="' +
+        key + '"' + (on ? " checked" : "") + '><span class="lbl">' + esc(x) + '</span></label></li>';
+    }).join("");
+    const flipSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a8 8 0 0 1 13.7-5.7L20 8"/><path d="M20 4v4h-4"/><path d="M21 13a8 8 0 0 1-13.7 5.7L4 16"/><path d="M4 20v-4h4"/></svg>';
+    return '<div class="card" data-idx="' + i + '"><div class="inner">' +
+      '<div class="face front">' +
+        '<div class="chead">' +
+          '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">' +
+            '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.7"/><circle cx="15" cy="5" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="19" r="1.7"/><circle cx="15" cy="19" r="1.7"/></svg>' +
+          '</button>' +
+          '<span class="ctag">' + c.a + ' / ' + esc(a.name) + '</span>' +
+          '<button class="flip" type="button" aria-label="Flip card" title="Flip for keywords and field example">' + flipSvg + '</button>' +
+        '</div>' +
+        '<div class="cbody">' +
+          '<h3>' + esc(c.t) + '</h3><p>' + esc(c.b) + '</p>' +
+          '<p class="plabel">In practice</p><ul class="practice">' + steps + '</ul>' +
+          '<p class="takeaway">' + esc(c.tk) + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="face back">' +
+        '<div class="chead">' +
+          '<span class="ctag">' + c.a + ' / field context</span>' +
+          '<button class="flip" type="button" aria-label="Flip card back" title="Back to the concept">' + flipSvg + '</button>' +
+        '</div>' +
+        '<div class="cbody">' +
+          '<p class="klabel">Keywords</p>' +
+          '<div class="tags">' + c.k.map(function(x){ return '<span class="tag">' + esc(x) + '</span>'; }).join("") + '</div>' +
+          '<p class="klabel">In the field</p><p class="field">' + esc(c.f) + '</p>' +
+          '<p class="klabel" style="margin-top:16px">Ask</p><p class="ask">' + esc(c.q) + '</p>' +
+        '</div>' +
+      '</div>' +
+    '</div></div>';
+  }).join("");
+
+  wireCards();
+  updateMeta();
+}
+
+function renderGlossary(){
+  stage.className = "";
+  stage.innerHTML = '<input class="search" id="gsearch" type="search" placeholder="Filter terms and definitions" aria-label="Filter glossary"><div class="gloss" id="glist"></div>';
+  const input = document.getElementById("gsearch");
+  function paint(){
+    const q = (input.value || "").toLowerCase().trim();
+    const hits = GLOSSARY.filter(function(g){
+      return !q || g.t.toLowerCase().indexOf(q) > -1 || g.d.toLowerCase().indexOf(q) > -1;
+    });
+    const box = document.getElementById("glist");
+    box.innerHTML = hits.length ? hits.map(function(g){
+      const on = checkedTerms.has(g.t);
+      return '<div class="gterm' + (on ? " done" : "") + '">' +
+        '<input type="checkbox" data-term="' + esc(g.t) + '"' + (on ? " checked" : "") +
+        ' aria-label="Mark ' + esc(g.t) + ' as reviewed">' +
+        '<div><h4><span class="tname">' + esc(g.t) + '</span><span class="src">' + g.s + '</span></h4>' +
+        '<p>' + esc(g.d) + '</p></div></div>';
+    }).join("") : '<p class="empty">No terms match that filter.</p>';
+
+    box.querySelectorAll("input[data-term]").forEach(function(cb){
+      cb.addEventListener("change", function(){
+        if (cb.checked) checkedTerms.add(cb.dataset.term); else checkedTerms.delete(cb.dataset.term);
+        cb.parentNode.classList.toggle("done", cb.checked);
+        updateMeta();
+      });
+    });
+    updateMeta();
+  }
+  input.addEventListener("input", paint);
+  paint();
+}
+
+/* ================= mix calculator ================= */
+let mix = {p:30, d:55, a:15};
+let activePreset = "regulated";
+let mixChart = null;
+
+const MODES = [
+  {key:"p", name:"People", colour:"#9098A6", note:"procedure, policy, judgment"},
+  {key:"d", name:"Deterministic", colour:"#2B6E7D", note:"rules, workflow, calculation"},
+  {key:"a", name:"AI", colour:"#C62C27", note:"models, agents, probabilistic"}
+];
+
+const PRESETS = [
+  {id:"regulated", name:"Regulated decisioning", m:{p:30,d:55,a:15},
+   why:"Credit, claims and eligibility work where each decision must be reproducible and explainable years later. A deterministic core carries the policy, people handle contested cases, and models stay on intake and classification rather than on the decision itself."},
+  {id:"intake", name:"Document intake", m:{p:15,d:35,a:50},
+   why:"Hundreds of inbound formats defeat rule writing, and a misread is cheap to catch downstream. Models do extraction and classification, rules enforce the invariants that must always hold, and a small team clears low-confidence exceptions."},
+  {id:"support", name:"Support triage", m:{p:30,d:20,a:50},
+   why:"Unstructured inbound text with recoverable errors. Models draft and route, people own anything with a relationship or a commitment attached, and rules handle entitlement checks that must not vary."},
+  {id:"close", name:"Financial close", m:{p:20,d:75,a:5},
+   why:"Stable rules, high consequence, and an external audit trail. Determinism dominates because every figure must be traceable. Human judgment sits at review and sign-off, and probabilistic components stay out of the numbers."},
+  {id:"clinical", name:"Safety-critical review", m:{p:50,d:40,a:10},
+   why:"Irreversible consequences and accountable professional judgment. Rules enforce protocol and completeness, people decide, and models assist by surfacing information rather than by recommending an action."},
+  {id:"content", name:"Content operations", m:{p:35,d:10,a:55},
+   why:"High variety, low reversibility cost, and quality judged rather than calculated. Models generate at volume, people edit and approve, and few rules apply beyond brand and compliance constraints."}
+];
+
+function normalize(changed, val){
+  const others = ["p","d","a"].filter(function(k){ return k !== changed; });
+  const rest = 100 - val;
+  const sumOthers = mix[others[0]] + mix[others[1]];
+  const next = {};
+  next[changed] = val;
+  if (sumOthers <= 0){
+    next[others[0]] = Math.round(rest / 2);
+    next[others[1]] = rest - next[others[0]];
+  } else {
+    next[others[0]] = Math.round(rest * (mix[others[0]] / sumOthers));
+    next[others[1]] = rest - next[others[0]];
+  }
+  mix = next;
+}
+
+function profileOf(m){
+  const seams = ["p","d","a"].filter(function(k){ return m[k] >= 10; }).length;
+  const ranked = [["p",m.p],["d",m.d],["a",m.a]].sort(function(x,y){ return y[1]-x[1]; });
+  const top = ranked[0], second = ranked[1];
+  const dominant = top[1] >= 45 && (top[1] - second[1]) >= 15;
+
+  if (m.d >= 30 && m.a >= 20 && m.p >= 10 && m.p <= 40)
+    return ["Assisted deterministic core", "Models absorb variety at the edges while rules hold the invariants and people take the contested cases. The most durable shape for high-volume work."];
+  if (dominant && top[0] === "p")
+    return ["Judgment-led", "Most of the work sits with people. Throughput scales with headcount, and consistency varies by individual and by workload."];
+  if (dominant && top[0] === "d")
+    return ["Rules-led", "A deterministic core carries the process. Predictable and auditable, and only as current as the rules someone maintains."];
+  if (dominant && top[0] === "a")
+    return ["Model-led", "Probabilistic components carry most of the volume. Verification, routing thresholds and drift monitoring become the operating discipline."];
+  if (m.a < 15 && m.p >= 30 && m.d >= 30)
+    return ["Judgment on a rules backbone", "Rules enforce protocol and completeness, people make the call. Traditional, defensible, and limited by how many trained people you have."];
+  if (seams === 3 && m.p >= 22 && m.d >= 22 && m.a >= 22)
+    return ["Three-way hybrid", "No modality dominates, which means at least four handoffs. Seam design and end-to-end measurement matter more here than any single component."];
+  return ["Mixed", "No modality dominates clearly. Worth stating deliberately which one owns the decision and which ones only support it."];
+}
+
+function analyse(m){
+  const risks = [], opps = [], ctrls = [];
+  const seams = ["p","d","a"].filter(function(k){ return m[k] >= 10; }).length;
+
+  if (m.a >= 50) risks.push("Majority probabilistic. The same input can produce different output, so verification and drift monitoring become a permanent operating cost rather than a project activity.");
+  if (m.a >= 25 && m.p < 15) risks.push("Substantial model share with thin human capacity behind it. When quality moves, there is nobody to absorb the review load.");
+  if (m.d >= 60) risks.push("Rule-heavy and brittle to cases the rules never anticipated. Whatever they miss lands in an exception queue that grows quietly.");
+  if (m.d >= 60 && m.p < 15) risks.push("A rule-heavy design generates exceptions, and there is little judgment available to clear them.");
+  if (m.p >= 50) risks.push("Capacity scales linearly with volume. Consistency varies by individual, by shift and by how busy the queue is.");
+  if (m.p >= 35 && m.a >= 30) risks.push("Two high-variance sources in one path. Attributing an error to the reviewer or to the model becomes difficult, and both will point at the other.");
+  if (m.d < 20 && m.a >= 40) risks.push("No deterministic spine. Nothing enforces the invariants that must hold regardless of what the model returns.");
+  if (seams === 3 && m.p >= 22 && m.d >= 22 && m.a >= 22) risks.push("Three-way split means at least four handoffs. Seam cost frequently exceeds what any single modality saves.");
+  if (m.a >= 15) risks.push("Model behavior changes with provider updates and prompt edits. Without pinned versions and an evaluation set, regressions arrive unannounced.");
+  if (m.a === 0 && m.d >= 70) risks.push("Entirely deterministic. Every change in policy becomes a change request, and rule maintenance is the whole cost of change.");
+
+  if (m.d >= 40) opps.push("A deterministic core gives reproducible decisions, an explainable path, and predictable unit cost as volume grows.");
+  if (m.a >= 20 && m.d >= 30) opps.push("Models absorb variety while rules hold the invariants. This division survives volume growth better than either modality alone.");
+  if (m.p >= 20 && m.p <= 40) opps.push("Enough judgment in the path to clear exceptions without carrying the whole volume on headcount.");
+  if (m.a >= 30) opps.push("Unstructured and highly varied input can be processed at volume without writing a rule for every format.");
+  if (m.p >= 15 && m.a >= 15) opps.push("Reviewer overrides are free training signal and rule evidence, if you capture them rather than just recording the outcome.");
+  if (m.p >= 45) opps.push("Clear accountability. A named person owns each decision, which matters where the outcome must be defended.");
+  if (m.d >= 25 && m.d <= 55 && m.a >= 15 && m.a <= 45 && m.p >= 15) opps.push("Balanced enough to move work between modalities as models improve or rules stabilize, without redesigning the process.");
+
+  if (m.a > 0) ctrls.push("Confidence threshold set from consequence, a versioned evaluation set, pinned model versions, and narrowly scoped agent tools.");
+  if (m.a >= 25 && m.p > 0) ctrls.push("Track reviewer override rate. A rate near zero means the review step is nominal and the control is not operating.");
+  if (m.d > 0) ctrls.push("Rule content ownership held separately from engine ownership, plus rule hit rates so dead rules can be found.");
+  if (m.p > 0) ctrls.push("Observe the performed procedure rather than collecting attestations, and re-baseline it on a fixed cycle.");
+  if (seams >= 2) ctrls.push("A named owner for every handoff, context carried across each one, and end-to-end cost per completed case as the headline metric.");
+  ctrls.push("Revisit this mix on a cycle. Volume growth, model improvement and staff turnover all move the right answer.");
+
+  return {risks:risks, opps:opps, ctrls:ctrls};
+}
+
+function drawChart(){
+  const wrap = document.getElementById("chartwrap");
+  if (!wrap) return;
+  const vals = MODES.map(function(md){ return mix[md.key]; });
+  if (window.Chart){
+    wrap.innerHTML = '<canvas id="mixcanvas"></canvas>';
+    const styles = getComputedStyle(document.documentElement);
+    const border = styles.getPropertyValue("--surface").trim() || "#13253D";
+    const label  = styles.getPropertyValue("--text-mid").trim() || "#B6BDC9";
+    if (mixChart) mixChart.destroy();
+    mixChart = new Chart(document.getElementById("mixcanvas"), {
+      type:"doughnut",
+      data:{
+        labels: MODES.map(function(md){ return md.name; }),
+        datasets:[{ data:vals, backgroundColor:MODES.map(function(md){ return md.colour; }),
+                    borderColor:border, borderWidth:3, hoverOffset:8 }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false, cutout:"62%",
+        animation:{ duration:450 },
+        plugins:{
+          legend:{ position:"bottom",
+            labels:{ color:label, boxWidth:10, boxHeight:10, usePointStyle:true,
+                     font:{ family:"IBM Plex Sans", size:12 }, padding:14 } },
+          tooltip:{ callbacks:{ label:function(c){ return c.label + ": " + c.parsed + "%"; } } }
+        }
+      }
+    });
+  } else {
+    wrap.innerHTML = '<div class="fallbar">' + MODES.map(function(md){
+      return '<span style="width:' + mix[md.key] + '%;background:' + md.colour + '"></span>';
+    }).join("") + '</div>';
+  }
+}
+
+function renderMix(){
+  stage.className = "";
+  const a = analyse(mix), prof = profileOf(mix);
+  const preset = PRESETS.find(function(x){ return x.id === activePreset; });
+
+  stage.innerHTML =
+    '<div class="mix">' +
+      '<div class="panel">' +
+        '<h3>Solution mix</h3>' +
+        '<p class="hint">Set the share of the process each modality carries. Hybrid is not a fourth slider, it is the shape these three make together.</p>' +
+        '<div class="chartwrap" id="chartwrap"></div>' +
+        MODES.map(function(md){
+          return '<div class="slider"><div class="srow"><span class="sname">' + md.name +
+            ' <span style="color:var(--muted);font-size:0.8125rem">' + md.note + '</span></span>' +
+            '<span class="sval">' + mix[md.key] + '%</span></div>' +
+            '<input type="range" min="0" max="100" value="' + mix[md.key] + '" data-mode="' + md.key +
+            '" aria-label="' + md.name + ' share"></div>';
+        }).join("") +
+        '<h3 style="margin-top:20px">Reference patterns</h3>' +
+        '<p class="hint">Illustrative shapes for common process types, not benchmarks.</p>' +
+        '<div class="presets">' + PRESETS.map(function(x){
+          return '<button type="button" data-preset="' + x.id + '" aria-pressed="' +
+            (x.id === activePreset) + '">' + x.name + '</button>';
+        }).join("") + '</div>' +
+        (preset ? '<p class="mixnote">' + esc(preset.why) + '</p>' : '') +
+      '</div>' +
+
+      '<div class="panel">' +
+        '<p class="profile">Profile: <span>' + prof[0] + '</span></p>' +
+        '<p class="why">' + prof[1] + '</p>' +
+        '<div class="block risk"><h4>Risks to carry</h4><ul>' +
+          a.risks.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+        '<div class="block opp"><h4>Opportunities</h4><ul>' +
+          a.opps.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+        '<div class="block ctrl"><h4>Controls this mix requires</h4><ul>' +
+          a.ctrls.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+      '</div>' +
+    '</div>';
+
+  drawChart();
+
+  stage.querySelectorAll('input[type="range"]').forEach(function(sl){
+    sl.addEventListener("input", function(){
+      normalize(sl.dataset.mode, Number(sl.value));
+      activePreset = null;
+      renderMix();
+    });
+  });
+  stage.querySelectorAll("[data-preset]").forEach(function(b){
+    b.addEventListener("click", function(){
+      const px = PRESETS.find(function(x){ return x.id === b.dataset.preset; });
+      mix = Object.assign({}, px.m);
+      activePreset = px.id;
+      renderMix();
+    });
+  });
+
+  updateMeta();
+}
+
+/* ================= design patterns ================= */
+const PATTERNS = [
+{id:"reqres",name:"Request and response",
+ alt:"Client calls a service which reads and writes a store",
+ n:[{x:10,y:62,t:"Client"},{x:140,y:62,t:"Service"},{x:270,y:62,t:"Store",k:"t"}],
+ e:[[0,1,"request","h"],[1,2,"read, write","h"]],
+ c:"The caller waits for an answer and learns immediately whether the work succeeded. Simple to reason about and to debug, and it couples the caller's availability to the callee's.",
+ use:["An immediate answer is required to continue.","Failure must be visible to the caller at once.","The number of consumers is small and stable."],
+ avoid:["Consumers will multiply over time.","The callee is slow or unreliable and the caller cannot wait.","Work can proceed without confirmation."],
+ k:["synchronous","tight coupling","RPC"]},
+
+{id:"pubsub",name:"Publish and subscribe",
+ alt:"A producer publishes to a topic consumed by three independent consumers",
+ n:[{x:8,y:65,t:"Producer"},{x:132,y:65,t:"Topic",k:"t"},{x:262,y:18,t:"Consumer A",w:88},{x:262,y:65,t:"Consumer B",w:88},{x:262,y:112,t:"Consumer C",w:88}],
+ e:[[0,1,"publish","h"],[1,2,"","h"],[1,3,"","h"],[1,4,"","h"]],
+ c:"The producer states that something happened and does not know who acts on it. New consumers attach without the producer changing, which is the main reason to accept the loss of an immediate answer.",
+ use:["Consumers will be added over time.","The producer should not know who reacts.","Each consumer can fail without stopping the others."],
+ avoid:["The producer needs the outcome to continue.","Ordering across consumers must be guaranteed.","Debugging effort outweighs the decoupling gained."],
+ k:["event-driven","decoupling","fan-out"]},
+
+{id:"broker",name:"Hub and spoke broker",
+ alt:"Four systems connect through a central broker rather than to each other",
+ n:[{x:8,y:26,t:"System A"},{x:8,y:100,t:"System B"},{x:140,y:63,t:"Broker",k:"a"},{x:272,y:26,t:"System C"},{x:272,y:100,t:"System D"}],
+ e:[[0,2,"","h"],[1,2,"","h"],[2,3,"","h"],[2,4,"","h"]],
+ c:"Each system integrates once with the hub instead of once per counterpart, converting quadratic interface growth into linear. The hub becomes a concentration risk and needs its own availability budget.",
+ use:["Interface count is outgrowing system count.","Routing and transformation rules keep changing.","Systems must be added without touching existing ones."],
+ avoid:["Only a handful of integrations exist.","The hub would have no owning team.","Latency budget cannot absorb an extra hop."],
+ k:["ESB","topology","concentration"]},
+
+{id:"batch",name:"Batch pipeline",
+ alt:"Sources flow through extract and load, then transform, into a warehouse",
+ n:[{x:6,y:65,t:"Sources",w:72},{x:98,y:65,t:"Extract|and load",w:76},{x:194,y:65,t:"Transform",w:76},{x:290,y:65,t:"Warehouse",k:"t",w:64}],
+ e:[[0,1,"","h"],[1,2,"","h"],[2,3,"","h"]],
+ c:"Work accumulates and is processed on a schedule. Cheap, restartable and easy to reason about, with a floor on freshness set by the interval rather than by the processing time.",
+ use:["Hourly or daily freshness is sufficient.","Reprocessing history must be straightforward.","Volume is large and the cost per record matters."],
+ avoid:["Decisions depend on current state.","The window is already close to the interval.","Late-arriving data would silently miss its batch."],
+ k:["ETL","ELT","scheduled"]},
+
+{id:"stream",name:"Streaming pipeline",
+ alt:"Producers write to an event log, a processor derives a sink and a read model",
+ n:[{x:6,y:65,t:"Producers",w:72},{x:98,y:65,t:"Event log",k:"t",w:76},{x:194,y:65,t:"Stream|processor",w:80},{x:294,y:28,t:"Sink",w:60},{x:294,y:100,t:"Read|model",w:60}],
+ e:[[0,1,"","h"],[1,2,"","h"],[2,3,"","h"],[2,4,"","h"]],
+ c:"Records are processed as they arrive and the log retains them, so a new consumer can replay from the beginning. Operationally heavier than batch and only worth it where freshness changes a decision.",
+ use:["A decision genuinely depends on recent state.","Consumers need to replay history independently.","Load is continuous rather than peaked."],
+ avoid:["Freshness beyond daily changes nothing.","The team has no streaming operational experience.","Exactly-once semantics are assumed rather than designed."],
+ k:["log","replay","real time"]},
+
+{id:"cqrs",name:"Command and query separation",
+ alt:"Commands write to a store, a projection builds a read model that serves queries",
+ n:[{x:6,y:22,t:"Command",w:72},{x:100,y:22,t:"Write|store",w:72},{x:194,y:22,t:"Projection",w:76},{x:194,y:104,t:"Read|model",k:"t",w:76},{x:88,y:104,t:"Query",w:72}],
+ e:[[0,1,"","h"],[1,2,"","h"],[2,3,"","v"],[3,4,"","h"]],
+ c:"Writes and reads use separate models optimized for their own shape. Read performance improves and the two sides can scale independently, at the cost of a lag the whole product must tolerate.",
+ use:["Read and write loads differ by an order of magnitude.","Query shapes are many and the write model is one.","Eventual consistency on reads is acceptable."],
+ avoid:["Users expect their own write to be visible immediately.","The domain is simple enough for one model.","Nobody owns keeping the projection correct."],
+ k:["CQRS","projection","eventual consistency"]},
+
+{id:"saga",name:"Saga with compensation",
+ alt:"Three steps run in sequence with a compensating path back through them",
+ n:[{x:10,y:46,t:"Reserve",w:90},{x:135,y:46,t:"Charge",w:90},{x:260,y:46,t:"Ship",w:90}],
+ e:[[0,1,"","h"],[1,2,"","h"],[2,0,"compensate in reverse","back"]],
+ c:"Where a transaction cannot span systems, each step commits locally and failure triggers compensating actions in reverse. Compensation is a business decision, since a refund is not the inverse of a charge.",
+ use:["A transaction crosses systems that cannot share a commit.","Each step has a meaningful undo.","Partial completion must never be left silent."],
+ avoid:["A single database transaction would do.","Some step genuinely cannot be undone.","No one has defined what compensation means."],
+ k:["saga","compensation","distributed transaction"]},
+
+{id:"strangler",name:"Strangler fig migration",
+ alt:"A facade routes migrated traffic to a new service and the remainder to legacy",
+ n:[{x:6,y:64,t:"Client",w:66},{x:96,y:64,t:"Facade",k:"a",w:72},{x:200,y:20,t:"New service",k:"t",w:96},{x:200,y:106,t:"Legacy",w:96}],
+ e:[[0,1,"","h"],[1,2,"migrated","h"],[1,3,"remaining","h"]],
+ c:"A facade fronts the old system and routes an increasing share to the replacement. Replacement happens in reversible increments rather than as one switchover, and the facade must be retired deliberately.",
+ use:["The legacy system is too large to replace at once.","Each slice can be verified in production.","Rollback per slice must stay cheap."],
+ avoid:["The system is small enough to replace outright.","The facade would become permanent by default.","Both sides would need to write the same data."],
+ k:["migration","facade","incremental"]},
+
+{id:"breaker",name:"Circuit breaker with fallback",
+ alt:"A breaker sits between caller and dependency, diverting to a fallback when open",
+ n:[{x:6,y:64,t:"Caller",w:68},{x:100,y:64,t:"Breaker",k:"a",w:76},{x:206,y:22,t:"Dependency",w:96},{x:206,y:106,t:"Fallback",k:"t",w:96}],
+ e:[[0,1,"","h"],[1,2,"closed","h"],[1,3,"open","h"]],
+ c:"After repeated failures the breaker stops calling the dependency and serves a degraded answer instead. It converts a slow cascading failure into a fast, chosen one, which is the point of designing failure modes.",
+ use:["A dependency can be slow as well as down.","A degraded answer is better than a stalled one.","Retry storms would make an outage worse."],
+ avoid:["No acceptable fallback exists.","The caller must have the authoritative answer.","Nothing monitors how long the breaker stays open."],
+ k:["resilience","bulkhead","degradation"]},
+
+{id:"gate",name:"Human review gate",
+ alt:"Automated decisions commit at high confidence and route to a reviewer at low confidence",
+ n:[{x:6,y:64,t:"Intake",w:64},{x:92,y:64,t:"Automated|decision",w:84},{x:200,y:110,t:"Reviewer",k:"h",w:80},{x:296,y:64,t:"Commit",k:"t",w:58}],
+ e:[[0,1,"","h"],[1,3,"high confidence","h"],[1,2,"low confidence","h"],[2,3,"","h"]],
+ c:"Confidence and consequence decide which cases a person sees. Review placed at every step produces rubber-stamping; placed at the ambiguous and costly cases it stays a real control.",
+ use:["Error cost varies sharply across cases.","Reviewer capacity is smaller than total volume.","Overrides can be captured as training signal."],
+ avoid:["Every case would be routed to review anyway.","Overriding is harder than accepting.","Reviewers are measured purely on throughput."],
+ k:["human in the loop","routing","oversight"]},
+
+{id:"rag",name:"Retrieval-augmented generation",
+ alt:"A query drives retrieval against an index, feeding a model that answers with citations",
+ n:[{x:6,y:64,t:"Query",w:62},{x:90,y:64,t:"Retriever",w:78},{x:90,y:8,t:"Index",k:"t",w:78},{x:190,y:64,t:"Model",k:"a",w:70},{x:282,y:64,t:"Answer|with cites",w:72}],
+ e:[[0,1,"","h"],[1,2,"search","v"],[1,3,"context","h"],[3,4,"","h"]],
+ c:"Relevant material is fetched and supplied as context so the answer can be grounded and cited. Answer quality is capped by retrieval, and index freshness is an operational concern that fails silently.",
+ use:["Answers must cite a checkable source.","The corpus changes faster than any model release.","The knowledge is private to the organization."],
+ avoid:["The task needs reasoning rather than lookup.","Nothing monitors whether ingestion still runs.","Retrieval quality has never been measured on its own."],
+ k:["RAG","grounding","citation"]},
+
+{id:"agentloop",name:"Agent with tool loop",
+ alt:"An agent acts through tools and observes results in a loop before returning a result",
+ n:[{x:14,y:58,t:"Goal",w:66},{x:106,y:58,t:"Agent",k:"a",w:80},{x:216,y:58,t:"Result",w:74},{x:106,y:122,t:"Tools",k:"t",w:80}],
+ e:[[0,1,"","h"],[1,2,"","h"],[1,3,"act, observe","v2"]],
+ c:"The model chooses an action, observes the outcome and chooses again. Tool scope is the real authorization boundary, and step, time and spend ceilings belong in the harness rather than in the instruction.",
+ use:["The path cannot be specified in advance.","Each tool is narrow and independently testable.","Wrong actions are visible and recoverable."],
+ avoid:["A fixed sequence would do the same work.","Tools can take irreversible action unsupervised.","No step, time or spend ceiling is enforced."],
+ k:["agent","tool loop","termination"]}
+];
+
+function dgm(p){
+  const W = 360, H = 172, DW = 80, DH = 42;
+  const nd = p.n.map(function(n){
+    const w = n.w || DW, h = n.h || DH;
+    return {x:n.x, y:n.y, w:w, h:h, t:n.t, k:n.k || "n", cx:n.x + w/2, cy:n.y + h/2};
+  });
+  const fill = {n:"var(--surface-2)", a:"var(--accent-wash)", t:"var(--teal-soft)", h:"transparent"};
+  const strk = {n:"var(--line)", a:"var(--accent)", t:"var(--teal)", h:"var(--muted)"};
+  const mid = "m" + p.id;
+
+  let s = '<svg class="dgm" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" ' +
+          'role="img" aria-label="' + esc(p.alt) + '">' +
+    '<defs><marker id="' + mid + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" ' +
+    'orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker></defs>';
+
+  p.e.forEach(function(ed){
+    const a = nd[ed[0]], b = nd[ed[1]], lab = ed[2] || "", ty = ed[3] || "h";
+    let d = "", lx = 0, ly = 0, both = false;
+    if (ty === "back"){
+      const yb = H - 12;
+      d = "M" + a.cx + " " + (a.y + a.h) + " V" + yb + " H" + b.cx + " V" + (b.y + b.h);
+      lx = (a.cx + b.cx) / 2; ly = yb - 5;
+    } else if (ty === "v" || ty === "v2"){
+      both = (ty === "v2");
+      const up = b.cy < a.cy;
+      const y1 = up ? a.y : a.y + a.h, y2 = up ? b.y + b.h : b.y;
+      d = "M" + a.cx + " " + y1 + " V" + y2;
+      lx = a.cx + 6; ly = (y1 + y2) / 2 + 3;
+    } else {
+      const right = b.cx > a.cx;
+      const x1 = right ? a.x + a.w : a.x, x2 = right ? b.x : b.x + b.w;
+      if (Math.abs(a.cy - b.cy) < 2){
+        d = "M" + x1 + " " + a.cy + " H" + x2;
+      } else {
+        const xm = (x1 + x2) / 2;
+        d = "M" + x1 + " " + a.cy + " H" + xm + " V" + b.cy + " H" + x2;
+      }
+      lx = (x1 + x2) / 2; ly = Math.min(a.cy, b.cy) - 6;
+      if (Math.abs(a.cy - b.cy) >= 2) ly = a.cy - 6;
+    }
+    s += '<path d="' + d + '" fill="none" stroke="var(--line)" stroke-width="1.3" ' +
+         'marker-end="url(#' + mid + ')"' + (both ? ' marker-start="url(#' + mid + ')"' : '') + '/>';
+    if (lab) s += '<text class="elab" x="' + lx + '" y="' + ly + '" text-anchor="' +
+                  (ty === "v" || ty === "v2" ? "start" : "middle") + '">' + esc(lab) + '</text>';
+  });
+
+  nd.forEach(function(n){
+    s += '<rect x="' + n.x + '" y="' + n.y + '" width="' + n.w + '" height="' + n.h + '" rx="3" ' +
+      'fill="' + fill[n.k] + '" stroke="' + strk[n.k] + '" stroke-width="1.3"' +
+      (n.k === "h" ? ' stroke-dasharray="4 3"' : '') + '/>';
+    const lines = String(n.t).split("|");
+    const y0 = n.cy - (lines.length - 1) * 5.5 + 3.5;
+    lines.forEach(function(ln, i){
+      s += '<text class="nlab" x="' + n.cx + '" y="' + (y0 + i * 11) + '" text-anchor="middle">' + esc(ln) + '</text>';
+    });
+  });
+  return s + '</svg>';
+}
+
+let porder = PATTERNS.map(function(_, i){ return i; });
+
+function renderPatterns(){
+  stage.className = "deck";
+  const flipSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a8 8 0 0 1 13.7-5.7L20 8"/><path d="M20 4v4h-4"/><path d="M21 13a8 8 0 0 1-13.7 5.7L4 16"/><path d="M4 20v-4h4"/></svg>';
+  stage.innerHTML = porder.map(function(i){
+    const p = PATTERNS[i];
+    return '<div class="card pat" data-pidx="' + i + '"><div class="inner">' +
+      '<div class="face front">' +
+        '<div class="chead">' +
+          '<button class="grip" type="button" aria-label="Drag to reorder" title="Drag to reorder">' +
+            '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.7"/><circle cx="15" cy="5" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="19" r="1.7"/><circle cx="15" cy="19" r="1.7"/></svg>' +
+          '</button>' +
+          '<span class="ctag">pattern / ' + esc(p.k[0]) + '</span>' +
+          '<button class="flip" type="button" aria-label="Flip card" title="Flip for fit and limits">' + flipSvg + '</button>' +
+        '</div>' +
+        '<div class="cbody"><h3>' + esc(p.name) + '</h3>' + dgm(p) +
+          '<p class="caption">' + esc(p.c) + '</p></div>' +
+      '</div>' +
+      '<div class="face back">' +
+        '<div class="chead"><span class="ctag">pattern / fit and limits</span>' +
+          '<button class="flip" type="button" aria-label="Flip card back" title="Back to the diagram">' + flipSvg + '</button>' +
+        '</div>' +
+        '<div class="cbody">' +
+          '<div class="pblock use"><h5>Reach for it when</h5><ul>' +
+            p.use.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+          '<div class="pblock avoid"><h5>Avoid it when</h5><ul>' +
+            p.avoid.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+          '<p class="klabel" style="margin-top:16px">Keywords</p>' +
+          '<div class="tags">' + p.k.map(function(x){ return '<span class="tag">' + esc(x) + '</span>'; }).join("") + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div></div>';
+  }).join("");
+
+  let dragI = null;
+  stage.querySelectorAll(".card").forEach(function(card){
+    card.querySelectorAll(".flip").forEach(function(b){
+      b.addEventListener("click", function(e){ e.stopPropagation(); card.classList.toggle("flipped"); });
+    });
+    const grip = card.querySelector(".grip");
+    if (grip) grip.addEventListener("mousedown", function(){ card.draggable = true; });
+    card.addEventListener("dragstart", function(e){
+      dragI = Number(card.dataset.pidx); card.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", String(dragI)); } catch(err){}
+    });
+    card.addEventListener("dragend", function(){
+      card.draggable = false; card.classList.remove("dragging");
+      stage.querySelectorAll(".card").forEach(function(c){ c.classList.remove("over"); });
+    });
+    card.addEventListener("dragover", function(e){
+      e.preventDefault();
+      if (Number(card.dataset.pidx) !== dragI) card.classList.add("over");
+    });
+    card.addEventListener("dragleave", function(){ card.classList.remove("over"); });
+    card.addEventListener("drop", function(e){
+      e.preventDefault(); card.classList.remove("over");
+      const from = dragI, to = Number(card.dataset.pidx);
+      if (from === null || from === to) return;
+      const fi = porder.indexOf(from), ti = porder.indexOf(to);
+      porder.splice(fi, 1); porder.splice(ti, 0, from);
+      dragI = null; renderPatterns();
+    });
+  });
+  updateMeta();
+}
+
+/* ================= systems auditing ================= */
+const ASECTIONS = [
+  {c:"BD", n:"Scope and boundary"},
+  {c:"WF", n:"Process and workflow"},
+  {c:"DT", n:"Data and information"},
+  {c:"AP", n:"Applications and integration"},
+  {c:"AU", n:"AI and automation"},
+  {c:"GO", n:"Governance and decision rights"},
+  {c:"RS", n:"Risk, security and continuity"},
+  {c:"CV", n:"Cost, value and ownership"}
+];
+
+const AUDIT = [
+{s:"BD",q:"What business outcome does this system exist to produce, and who owns that outcome?",
+ ok:"A named individual and a measurable outcome.",
+ no:"A description of what the system does rather than what it is for, or ownership attributed to a department."},
+{s:"BD",q:"What is deliberately out of scope, and who decided that?",
+ ok:"An explicit list with a decision owner and a date.",
+ no:"Nothing is out of scope. The boundary was never drawn, so every later dispute will be a scope dispute."},
+{s:"BD",q:"Which upstream systems or parties do you depend on but do not control?",
+ ok:"Named dependencies, each with an owner and the agreed behavior at the interface.",
+ no:"Hesitation, or dependencies described only in the aggregate as the interface."},
+{s:"BD",q:"Which users did you not consult, and why?",
+ ok:"A considered answer naming a group and a reason for leaving them out.",
+ no:"Everyone was consulted. Usually means the loudest or most senior group was."},
+{s:"BD",q:"What happens to this process if the system is unavailable for a day?",
+ ok:"A described manual fallback that someone has actually performed recently.",
+ no:"That cannot happen, or a documented continuity plan nobody has exercised."},
+{s:"BD",q:"What changed in the last twelve months that this design has not caught up with?",
+ ok:"Something specific, recent and slightly uncomfortable.",
+ no:"Nothing much. Organizations always change, so the answer means nobody is looking."},
+
+{s:"WF",q:"Walk me through what actually happens, including what you do when it goes wrong.",
+ ok:"Workarounds, side channels and exceptions mentioned without being asked for.",
+ no:"A recitation that matches the published diagram exactly. You are hearing the document, not the work."},
+{s:"WF",q:"Where does work wait, and on whom?",
+ ok:"Named queues with rough waiting times attached.",
+ no:"Only processing time is known. Waiting is usually the bulk of end-to-end duration."},
+{s:"WF",q:"What proportion of cases follow the standard path?",
+ ok:"A number derived from data, with the main exception categories named.",
+ no:"Most of them. Measured exception rates are routinely higher than the estimate."},
+{s:"WF",q:"Which approval steps have rejected something in the last quarter?",
+ ok:"Specific examples, or a frank admission that one or two steps never reject.",
+ no:"Defensiveness about a step's value, which usually means it has none."},
+{s:"WF",q:"What do people do outside the system to make this work?",
+ ok:"Spreadsheets, shared mailboxes and personal trackers named without embarrassment.",
+ no:"Nothing. Ask the people doing the work rather than the people who own the process."},
+{s:"WF",q:"When was this process last mapped, and who confirmed it?",
+ ok:"A date inside the last year and a named operator who does the work.",
+ no:"An undated map, or one confirmed only by the process owner."},
+
+{s:"DT",q:"For each key field, which system is authoritative and who may write to it?",
+ ok:"Attribute-level answers. Address and credit limit can legitimately master in different places.",
+ no:"Entity-level answers, or two systems claiming the same field with sync order deciding."},
+{s:"DT",q:"How long does it take to answer where a given figure came from?",
+ ok:"Minutes, with tooling. An honest we would have to dig is also useful.",
+ no:"Confidence with no demonstration. Ask them to trace one number while you watch."},
+{s:"DT",q:"What counts as a breaking change to this data, and who gets told?",
+ ok:"A written definition and a notification path listing named consumers.",
+ no:"Schema changes announced after deployment, or discovered by the consumer."},
+{s:"DT",q:"Which datasets are being used for decisions they were not built for?",
+ ok:"Awareness of at least one, with the reuse risk articulated.",
+ no:"Data is data. Aggregate-grade data driving individual determinations is the common case."},
+{s:"DT",q:"How do you know the pipeline ran, and ran correctly?",
+ ok:"Freshness and volume checks with alerting on both, not only on job exit status.",
+ no:"Success means the job did not error. Silent partial loads pass that test."},
+{s:"DT",q:"What personal or regulated data is in here, and what follows from that?",
+ ok:"A classification that drives concrete retention, residency and access rules.",
+ no:"A classification scheme that exists as a document with no operational consequence."},
+
+{s:"AP",q:"How many interfaces exist, and how many are point to point?",
+ ok:"A count from an inventory, plus awareness of where the same data moves twice.",
+ no:"No inventory. The real count almost always exceeds the estimate."},
+{s:"AP",q:"Which applications read or write another application's database directly?",
+ ok:"A documented list with a plan to replace direct access with an interface.",
+ no:"None that I know of. Reporting and analytics tools are the usual undocumented readers."},
+{s:"AP",q:"Which systems cannot be upgraded independently, and why?",
+ ok:"Named coupling with the reason and the release constraint it imposes.",
+ no:"Joint change windows described as normal practice rather than as a cost."},
+{s:"AP",q:"What is your most business-critical system that is out of support?",
+ ok:"A direct answer with a funded remediation date.",
+ no:"A remediation plan with no budget line, or a pause before answering."},
+{s:"AP",q:"For each application, who owns retirement rather than uptime?",
+ ok:"A named lifecycle owner, distinct from the budget holder.",
+ no:"Nobody owns retirement, which is why the portfolio only ever grows."},
+{s:"AP",q:"What would it take to move off your largest vendor?",
+ ok:"A rough estimate showing someone has actually considered the question.",
+ no:"The question has never been asked. That absence is itself the finding."},
+
+{s:"AU",q:"Where is a model or an agent making or shaping a decision today?",
+ ok:"A specific inventory, including capabilities that arrived inside purchased software.",
+ no:"We are not using AI yet. Vendors have shipped it into features already in use."},
+{s:"AU",q:"What confidence level lets an automated output act without review?",
+ ok:"An explicit threshold set from the cost of a wrong answer, with a defined fallback below it.",
+ no:"Everything is routed, or everything is reviewed. Both mean the threshold was never chosen."},
+{s:"AU",q:"How do you know the model still performs as it did at launch?",
+ ok:"Scheduled evaluation against a versioned set, with model versions pinned.",
+ no:"Quality is judged by complaint volume, which lags the degradation by weeks."},
+{s:"AU",q:"What can an agent's tools actually reach?",
+ ok:"A tool-by-tool scope answer with least-privilege credentials per tool.",
+ no:"Broad credentials, with the prompt or system instruction described as the control."},
+{s:"AU",q:"What is the cost per completed task, including retries and human correction?",
+ ok:"A loaded figure, plus the volume at which the economics stop working.",
+ no:"Only token price or licence cost is known."},
+{s:"AU",q:"Who reviews automated output, and how often do they override it?",
+ ok:"A named role and an override rate somebody tracks.",
+ no:"An override rate near zero, or unknown. Either way the review is nominal."},
+
+{s:"GO",q:"Who decides, at what threshold, and who can overrule?",
+ ok:"Named roles, a stated threshold, and a single person who breaks a deadlock.",
+ no:"The committee decides. Committees have no budget and cannot be accountable."},
+{s:"GO",q:"How does a legitimate exception to a standard get approved?",
+ ok:"A published route, time-bound, with the rationale recorded.",
+ no:"No exception path exists, which means exceptions are being taken silently."},
+{s:"GO",q:"How long is the architecture review queue, and who stopped submitting?",
+ ok:"A measured wait time and awareness of avoidance behavior below the threshold.",
+ no:"Falling submissions reported as improved compliance."},
+{s:"GO",q:"Which controls were last tested by sampling real transactions?",
+ ok:"Dates, results, and at least one finding. Testing that never finds anything is not testing.",
+ no:"Controls reviewed for design only, or attestation treated as evidence of operation."},
+{s:"GO",q:"What can your automation's service accounts do end to end?",
+ ok:"Service account entitlements reviewed with the same rigour as human accounts.",
+ no:"Service accounts excluded from recertification, frequently holding request, approve and execute."},
+{s:"GO",q:"What artifact proves someone actually followed this policy?",
+ ok:"Evidence generated as a side effect of doing the work.",
+ no:"A checkbox or a signature is the only evidence, which records the attestation and not the behavior."},
+
+{s:"RS",q:"Show me three risks written as cause, event and consequence.",
+ ok:"Actionable statements with named individual owners who hold budget.",
+ no:"Topic headings such as legacy technology risk, carried forward for years."},
+{s:"RS",q:"What dependency appears across many unrelated risk entries?",
+ ok:"Awareness of concentration on a platform, a provider or a person.",
+ no:"Risks only ever assessed individually. Concentration is invisible from inside single entries."},
+{s:"RS",q:"Which accepted risks are older than the conditions they were accepted under?",
+ ok:"Acceptances carrying recorded conditions and an expiry date.",
+ no:"Open-ended acceptances still cited years after the architecture changed."},
+{s:"RS",q:"When did you last restore from backup, against a clock?",
+ ok:"A recent test with a measured duration, including a partial restore.",
+ no:"Backup jobs complete successfully. A completed job is not a proven restore."},
+{s:"RS",q:"How long can the business operate without this, and who decided that?",
+ ok:"A tolerance stated by the business, varying by process rather than uniform.",
+ no:"A single recovery objective set by IT years ago and never revisited."},
+{s:"RS",q:"What did your last access recertification actually remove?",
+ ok:"A removal count with examples.",
+ no:"Reviews completed with nothing removed. The review is running, the control is not."},
+
+{s:"CV",q:"What does this cost to run, separate from what it cost to build?",
+ ok:"A recurring figure with a marginal cost per unit of use.",
+ no:"Only project cost is known. Run cost usually lands in a different budget."},
+{s:"CV",q:"Who is accountable for the benefit after the project team disbands?",
+ ok:"A named operational owner who agreed the measure before the build started.",
+ no:"Benefits owned by the programme, which will close before they materialize."},
+{s:"CV",q:"What operational change must happen for the savings to be real?",
+ ok:"A specific commitment, such as released headcount or a contract someone will cancel.",
+ no:"Savings expressed as capacity or efficiency with no decision attached."},
+{s:"CV",q:"Who operates this, and were they consulted before handover?",
+ ok:"A named team with capacity confirmed and a runbook they helped write.",
+ no:"Handover treated as a communication rather than as a design activity."},
+{s:"CV",q:"What are you funding next year purely because stopping would be difficult?",
+ ok:"Candid identification of at least one item.",
+ no:"Everything is justified. Nothing has been re-examined since it was approved."},
+{s:"CV",q:"If this fails, what will everyone say the reason was?",
+ ok:"A specific, plausible and slightly uncomfortable answer.",
+ no:"Only technical risks named. The usual causes are ownership, adoption and benefit."}
+];
+
+const checkedAudit = new Set();
+let auditFilter = "ALL", auditQuery = "", hintsOpen = new Set(), allHints = false;
+
+function auditIn(){
+  return AUDIT.map(function(a, i){ return {a:a, i:i}; }).filter(function(o){
+    if (auditFilter !== "ALL" && o.a.s !== auditFilter) return false;
+    if (!auditQuery) return true;
+    const t = (o.a.q + " " + o.a.ok + " " + o.a.no).toLowerCase();
+    return t.indexOf(auditQuery) > -1;
+  });
+}
+
+function paintAudit(){
+  const rows = auditIn();
+  const box = document.getElementById("alist");
+  if (!box) return;
+  const chev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+
+  const html = ASECTIONS.map(function(sec){
+    const mine = rows.filter(function(o){ return o.a.s === sec.c; });
+    if (!mine.length) return "";
+    const done = mine.filter(function(o){ return checkedAudit.has(o.i); }).length;
+    return '<section class="sect" data-sec="' + sec.c + '">' +
+      '<header><span class="scode">' + sec.c + '</span><h3>' + esc(sec.n) + '</h3>' +
+      '<span class="prog"><b>' + done + '</b>/' + mine.length + '</span></header>' +
+      mine.map(function(o){
+        const on = checkedAudit.has(o.i), open = allHints || hintsOpen.has(o.i);
+        return '<div class="qrow' + (on ? " done" : "") + '" data-q="' + o.i + '">' +
+          '<div class="qtop"><label><input type="checkbox" data-audit="' + o.i + '"' +
+            (on ? " checked" : "") + '><span>' + esc(o.a.q) + '</span></label>' +
+            '<button class="hintbtn" type="button" data-hint="' + o.i + '" aria-expanded="' + open +
+            '" aria-label="Show what a good answer looks like" title="What a good answer looks like">' + chev + '</button></div>' +
+          (open ? '<div class="hint">' +
+             '<p><span class="hlab ok">Good answer</span>' + esc(o.a.ok) + '</p>' +
+             '<p><span class="hlab no">Weak signal</span>' + esc(o.a.no) + '</p></div>' : '') +
+        '</div>';
+      }).join("") + '</section>';
+  }).join("");
+
+  box.innerHTML = html || '<p class="empty">No questions match that filter.</p>';
+
+  box.querySelectorAll("input[data-audit]").forEach(function(cb){
+    cb.addEventListener("change", function(){
+      const i = Number(cb.dataset.audit);
+      if (cb.checked) checkedAudit.add(i); else checkedAudit.delete(i);
+      const row = cb.closest(".qrow");
+      row.classList.toggle("done", cb.checked);
+      const sec = row.closest(".sect");
+      const tot = sec.querySelectorAll(".qrow").length;
+      const dn  = sec.querySelectorAll(".qrow.done").length;
+      sec.querySelector(".prog").innerHTML = "<b>" + dn + "</b>/" + tot;
+      updateMeta();
+    });
+  });
+  box.querySelectorAll("[data-hint]").forEach(function(b){
+    b.addEventListener("click", function(){
+      const i = Number(b.dataset.hint);
+      if (hintsOpen.has(i)) hintsOpen.delete(i); else hintsOpen.add(i);
+      allHints = false;
+      const t = document.getElementById("hintsBtn");
+      if (t) t.setAttribute("aria-pressed", "false");
+      paintAudit();
+    });
+  });
+  updateMeta();
+}
+
+function renderAudit(){
+  stage.className = "";
+  stage.innerHTML =
+    '<div class="auditbar">' +
+      '<input class="search" id="asearch" type="search" placeholder="Filter questions and hints" aria-label="Filter audit questions" value="' + esc(auditQuery) + '">' +
+      '<button type="button" id="hintsBtn" aria-pressed="' + allHints + '">' + (allHints ? "Hide all hints" : "Show all hints") + '</button>' +
+    '</div><div class="audit" id="alist"></div>';
+
+  const inp = document.getElementById("asearch");
+  inp.addEventListener("input", function(){ auditQuery = inp.value.toLowerCase().trim(); paintAudit(); });
+  document.getElementById("hintsBtn").addEventListener("click", function(){
+    allHints = !allHints;
+    hintsOpen.clear();
+    renderAudit();
+    document.getElementById("asearch").focus();
+  });
+  paintAudit();
+}
+
+function updateMeta(){
+  if (tab === "GL"){
+    metaEl.innerHTML = GLOSSARY.length + " terms / <b>" + checkedTerms.size + "</b> reviewed / filter by typing";
+    return;
+  }
+  if (tab === "MX"){
+    metaEl.innerHTML = "drag the sliders or load a pattern / analysis updates live";
+    return;
+  }
+  if (tab === "DX"){
+    metaEl.innerHTML = PATTERNS.length + " patterns / drag to reorder, flip for fit and limits";
+    return;
+  }
+  if (tab === "SA"){
+    const rows = auditIn();
+    const done = rows.filter(function(o){ return checkedAudit.has(o.i); }).length;
+    const scope = auditFilter === "ALL" ? "all sections"
+      : ASECTIONS.find(function(s){ return s.c === auditFilter; }).n.toLowerCase();
+    metaEl.innerHTML = rows.length + " questions / " + scope + " / <b>" + done +
+      "</b> covered / open a hint for what a good answer looks like";
+    return;
+  }
+  const idx = cardsIn(currentCodes());
+  let total = 0, done = 0;
+  idx.forEach(function(i){
+    CARDS[i].p.forEach(function(_, j){
+      total++;
+      if (checkedSteps.has(i + ":" + j)) done++;
+    });
+  });
+  const label = area === "ALL"
+    ? TABS.find(function(t){ return t.id === tab; }).label.toLowerCase()
+    : areaByCode(area).name.toLowerCase();
+  metaEl.innerHTML = idx.length + " cards / " + label + " / <b>" + done + "</b> of " + total +
+    " steps ticked / drag to reorder, flip for field context";
+}
+
+/* ---------------- interactions ---------------- */
+function wireCards(){
+  let dragIdx = null;
+
+  stage.querySelectorAll("input[data-step]").forEach(function(cb){
+    cb.addEventListener("change", function(){
+      if (cb.checked) checkedSteps.add(cb.dataset.step); else checkedSteps.delete(cb.dataset.step);
+      cb.parentNode.classList.toggle("done", cb.checked);
+      updateMeta();
+    });
+  });
+
+  stage.querySelectorAll(".card").forEach(function(card){
+    card.querySelectorAll(".flip").forEach(function(btn){
+      btn.addEventListener("click", function(e){ e.stopPropagation(); card.classList.toggle("flipped"); });
+    });
+
+    const grip = card.querySelector(".grip");
+    if (grip){
+      grip.addEventListener("mousedown", function(){ card.draggable = true; });
+      grip.addEventListener("touchstart", function(){ card.draggable = true; }, {passive:true});
+    }
+    card.addEventListener("dragend", function(){
+      card.draggable = false;
+      card.classList.remove("dragging");
+      stage.querySelectorAll(".card").forEach(function(c){ c.classList.remove("over"); });
+    });
+    card.addEventListener("dragstart", function(e){
+      dragIdx = Number(card.dataset.idx);
+      card.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", String(dragIdx)); } catch(err){}
+    });
+    card.addEventListener("dragover", function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      if (Number(card.dataset.idx) !== dragIdx) card.classList.add("over");
+    });
+    card.addEventListener("dragleave", function(){ card.classList.remove("over"); });
+    card.addEventListener("drop", function(e){
+      e.preventDefault();
+      card.classList.remove("over");
+      const from = dragIdx !== null ? dragIdx : Number(e.dataTransfer.getData("text/plain"));
+      const to = Number(card.dataset.idx);
+      if (isNaN(from) || from === to) return;
+      const fi = order.indexOf(from), ti = order.indexOf(to);
+      order.splice(fi, 1);
+      order.splice(ti, 0, from);
+      dragIdx = null;
+      render();
+    });
+  });
+}
+
+document.getElementById("resetBtn").addEventListener("click", function(){
+  if (tab === "SA"){
+    auditIn().forEach(function(o){ checkedAudit.delete(o.i); });
+    paintAudit();
+  } else if (tab === "MX"){
+    mix = {p:34, d:33, a:33}; activePreset = null; renderMix();
+  } else if (tab === "GL"){
+    checkedTerms.clear();
+    renderGlossary();
+  } else {
+    cardsIn(currentCodes()).forEach(function(i){
+      CARDS[i].p.forEach(function(_, j){ checkedSteps.delete(i + ":" + j); });
+    });
+    render();
+  }
+});
+
+const themeBtn = document.getElementById("themeBtn");
+themeBtn.addEventListener("click", function(){
+  const light = document.documentElement.getAttribute("data-theme") === "light";
+  document.documentElement.setAttribute("data-theme", light ? "dark" : "light");
+  themeBtn.querySelector(".ic-moon").style.display = light ? "block" : "none";
+  themeBtn.querySelector(".ic-sun").style.display  = light ? "none" : "block";
+  if (tab === "MX") drawChart();
+});
+
+buildTabs(); buildRail(); render();
+</script>
+</body>
+</html>
