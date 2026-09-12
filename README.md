@@ -3,7 +3,8 @@
 A single-page working reference for designing, engineering, governing and analysing
 systems across an enterprise estate of data and applications.
 
-Live: <https://jameschrisa.github.io/systems-design/>
+Live: <https://jameschrisa.github.io/systems-design/>  
+Design system: <https://jameschrisa.github.io/systems-design/brand.html>
 
 ## What is in it
 
@@ -18,7 +19,13 @@ Live: <https://jameschrisa.github.io/systems-design/>
 | Design Patterns | 12 block-diagram patterns with fit and limits |
 | Systems Auditing | 48 client questions in 8 sections, with answer hints |
 | Mix Calculator | Interactive people / deterministic / AI distribution with generated risks and controls |
-| Glossary | 60 terms, filterable |
+| Metrics | 36 enterprise metrics across delivery, reliability, process, operations, UX and AI |
+| System Playground | Drag-and-connect canvas for sketching system diagrams, exports to SVG |
+| Runbooks | 12 operational procedures: trigger, preconditions, steps, verification, rollback, escalation |
+| Playbooks | 12 repeatable engagements: objective, phased plays, artifacts, success signals, failure modes |
+| Glossary | 102 terms, filterable by source, search matches aliases |
+
+Glossary, Metrics, Systems Audit, Mix Calculator, System Playground, Runbooks and Playbooks sit in the header icon bar rather than the tab strip.
 
 Every card front carries practice steps as checkboxes and a one-line takeaway.
 Flip any card for keywords, a field example and a diagnostic question.
@@ -51,6 +58,7 @@ This folder is self-contained. Two options:
 
 ```
 index.html            the whole application, no build step
+brand.html            brand and UI reference, reusable design system
 favicon.ico           multi-resolution, 16 to 64px
 site.webmanifest      installable metadata
 .nojekyll             disables Jekyll processing

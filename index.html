@@ -4,7 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0C1A2F">
-<title>Systems Practice — Design, Engineering, Analysis, Risk</title>
+<title>Systems Practice — a working reference</title>
+<meta name="description" content="A working reference for designing, engineering, governing and analysing systems across an enterprise estate. 132 cards, 12 patterns, 36 metrics, 12 runbooks, 12 playbooks, a 48-question audit matrix, a 102-term glossary, a mix calculator and a system playground.">
+<meta name="author" content="James Christopher">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
+<link rel="manifest" href="site.webmanifest">
+<!-- social preview. Update both URLs below if the repo name differs. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Systems Practice — a working reference">
+<meta property="og:description" content="Design, engineering, governance, analysis and AI systems engineering, as cards you can work through.">
+<meta property="og:url" content="https://jameschrisa.github.io/systems-design/">
+<meta property="og:image" content="https://jameschrisa.github.io/systems-design/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
@@ -240,6 +256,32 @@ ul.practice label.done .lbl{text-decoration:none;}
   font-size:0.9rem;pointer-events:none;text-align:center;padding:0 30px;line-height:1.6;}
 @media (max-width:860px){ .pg{grid-template-columns:1fr;} .pgcanvas{height:520px;} }
 
+/* ---- runbooks and playbooks ---- */
+.books{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:18px;align-items:start;}
+.book{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;
+  padding:18px 20px 20px;box-shadow:0 1px 2px var(--shadow);}
+[data-theme="light"] .book{box-shadow:0 1px 2px rgba(12,26,47,.05),0 5px 16px -4px rgba(12,26,47,.16);}
+.book .cat{font-family:"IBM Plex Mono",monospace;font-size:0.6875rem;color:var(--teal);letter-spacing:.03em;}
+.book h3{margin:7px 0 0;font-size:1.0325rem;font-weight:550;line-height:1.3;letter-spacing:-.008em;}
+.book .trig{margin:9px 0 0;color:var(--text);font-size:0.875rem;line-height:1.5;
+  padding:10px 12px;border-radius:6px;background:var(--accent-wash);border-left:3px solid var(--accent);}
+.brow{margin-top:13px;padding-top:12px;border-top:1px solid var(--line-soft);}
+.blab{display:block;font-family:"IBM Plex Mono",monospace;font-size:0.6875rem;
+  color:var(--muted);letter-spacing:.03em;margin-bottom:6px;}
+.brow p{margin:0;color:var(--text-mid);font-size:0.86rem;line-height:1.55;}
+.bsteps{margin:0;padding-left:20px;counter-reset:none;}
+.bsteps li{margin:0 0 7px;color:var(--text-mid);font-size:0.86rem;line-height:1.5;}
+.bsteps li::marker{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:0.75rem;}
+.bflat{margin:0;padding:0;list-style:none;}
+.bflat li{margin:0 0 6px;padding-left:14px;position:relative;color:var(--text-mid);
+  font-size:0.86rem;line-height:1.5;}
+.bflat li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;
+  border-radius:50%;background:var(--teal);}
+.bphase{margin-top:12px;}
+.bphase h5{margin:0 0 6px;font-size:0.85rem;font-weight:550;color:var(--text);}
+.bwarn{color:var(--text-mid);font-size:0.86rem;line-height:1.55;margin:0;
+  border-left:2px solid var(--accent-soft);padding-left:12px;}
+
 /* ---- metrics ---- */
 .metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:18px;align-items:start;}
 .metric{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;
@@ -454,6 +496,8 @@ const ICONS = {
   "cpu": '<path d="M12 20v2"/><path d="M12 2v2"/><path d="M17 20v2"/><path d="M17 2v2"/><path d="M2 12h2"/><path d="M2 17h2"/><path d="M2 7h2"/><path d="M20 12h2"/><path d="M20 17h2"/><path d="M20 7h2"/><path d="M7 20v2"/><path d="M7 2v2"/><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1"/>',
   "network": '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>',
   "clipboard-check": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+  "list-checks": '<path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/>',
+  "scroll-text": '<path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/>',
   "gauge": '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
   "boxes": '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>',
   "book-open": '<path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>'
@@ -478,7 +522,9 @@ const NAVGROUPS = [
   {box:true, items:[
     {id:"SA", label:"Systems Audit",     ic:"clipboard-check"},
     {id:"MX", label:"Mix Calculator",    ic:"sliders-horizontal"},
-    {id:"PG", label:"System Playground", ic:"boxes"}
+    {id:"PG", label:"System Playground", ic:"boxes"},
+    {id:"RB", label:"Runbooks",          ic:"list-checks"},
+    {id:"PB", label:"Playbooks",         ic:"scroll-text"}
   ]}
 ];
 
@@ -1478,6 +1524,26 @@ function buildRail(){
     });
     return;
   }
+  if (tab === "RB" || tab === "PB"){
+    railEl.style.display = "flex";
+    const isRun = tab === "RB";
+    const cats = isRun ? RCATS : PCATS;
+    const all = isRun ? RUNBOOKS : PLAYBOOKS;
+    const cur = isRun ? rcat : pcat;
+    const list = [{c:"ALL", n:"All categories"}].concat(cats);
+    railEl.innerHTML = list.map(function(x){
+      const cnt = x.c === "ALL" ? all.length : all.filter(function(b){ return b.c === x.c; }).length;
+      return '<button type="button" data-bcat="' + x.c + '" aria-pressed="' + (x.c === cur) +
+        '">' + x.n + '<span class="n">' + cnt + '</span></button>';
+    }).join("");
+    railEl.querySelectorAll("button").forEach(function(b){
+      b.addEventListener("click", function(){
+        if (isRun){ rcat = b.dataset.bcat; buildRail(); paintRunbooks(); }
+        else { pcat = b.dataset.bcat; buildRail(); paintPlaybooks(); }
+      });
+    });
+    return;
+  }
   if (tab === "MT"){
     railEl.style.display = "flex";
     const list = [{c:"ALL", n:"All categories"}].concat(MCATS);
@@ -1524,6 +1590,8 @@ function render(){
   if (tab === "SA"){ renderAudit(); return; }
   if (tab === "MT"){ renderMetrics(); return; }
   if (tab === "PG"){ renderPlayground(); return; }
+  if (tab === "RB"){ renderRunbooks(); return; }
+  if (tab === "PB"){ renderPlaybooks(); return; }
   const idx = cardsIn(currentCodes());
 
   stage.className = "deck";
@@ -2971,6 +3039,400 @@ document.addEventListener("keydown", function(e){
   if (e.key === "Escape"){ pgFrom = null; pgSelNode = null; pgSelEdge = null; pgPaint(); }
 });
 
+/* ================= runbooks ================= */
+const RCATS = [
+  {c:"INC", n:"Incident response"},
+  {c:"CHG", n:"Change and release"},
+  {c:"DAT", n:"Data and pipelines"},
+  {c:"SEC", n:"Security and access"},
+  {c:"CNT", n:"Continuity and recovery"}
+];
+
+const RUNBOOKS = [
+{c:"INC",n:"Production incident triage",
+ t:"An alert fires, or a user reports degraded service, and nobody yet knows the cause or the blast radius.",
+ pre:["An on-call rotation with a named person currently responsible.","A channel where the incident is coordinated in the open.","Read access to logs, traces and recent change history."],
+ s:["Declare the incident and state a severity. Under-declaring costs more than over-declaring.",
+    "Name one incident lead. That person coordinates and does not debug.",
+    "Establish impact before cause: who is affected, which journeys, since when.",
+    "Check the change log first. Most incidents follow a change within the last 24 hours.",
+    "Mitigate before diagnosing. Roll back, fail over or disable the feature flag.",
+    "Confirm recovery from the user's position, not from the dashboard.",
+    "Keep a timestamped log as you go. Reconstructing it afterwards never works."],
+ v:"The affected journey completes end to end from outside your network, and the leading indicator has returned to baseline rather than merely the alert clearing.",
+ b:"If mitigation makes things worse, revert the mitigation itself and return to the last known good state before trying a second theory.",
+ e:"Escalate on severity, not on frustration. Bring in the service owner at the first mitigation failure, and communications once customer impact exceeds your stated notification threshold."},
+
+{c:"CHG",n:"Service rollback",
+ t:"A deployment has degraded service and mitigation is needed before the cause is understood.",
+ pre:["The previous version is still deployable and its artifact retained.","Database changes since the release are backward compatible.","A known command or pipeline step that performs the rollback."],
+ s:["Confirm the release is the likely cause by checking the timing against the first symptom.",
+    "Check whether any schema or data change shipped with it. If so, stop and use the migration runbook instead.",
+    "Roll back to the prior artifact, not to a rebuilt one. Rebuilt is not the same binary.",
+    "Watch error rate and latency for at least one full traffic cycle.",
+    "Re-enable anything the deploy disabled, such as a scheduled job or a consumer.",
+    "Record the rollback as a change in its own right."],
+ v:"Error rate and tail latency return to the pre-release baseline, and any queue that built up has drained rather than merely stopped growing.",
+ b:"If the rollback itself fails, fail forward with a targeted fix rather than attempting a second rollback. Two failed reversions usually indicate a state problem, not a code problem.",
+ e:"If a data change is involved, the data owner joins before anything is reverted. Reverting code over changed data is how a degradation becomes corruption."},
+
+{c:"DAT",n:"Schema migration, expand and contract",
+ t:"A table or contract must change while consumers continue running.",
+ pre:["An inventory of every reader and writer, including reporting tools.","Consumers can be deployed independently of the producer.","A rollback path for each phase."],
+ s:["Expand: add the new column or field as nullable, writing nothing to it yet.",
+    "Dual write: write both old and new, keeping the old authoritative.",
+    "Backfill historical rows in batches, with progress recorded outside the job.",
+    "Reconcile old against new and hold until the difference is zero.",
+    "Migrate readers one at a time, verifying each before the next.",
+    "Flip the new field to authoritative and stop writing the old.",
+    "Contract: remove the old field only after a full retention or reporting cycle has passed."],
+ v:"Row counts and checksums agree between old and new, every known consumer has been observed reading the new field, and no query in the logs still references the old one.",
+ b:"Each phase reverses independently. Never combine expand and contract in one release, because that removes the ability to revert without data loss.",
+ e:"Bring in the data owner before the contract phase. A reader you did not know about usually surfaces there rather than earlier."},
+
+{c:"CHG",n:"System cutover and go-live",
+ t:"A new system takes over from an existing one on a planned date.",
+ pre:["A tested rollback that has actually been exercised, not just written.","Reconciliation between old and new agreed and automated.","Named owners for the go and no-go decision."],
+ s:["Hold a go or no-go on stated criteria agreed in advance, not on sentiment on the day.",
+    "Freeze changes to both systems for the window.",
+    "Take a restorable snapshot of the source before anything moves.",
+    "Migrate data, then reconcile counts and control totals before opening access.",
+    "Run a small volume of real transactions through the new path first.",
+    "Open to users in a defined order, keeping the old system readable.",
+    "Hold hypercare with the delivery team on call and a daily reconciliation."],
+ v:"Control totals match, a sample of real transactions has completed end to end, and the first full business cycle, including month-end if it falls in the window, has closed without manual correction.",
+ b:"Rollback has a deadline. Decide in advance the hour after which you stop trying and revert, and hold to it. Rollback windows are almost always missed by choosing to continue.",
+ e:"The business owner decides go, no-go and revert. Technical readiness is an input to that decision rather than the decision itself."},
+
+{c:"CNT",n:"Failover drill",
+ t:"A scheduled test of whether the standby actually takes over, run before you need it to.",
+ pre:["A stated recovery objective from the business, not from IT.","A maintenance window, or confidence that the drill is non-disruptive.","A way to measure recovery duration against a clock."],
+ s:["Announce the drill and state what will be measured.",
+    "Remove the shared dependency, not just the instance. Killing a node tests less than you think.",
+    "Time from failure injection to service restoration, not to failover completion.",
+    "Check that configuration, secrets and scheduled jobs came across, not only compute.",
+    "Verify data written during the transition was not lost or duplicated.",
+    "Fail back deliberately, and time that too. Fail-back is the step teams skip.",
+    "Record the measured recovery time against the stated objective."],
+ v:"Service is restored inside the recovery objective, the data loss window is inside the recovery point objective, and fail-back completed without manual repair.",
+ b:"If the drill causes real impact, stop and restore the primary. A failed drill is a finding, not a failure; hiding it is the failure.",
+ e:"Any measured recovery outside the stated objective goes to the business owner, because the objective was their decision and may now need re-pricing."},
+
+{c:"SEC",n:"Credential rotation",
+ t:"A secret is expiring, has been exposed, or is due for scheduled rotation.",
+ pre:["An inventory of where the credential is referenced.","The ability to run two valid credentials briefly.","A tested path to revoke the old one."],
+ s:["Find every reference, including pipeline variables, configuration, wikis and support tickets.",
+    "Issue the new credential alongside the old rather than replacing it outright.",
+    "Update references to the new credential, centralised store first.",
+    "Watch authentication failures for a full cycle, including nightly and weekly jobs.",
+    "Revoke the old credential only after a period longer than your longest scheduled job.",
+    "Confirm revocation broke nothing, then record the rotation date."],
+ v:"No authentication failures across a full weekly cycle, and the old credential is confirmed revoked rather than merely unused.",
+ b:"If revocation breaks a service, reissue the old credential immediately if it can be, and treat the unknown dependency as the finding to fix.",
+ e:"If the rotation follows an exposure rather than a schedule, security leads and the timeline is preserved, since revocation destroys evidence of use."},
+
+{c:"INC",n:"Capacity saturation response",
+ t:"A constrained resource is approaching its limit: connection pool, thread pool, disk, queue depth or memory.",
+ pre:["Saturation is measured and alerted on, not inferred from latency.","A known way to add capacity or shed load.","An understanding of what queues behind the resource."],
+ s:["Confirm which resource is actually saturated. Latency alone does not identify it.",
+    "Check for a change in demand shape, not only in volume. A new caller or a retry storm is common.",
+    "Shed or throttle the lowest-value traffic first, if the system allows it.",
+    "Add capacity only after you know the resource, or you will scale the wrong layer.",
+    "Watch queue depth drain rather than instantaneous utilisation.",
+    "Find what consumed the margin. Saturation is rarely sudden."],
+ v:"The saturated resource is back below roughly 70 percent in steady state and the queue has fully drained, with tail latency rather than the mean confirming it.",
+ b:"If scaling does not help, the constraint is elsewhere. Stop adding capacity, which costs money without effect, and trace the dependency chain.",
+ e:"Involve the caller if demand shape changed. A retry storm is fixed at the client, never at the server."},
+
+{c:"DAT",n:"Pipeline failure recovery",
+ t:"A scheduled data job has failed, partially completed, or silently produced nothing.",
+ pre:["Jobs are idempotent, or a safe way exists to reprocess a window.","Watermarks or checkpoints identify what was processed.","Downstream consumers are known."],
+ s:["Establish what actually landed. A completed job status is not evidence of complete data.",
+    "Identify the window affected and whether downstream has already consumed it.",
+    "Stop dependent jobs before reprocessing, or you will compound the error.",
+    "Reprocess the window rather than the whole history, unless completeness is unprovable.",
+    "Reconcile counts and totals against the source before releasing downstream.",
+    "Notify consumers that figures for the window have changed.",
+    "Check whether the failure mode is silent, and add a check if it was."],
+ v:"Source and target counts agree for the window, downstream aggregates have been recomputed, and anyone who used the wrong figures has been told.",
+ b:"If reprocessing risks duplication and idempotency is not guaranteed, restore the target to the last known-good checkpoint first.",
+ e:"If the bad data reached external reporting or a regulatory submission, the data owner and compliance are informed the same day."},
+
+{c:"INC",n:"Interface break response",
+ t:"An integration has started failing, or is succeeding while producing wrong or incomplete results.",
+ pre:["A correlation identifier that spans both sides.","Contact for the owning team on each side.","Knowledge of what the contract actually specifies."],
+ s:["Determine whether it is failing loudly or silently. Silent is worse and older than it looks.",
+    "Check for a producer change, including an additive one. New enumerated values break hard-coded readers.",
+    "Establish the window and how many records travelled through it.",
+    "Stop consuming rather than half-consuming, if partial processing causes state damage.",
+    "Agree who fixes: the producer reverts, or the consumer tolerates. Say it explicitly.",
+    "Replay the window once both sides agree the contract again.",
+    "Record what would have caught this and add it."],
+ v:"A test record travels end to end with the correct values, and the affected window has been replayed and reconciled rather than just resumed.",
+ b:"If replay would duplicate downstream effects, reconcile and correct in place instead. Replay is only safe where consumers are idempotent.",
+ e:"Escalate to both service owners at once. Interface incidents stall when each side waits for the other to accept ownership."},
+
+{c:"DAT",n:"Model or AI service degradation",
+ t:"Output quality has fallen, complaints have risen, or an evaluation run has regressed.",
+ pre:["A versioned evaluation set.","Pinned model and prompt versions, with the prior configuration deployable.","Traces capturing inputs, retrieved context and tool calls."],
+ s:["Run the evaluation set against production configuration before changing anything.",
+    "Compare against the last known-good run. Without that, you are guessing.",
+    "Check the provider for a model update. Nothing changed on our side is not reassurance.",
+    "Segment the failures. An aggregate drop is usually one segment collapsing.",
+    "Inspect retrieval before blaming generation. Check whether the right context was fetched.",
+    "Raise the confidence threshold to route more to humans while you diagnose.",
+    "Restore the previous pinned configuration if the regression is external."],
+ v:"Evaluation scores return to the prior baseline on every material segment, not only in aggregate, and the threshold has been returned to its normal setting.",
+ b:"Restoring the previous prompt, model and parameter set as one unit. Reverting one of the three produces a configuration you have never tested.",
+ e:"If the cause is a provider change, open a vendor ticket and record the exposure. Unpinned versions are a finding for the architecture owner."},
+
+{c:"CNT",n:"Restore from backup",
+ t:"Data has been lost, corrupted or encrypted, and the system of record cannot be repaired in place.",
+ pre:["A restore path tested within the last quarter.","Backups isolated from the credentials that could have caused the loss.","A decision on acceptable data loss made by the business."],
+ s:["Stop writes to the affected store before anything else, or you will restore into a moving target.",
+    "Establish the corruption point in time, which is usually earlier than the detection point.",
+    "Restore to a clean environment first, never over the top of the damaged one.",
+    "Verify the restore independently: row counts, checksums and a functional check.",
+    "Decide with the business what to do with the gap between restore point and now.",
+    "Cut over, then reconcile downstream systems that consumed the bad data.",
+    "Keep the damaged copy until the cause is understood."],
+ v:"The restored system passes a functional check and reconciles to an independent source, and the data loss window is confirmed and communicated rather than assumed.",
+ b:"If the restore is itself bad, go to the previous backup generation. This is why generation depth matters more than backup frequency.",
+ e:"Business owner decides on the loss window. If encryption or deliberate deletion is suspected, security leads and nothing is overwritten."},
+
+{c:"CHG",n:"Application decommission",
+ t:"A system has been replaced or is no longer needed and must be removed from the estate.",
+ pre:["A named owner for the retirement, distinct from the budget holder.","Data retention obligations established in writing.","An inventory of consumers, including reporting and direct database readers."],
+ s:["Find every consumer, including scheduled jobs, reports and integrations nobody documented.",
+    "Announce the date and put a monitored deprecation notice in the path where possible.",
+    "Turn it off before deleting it. Keep it recoverable for an agreed period.",
+    "Watch for failures across a full cycle, including month-end and quarter-end.",
+    "Export and archive data to meet the retention obligation, verified as readable.",
+    "Remove credentials, firewall rules, DNS entries, licences and contracts.",
+    "Confirm the licence and support contract is actually cancelled, not merely unused."],
+ v:"A full business cycle passes with the system off and no failures attributed to it, archived data has been read back successfully, and the contract termination is confirmed in writing.",
+ b:"Restore from the powered-off state if a consumer surfaces, then restart the clock rather than pressing on.",
+ e:"Any retention or legal-hold question goes to legal before deletion. Deletion is the one step in this runbook that cannot be reversed."}
+];
+
+/* ================= playbooks ================= */
+const PCATS = [
+  {c:"DIS", n:"Discovery and assessment"},
+  {c:"ARC", n:"Architecture and decisions"},
+  {c:"MIG", n:"Migration and modernization"},
+  {c:"INT", n:"Data and integration"},
+  {c:"AIC", n:"AI capability"},
+  {c:"OPM", n:"Operating model"}
+];
+
+const PLAYBOOKS = [
+{c:"DIS",n:"Current-state discovery",
+ u:"At the start of any engagement where you inherit a system nobody has described accurately in years.",
+ o:"Produce a current-state picture that operators recognise, covering the human, process and technology layers rather than only the architecture diagram.",
+ ph:[{n:"Frame", s:["Name the system, draw the boundary, write down what is out of scope.","Identify who owns the outcome, distinct from who owns the system."]},
+     {n:"Observe", s:["Sit with operators and watch the work, including the exception path.","Collect the workarounds first. They describe the failure precisely.","Pull volumetrics: counts, peaks, exception rates, queue times."]},
+     {n:"Reconcile", s:["Compare the observed process against the documented one and record the deltas.","Validate findings back with the people who described them."]}],
+ out:["Boundary statement with explicit exclusions","Process map dated and attributed to a named operator","Volumetrics and exception categories","Register of workarounds with the gap each one fills"],
+ sig:"Operators read the map and say it is right, including the parts that are unflattering.",
+ f:"Mapping from documentation and management interviews only. The published process describes intent, and designing against intent automates something that does not exist."},
+
+{c:"DIS",n:"Application portfolio rationalization",
+ u:"When the estate has grown past what anyone can hold in their head and cost is rising faster than capability.",
+ o:"Decide, for each application, whether to tolerate, invest, migrate or eliminate, on the basis of business fit and technical condition rather than licence spend.",
+ ph:[{n:"Inventory", s:["List applications with owner, capability served, cost to run and support status.","Group by business capability rather than by department or vendor."]},
+     {n:"Assess", s:["Score business fit and technical condition separately before combining them.","Identify duplication within each capability group.","Flag anything out of support or carrying a single point of knowledge."]},
+     {n:"Decide", s:["Place each application in tolerate, invest, migrate or eliminate with a named decision owner.","Sequence eliminations by dependency, not by size of saving.","Fund the removals, or they will not happen."]}],
+ out:["Capability-mapped inventory","Fit and condition scores with reasoning","Disposition per application with owner and date","A funded decommission sequence"],
+ sig:"Applications retired per year rises above zero and approaches applications added.",
+ f:"Ranking by licence cost. The most expensive system gets replaced while a cheap unsupported one carrying core logic survives another four years."},
+
+{c:"ARC",n:"Architecture decisions and records",
+ u:"When the same design arguments keep recurring and nobody can say who decided what, or why.",
+ o:"Establish decision rights and a lightweight record, so decisions are made once, by someone with authority, and remain traceable.",
+ ph:[{n:"Set rights", s:["Define the threshold above which a choice is an architecture decision.","Name the role that decides and the one that breaks a deadlock.","Publish the exception route alongside any standard."]},
+     {n:"Record", s:["Capture context, options considered, decision and consequences. One page.","Record the reasoning, not only the outcome. The reasoning is what ages.","Store records with the code, not in a separate wiki nobody opens."]},
+     {n:"Review", s:["Revisit decisions when their stated assumptions change, not on a calendar.","Track exception rate per standard as feedback on the standard."]}],
+ out:["Decision rights matrix with thresholds","A record per material decision","Published exception process","Exception rate by standard"],
+ sig:"A new joiner can answer why the system is shaped this way without finding the person who built it.",
+ f:"Writing standards before establishing who may enforce or exempt them. A standard nobody can enforce is a preference, and teams interpret it independently."},
+
+{c:"ARC",n:"Vendor selection and exit",
+ u:"Before committing to a platform or provider that will be difficult to leave.",
+ o:"Choose on fit and on exit cost together, and establish the exit path while you still have commercial leverage.",
+ ph:[{n:"Define", s:["State the capability need without naming a mechanism.","Establish the non-functional constraints: residency, retention, latency, integration.","Decide what you will not outsource, such as the data model or the decision logic."]},
+     {n:"Evaluate", s:["Test against your own data and volumes, not a vendor demo.","Assess the evidence you will receive in operation, and how often.","Price the exit: data return format, assistance obligations, notice periods."]},
+     {n:"Contract", s:["Negotiate exit assistance at entry. It is unobtainable later.","Decouple your business logic from the provider through an interface you own.","Record what would trigger a review of the decision."]}],
+ out:["Capability requirement stated mechanism-free","Evaluation against real data","Exit plan with data return format and timing","Interface boundary that keeps logic on your side"],
+ sig:"You can state, with a number, what leaving would cost and how long it would take.",
+ f:"Treating exit as a later problem. Outsourcing an activity never outsources the consequence, and service credits do not restore a capability."},
+
+{c:"MIG",n:"Strangler fig migration",
+ u:"When a legacy system is too large or too critical to replace in one movement.",
+ o:"Replace the system in reversible increments behind a facade, so each slice can be verified in production and rolled back alone.",
+ ph:[{n:"Establish the seam", s:["Put a facade in front of the legacy system and route all traffic through it.","Prove the facade is transparent before migrating anything."]},
+     {n:"Migrate in slices", s:["Choose slices by seam quality, not by business priority. The first slice proves the method.","Run old and new in parallel and compare outputs before switching.","Switch traffic per slice, with rollback at the routing layer."]},
+     {n:"Retire", s:["Track the share of traffic still hitting legacy as the headline measure.","Plan the facade's own removal, or it becomes permanent.","Decommission the legacy system properly rather than leaving it running."]}],
+ out:["Facade with per-slice routing","Parallel-run comparison results per slice","Traffic share trend toward the new system","Decommission plan for both legacy and facade"],
+ sig:"Legacy traffic share falls every quarter and each slice was switched without a change freeze.",
+ f:"Both systems writing the same data during parallel run. That converts a reversible migration into a reconciliation problem."},
+
+{c:"MIG",n:"Cloud migration wave planning",
+ u:"When moving a portfolio rather than a single application, and sequencing decides the cost.",
+ o:"Sequence by dependency and by learning value, so early waves build capability and later waves carry the risk.",
+ ph:[{n:"Group", s:["Map dependencies between applications, including shared data stores.","Group applications that must move together into a single wave.","Identify what cannot move and why, before planning around it."]},
+     {n:"Sequence", s:["Put a low-risk, representative application in wave one to prove the path.","Defer anything with unresolved residency, licensing or latency constraints.","Keep each wave small enough to complete inside a quarter."]},
+     {n:"Operate", s:["Establish run cost per application before the second wave, not after the last.","Capture and apply lessons between waves, or you will repeat them.","Decommission source infrastructure per wave rather than at the end."]}],
+ out:["Dependency-grouped wave plan","Landing zone and guardrails proven by wave one","Run cost per application","Per-wave decommission confirmations"],
+ sig:"Wave two is faster than wave one, and source infrastructure is actually switched off.",
+ f:"Running both estates to the end of the programme. The double-run cost usually exceeds the projected saving, and nobody owns turning the old one off."},
+
+{c:"INT",n:"Data contract rollout",
+ u:"When producer changes keep breaking consumers, and nobody can say what a breaking change is.",
+ o:"Make the interface between data producers and consumers explicit, owned and versioned, so change becomes safe rather than forbidden.",
+ ph:[{n:"Define", s:["Pick the highest-traffic datasets first, not the easiest ones.","Specify schema, meaning, cadence and guarantees, not only the field list.","Write down what counts as a breaking change before anyone needs to argue."]},
+     {n:"Enforce", s:["Validate the contract in the pipeline rather than in a review.","Version contracts and support the previous version through a stated window.","Give each contract a named owner reachable during an incident."]},
+     {n:"Extend", s:["Add contracts as datasets are touched, rather than as a separate programme.","Track consumer breakages as the measure of whether it is working."]}],
+ out:["Versioned contracts for the highest-traffic datasets","Breaking-change definition","Pipeline validation that fails the build","Named owner per contract"],
+ sig:"Producer changes ship without a consumer outage, and the backlog of change requests blocked on fear disappears.",
+ f:"Publishing contracts as documentation. If conformance is not enforced in the pipeline, the contract describes an aspiration."},
+
+{c:"INT",n:"Interface rationalization",
+ u:"When interface count is outgrowing system count and every change pulls in more of the estate than it should.",
+ o:"Reduce coupling deliberately, converting quadratic point-to-point growth into something a team can still reason about.",
+ ph:[{n:"Inventory", s:["Count interfaces and identify which move the same data.","Find every application reading another application's database directly.","Map which systems cannot be released independently, and why."]},
+     {n:"Consolidate", s:["Route duplicated flows through one path with a named owner.","Replace direct database reads with a published interface.","Introduce a broker only where interface count justifies its own availability cost."]},
+     {n:"Hold the line", s:["Require an interface count check before approving a new direct connection.","Constrain interfaces centrally and leave internal choices to teams."]}],
+ out:["Interface inventory with duplication flagged","List of cross-application database dependencies","Consolidated flows with owners","A standing check before new point-to-point connections"],
+ sig:"Interface count per system falls, and two teams can release on different days.",
+ f:"Building the broker before removing the duplication. You then operate both topologies and inherit the availability risk of the hub as well."},
+
+{c:"AIC",n:"AI capability, pilot to production",
+ u:"When a promising model demonstration needs to become something the organization can run.",
+ o:"Move from a demonstration to an operated capability with defined thresholds, evaluation, oversight and unit economics.",
+ ph:[{n:"Qualify", s:["Confirm the task suits a probabilistic approach: high variation, recoverable errors.","Build the evaluation set before choosing a model. It is the specification.","Establish what a wrong answer costs, since that sets the threshold."]},
+     {n:"Design for operation", s:["Set the confidence threshold from consequence and define the path below it.","Scope agent tools narrowly and keep authorization outside the prompt.","Decide observability before deployment: drift, variability, tool failures."]},
+     {n:"Operate", s:["Pin versions and run evaluations on a schedule, not only at release.","Track override rate; near zero means the review is nominal.","Measure cost per completed task including retries and correction."]}],
+ out:["Versioned evaluation set","Confidence threshold with a defined fallback","Tool scope and credential map","Cost per completed task with a break-even volume"],
+ sig:"A provider model update is detected by your evaluation run rather than by a user complaint.",
+ f:"Piloting on curated examples and deploying against production distribution. Aggregate accuracy hides the segment that collapses."},
+
+{c:"AIC",n:"AI evaluation and guardrails",
+ u:"When several AI features exist and quality is judged by whoever looked at the output most recently.",
+ o:"Establish a shared measurement and control layer so changes are evidence-based and failures are bounded.",
+ ph:[{n:"Measure", s:["Build per-use-case evaluation sets including hard, rare and adversarial cases.","Calibrate any model-based judge against human labels before trusting its scores.","Report by segment. Averages conceal the failure."]},
+     {n:"Bound", s:["Treat fetched content as data, never as instruction.","Cap steps, elapsed time and spend in the harness rather than in the prompt.","Define what the system does when it exhausts a limit."]},
+     {n:"Watch", s:["Trace inputs, retrieved context and every tool call with arguments.","Baseline input distributions so drift is visible before output degrades.","Review alert-to-action ratio, since volume erodes response."]}],
+ out:["Evaluation sets per use case, versioned","Judge calibration record","Harness limits and exhaustion behaviour","Trace coverage across retrieval, tools and generation"],
+ sig:"A regression is caught by a scheduled run and attributed to a specific step within a day.",
+ f:"Treating the guardrail as the prompt. Instructions can be overridden by content; tool scope and harness limits cannot."},
+
+{c:"OPM",n:"Observability uplift",
+ u:"When incidents are diagnosed by guesswork and the same class of failure keeps recurring.",
+ o:"Move from collecting telemetry to answering questions, so detection is faster than the user and attribution is faster than the argument.",
+ ph:[{n:"Define questions", s:["List the questions you could not answer during the last five incidents.","Decide the detections the logs exist to support before choosing what to collect.","Identify the leading signal for each service, not the downstream consequence."]},
+     {n:"Instrument", s:["Carry a correlation identifier across every hop, including the broker.","Instrument at each source boundary, not only at the hub.","Capture saturation, which moves before latency, which moves before errors."]},
+     {n:"Prune", s:["Require a named action for every alert before enabling it.","Delete alerts with no action, and track acknowledged-without-action.","Test detection with a controlled exercise rather than a coverage report."]}],
+ out:["Question list from real incidents","Correlation identifier spanning the estate","Leading-indicator alerts with named actions","A tested detection exercise"],
+ sig:"Mean time to detect falls, and incidents are attributed to the right system without a meeting.",
+ f:"Buying a platform and enabling everything. Collection without detection produces a forensic record of a breach nobody noticed."},
+
+{c:"OPM",n:"Handover to run",
+ u:"As a build completes, and before the delivery team disperses.",
+ o:"Transfer a system into operation with the knowledge, capacity and authority needed to keep it working.",
+ ph:[{n:"Prepare", s:["Name the operating owner before the final build phase, not after it.","Confirm the receiving team has capacity, not merely the assignment.","Write runbooks for the three most likely failures, with the receiving team."]},
+     {n:"Transfer", s:["Have the receiving team operate the system while the build team watches.","Hand over access, credentials and the ability to change things, not only documents.","Agree what they may change without asking, and what they may not."]},
+     {n:"Confirm", s:["Run an incident exercise before the build team leaves.","Establish who funds the maintenance, separately from who funded the build.","Schedule a review one cycle later, with the build team still reachable."]}],
+ out:["Named operating owner with confirmed capacity","Runbooks written jointly, not delivered","Change authority stated explicitly","A completed incident exercise"],
+ sig:"The receiving team resolves the first real incident without calling the build team.",
+ f:"Handover as a documentation event. The system then freezes rather than being maintained, because nobody who understands it is accountable for it."}
+];
+
+let rcat = "ALL", rq = "", pcat = "ALL", pq = "";
+
+function runbooksIn(){
+  return RUNBOOKS.filter(function(b){
+    if (rcat !== "ALL" && b.c !== rcat) return false;
+    if (!rq) return true;
+    return (b.n + " " + b.t + " " + b.s.join(" ") + " " + b.v + " " + b.b + " " + b.e).toLowerCase().indexOf(rq) > -1;
+  });
+}
+function playbooksIn(){
+  return PLAYBOOKS.filter(function(b){
+    if (pcat !== "ALL" && b.c !== pcat) return false;
+    if (!pq) return true;
+    const hay = b.n + " " + b.u + " " + b.o + " " + b.f + " " +
+      b.ph.map(function(p){ return p.n + " " + p.s.join(" "); }).join(" ");
+    return hay.toLowerCase().indexOf(pq) > -1;
+  });
+}
+
+function renderRunbooks(){
+  stage.className = "";
+  stage.innerHTML = '<div class="auditbar"><input class="search" id="rsearch" type="search" ' +
+    'placeholder="Filter runbooks" aria-label="Filter runbooks" value="' + esc(rq) + '"></div>' +
+    '<div class="books" id="rlist"></div>';
+  const inp = document.getElementById("rsearch");
+  inp.addEventListener("input", function(){ rq = inp.value.toLowerCase().trim(); paintRunbooks(); });
+  paintRunbooks();
+}
+
+function paintRunbooks(){
+  const box = document.getElementById("rlist");
+  if (!box) return;
+  const list = runbooksIn();
+  box.innerHTML = list.length ? list.map(function(b){
+    const cat = RCATS.find(function(x){ return x.c === b.c; });
+    return '<article class="book">' +
+      '<span class="cat">' + b.c + ' / ' + esc(cat.n) + '</span>' +
+      '<h3>' + esc(b.n) + '</h3>' +
+      '<p class="trig">' + esc(b.t) + '</p>' +
+      '<div class="brow"><span class="blab">Before you start</span><ul class="bflat">' +
+        b.pre.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+      '<div class="brow"><span class="blab">Steps</span><ol class="bsteps">' +
+        b.s.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ol></div>' +
+      '<div class="brow"><span class="blab">Done when</span><p>' + esc(b.v) + '</p></div>' +
+      '<div class="brow"><span class="blab">If it goes wrong</span><p class="bwarn">' + esc(b.b) + '</p></div>' +
+      '<div class="brow"><span class="blab">Escalation</span><p>' + esc(b.e) + '</p></div>' +
+    '</article>';
+  }).join("") : '<p class="empty">No runbooks match that filter.</p>';
+  updateMeta();
+}
+
+function renderPlaybooks(){
+  stage.className = "";
+  stage.innerHTML = '<div class="auditbar"><input class="search" id="psearch" type="search" ' +
+    'placeholder="Filter playbooks" aria-label="Filter playbooks" value="' + esc(pq) + '"></div>' +
+    '<div class="books" id="plist"></div>';
+  const inp = document.getElementById("psearch");
+  inp.addEventListener("input", function(){ pq = inp.value.toLowerCase().trim(); paintPlaybooks(); });
+  paintPlaybooks();
+}
+
+function paintPlaybooks(){
+  const box = document.getElementById("plist");
+  if (!box) return;
+  const list = playbooksIn();
+  box.innerHTML = list.length ? list.map(function(b){
+    const cat = PCATS.find(function(x){ return x.c === b.c; });
+    return '<article class="book">' +
+      '<span class="cat">' + b.c + ' / ' + esc(cat.n) + '</span>' +
+      '<h3>' + esc(b.n) + '</h3>' +
+      '<p class="trig">' + esc(b.u) + '</p>' +
+      '<div class="brow"><span class="blab">Objective</span><p>' + esc(b.o) + '</p></div>' +
+      '<div class="brow"><span class="blab">Plays</span>' +
+        b.ph.map(function(p){
+          return '<div class="bphase"><h5>' + esc(p.n) + '</h5><ol class="bsteps">' +
+            p.s.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ol></div>';
+        }).join("") + '</div>' +
+      '<div class="brow"><span class="blab">Artifacts it produces</span><ul class="bflat">' +
+        b.out.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+      '<div class="brow"><span class="blab">You know it worked when</span><p>' + esc(b.sig) + '</p></div>' +
+      '<div class="brow"><span class="blab">Where it usually fails</span><p class="bwarn">' + esc(b.f) + '</p></div>' +
+    '</article>';
+  }).join("") : '<p class="empty">No playbooks match that filter.</p>';
+  updateMeta();
+}
+
 function updateMeta(){
   if (tab === "GL"){
     const inScope = glossSrc === "ALL" ? GLOSSARY : GLOSSARY.filter(function(g){ return g.s === glossSrc; });
@@ -2989,6 +3451,18 @@ function updateMeta(){
   }
   if (tab === "PG"){
     metaEl.innerHTML = "drag blocks in, turn on Connect to link two, double-click a label to rename";
+    return;
+  }
+  if (tab === "RB"){
+    const l = runbooksIn();
+    const scope = rcat === "ALL" ? "all categories" : RCATS.find(function(x){ return x.c === rcat; }).n.toLowerCase();
+    metaEl.innerHTML = l.length + " runbooks / " + scope + " / what to do when it happens";
+    return;
+  }
+  if (tab === "PB"){
+    const l = playbooksIn();
+    const scope = pcat === "ALL" ? "all categories" : PCATS.find(function(x){ return x.c === pcat; }).n.toLowerCase();
+    metaEl.innerHTML = l.length + " playbooks / " + scope + " / how to run the work";
     return;
   }
   if (tab === "MT"){
